@@ -4,6 +4,11 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
+import tn.opendata.tainan311.tn.opendata.tainan311.georeportv2.GeoReportV2;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -12,8 +17,38 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //addFeturesCallback(GeoReportV2.getServiceDefinition("033"));
+
+//        addFeturesCallback(GeoReportV2.getServiceList());
+        addFeturesCallback(GeoReportV2.QueryRequestBuilder.newBuilder().open().build());
     }
 
+    private <T> void addFeturesCallback(ListenableFuture<T> future) {
+        Futures.addCallback(future, new FutureCallback<T>(){
+
+            @Override
+            public void onSuccess(final T result) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(MainActivity.this, result.toString(), Toast.LENGTH_LONG).show();
+                    }
+                });
+
+            }
+
+            @Override
+            public void onFailure(final Throwable t) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(MainActivity.this, t.toString(), Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

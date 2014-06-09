@@ -32,5 +32,9 @@ android {
 
 dependencies {
     compile 'com.android.support:appcompat-v7:19.+'
+    compile 'com.android.support:support-v4:19.+'
+    compile 'com.google.guava:guava:17.0'
+    compile 'com.google.code.gson:gson:2.2.4'
+    compile 'com.android.support:support-v13:19.+'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
