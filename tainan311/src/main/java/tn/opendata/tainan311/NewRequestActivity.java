@@ -1,48 +1,25 @@
 package tn.opendata.tainan311;
 
-import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import tn.opendata.tainan311.R;
 
-public class MainActivity extends ActionBarActivity {
+public class NewRequestActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
+        setContentView(R.layout.activity_new_request);
     }
 
-    public void onImageClick(View view) {
-        Class<?> activity = null;
-        switch (view.getId()) {
-            case R.id.imageButton:
-                activity = NewRequestActivity.class;
-                break;
-            case R.id.imageButton2:
-                activity = RequestListActivity.class;
-                break;
-            case R.id.imageButton3:
-                activity = MyRequestActivity.class;
-                break;
-            case R.id.imageButton4:
-                // FIXME: donate activity
-                activity = DetailActivity.class;
-                break;
-        }
-        if (activity != null) {
-            startActivity(new Intent(this, activity));
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.new_request, menu);
         return true;
     }
 

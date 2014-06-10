@@ -1,4 +1,4 @@
-package tn.opendata.tainan311.tn.opendata.tainan311.georeportv2;
+package tn.opendata.tainan311.georeportv2;
 
 import android.util.Log;
 import org.json.JSONArray;

@@ -8,6 +8,52 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="tn.opendata.tainan311.MainActivity">
 
+<TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+       android:text="@string/tainan_311" android:textSize="24pt" android:id="@+id/textView"/>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" android:layout_below="@+id/textView"
+            android:layout_alignParentRight="true" android:layout_alignParentEnd="true" android:weightSum="1">
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:weightSum="1">
+            <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/fix_tool"
+                    android:id="@+id/imageButton" android:layout_gravity="left"
+                    android:onClick="onImageClick"
+                    android:layout_weight="0.5"/>
+            <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/nearby"
+                    android:id="@+id/imageButton2" android:layout_gravity="right"
+                    android:onClick="onImageClick"
+                    android:layout_weight="0.5"/>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:weightSum="1">
+            <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/myrequest"
+                    android:id="@+id/imageButton3" android:layout_gravity="left"
+                    android:onClick="onImageClick"
+                    android:layout_weight="0.5"/>
+            <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/donate"
+                    android:id="@+id/imageButton4" android:layout_gravity="right"
+                    android:onClick="onImageClick"
+                    android:layout_weight="0.5"/>
+        </LinearLayout>
+    </LinearLayout>
 
 
 </RelativeLayout>

@@ -1,4 +1,4 @@
-package tn.opendata.tainan311.tn.opendata.tainan311.utils;
+package tn.opendata.tainan311.utils;
 
 import android.app.Activity;
 import android.content.Context;

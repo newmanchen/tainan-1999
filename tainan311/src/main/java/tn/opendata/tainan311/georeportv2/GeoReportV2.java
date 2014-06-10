@@ -1,4 +1,4 @@
-package tn.opendata.tainan311.tn.opendata.tainan311.georeportv2;
+package tn.opendata.tainan311.georeportv2;
 
 import android.text.TextUtils;
 import android.util.Log;
@@ -17,7 +17,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
-import tn.opendata.tainan311.tn.opendata.tainan311.georeportv2.tn.opendata.tainan311.georeportv2.vo.*;
+import tn.opendata.tainan311.georeportv2.vo.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -32,7 +32,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import com.google.common.util.concurrent.ListeningExecutorService;
 
-import static tn.opendata.tainan311.tn.opendata.tainan311.utils.EasyUtil.close;
+import static tn.opendata.tainan311.utils.EasyUtil.close;
 
 /**
  * Created by vincent on 2014/6/6.

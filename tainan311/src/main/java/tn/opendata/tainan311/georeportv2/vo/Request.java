@@ -1,4 +1,4 @@
-package tn.opendata.tainan311.tn.opendata.tainan311.georeportv2.tn.opendata.tainan311.georeportv2.vo;
+package tn.opendata.tainan311.georeportv2.vo;
 
 import java.util.List;
 
