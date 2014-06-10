@@ -17,7 +17,7 @@ android {
     buildToolsVersion "19.1.0"
 
     defaultConfig {
-        minSdkVersion 9
+        minSdkVersion 14
         targetSdkVersion 19
         versionCode 1
         versionName "1.0"
@@ -31,11 +31,9 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:19.+'
     compile 'com.android.support:support-v4:19.+'
     compile 'com.google.guava:guava:17.0'
     compile 'com.google.code.gson:gson:2.2.4'
-    compile 'com.android.support:support-v13:19.+'
     compile 'com.google.android.gms:play-services:4.4.52'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }

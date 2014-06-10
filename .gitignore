@@ -2,3 +2,7 @@
 /local.properties
 /.idea/workspace.xml
 .DS_Store
+.idea/*
+
+*.iml
+tainan311/*.iml
