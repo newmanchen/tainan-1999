@@ -6,6 +6,7 @@ import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +29,7 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
     private Button nextButton;
     private Button doneButton;
     private Button previousButton;
-
+    private final Bundle data = new Bundle(); //TODO: handle config change
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -55,7 +56,13 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
 
     public void onClick(View v){
         if(v.getId() == R.id.next){
-            mViewPager.setCurrentItem(mViewPager.getCurrentItem()+1,true);
+            String tag = makeFragmentName(R.id.pager,mViewPager.getCurrentItem());
+            WizardFragment f = (WizardFragment)getFragmentManager().findFragmentByTag(tag);
+            data.putAll(f.onNextClick((Bundle)data.clone()));
+
+            int nextIndex = mViewPager.getCurrentItem()+1;
+            mViewPager.setCurrentItem(nextIndex,true);
+
         }else if(v.getId() == R.id.previous){
             mViewPager.setCurrentItem(mViewPager.getCurrentItem()-1,true);
         }else{
@@ -114,6 +121,8 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
     }
 
 
-
+    private static String makeFragmentName(int viewId, int index){
+        return "android:switcher:" + viewId + ":" + index;
+    }
 
 }

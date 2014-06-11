@@ -55,5 +55,9 @@ public class PickMapFragment extends WizardFragment {
         return rootView;
     }
 
+    @Override
+    public Bundle onNextClick(Bundle acc) {
+        return acc;
+    }
 }
 

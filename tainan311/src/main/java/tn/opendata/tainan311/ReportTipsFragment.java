@@ -53,5 +53,9 @@ public class ReportTipsFragment extends WizardFragment {
         return rootView;
     }
 
+    @Override
+    public Bundle onNextClick(Bundle acc) {
+        return acc;
+    }
 }
 

@@ -2,11 +2,12 @@ package tn.opendata.tainan311;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.os.Bundle;
 
 /**
  * Created by sam on 2014/6/11.
  */
-public class WizardFragment extends Fragment{
+public abstract class WizardFragment extends Fragment{
     private boolean mReady;
     private FlowController conroller = DummyController;
 
@@ -34,6 +35,7 @@ public class WizardFragment extends Fragment{
         conroller = DummyController;
     }
 
+    public abstract Bundle onNextClick(Bundle acc);
 
     public static  interface FlowController{
         public void setNextEnabled(boolean enabled);
