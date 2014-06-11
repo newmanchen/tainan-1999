@@ -1,4 +1,13 @@
 .gradle
+
+
+.idea/
+
 /local.properties
 /.idea/workspace.xml
 .DS_Store
+
+
+
+tainan311/*.iml
+

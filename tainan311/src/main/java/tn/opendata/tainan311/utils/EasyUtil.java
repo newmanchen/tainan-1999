@@ -45,6 +45,6 @@ public class EasyUtil {
     }
 
     public static void NOT_IMPLELENT(Context c){
-        Toast.makeText(c,"還沒空做...",Toast.LENGTH_SHORT).show();
+        Toast.makeText(c,"需要有人實作...",Toast.LENGTH_SHORT).show();
     }
 }

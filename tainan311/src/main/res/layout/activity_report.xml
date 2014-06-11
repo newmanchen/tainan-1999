@@ -1,0 +1,55 @@
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+                android:orientation="vertical"
+               >
+
+<tn.opendata.tainan311.utils.CustomViewPager
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/pager"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    tools:context="tn.opendata.tainan311.ReportActivity" />
+
+<LinearLayout android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="#ff94ceca"
+              android:padding="2dp"
+        >
+    <Button android:id="@+id/previous"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+             android:text="@string/previous"
+             android:onClick="onClick"
+            />
+    <Button android:id="@+id/next"
+            android:textColor="#ff19ff00"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:text="@string/next"
+            android:onClick="onClick"
+            />
+
+    <Button android:id="@+id/done"
+            android:textColor="#ff19ff00"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:text="@string/done"
+            android:visibility="gone"
+            android:onClick="onClick"
+            />
+
+</LinearLayout>
+
+
+</LinearLayout>
