@@ -66,7 +66,9 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
         }else if(v.getId() == R.id.previous){
             mViewPager.setCurrentItem(mViewPager.getCurrentItem()-1,true);
         }else{
-            NOT_IMPLELENT(this);
+            String tag = makeFragmentName(R.id.pager,mViewPager.getCurrentItem());
+            WizardFragment f = (WizardFragment)getFragmentManager().findFragmentByTag(tag);
+            data.putAll(f.onNextClick((Bundle)data.clone()));
             finish();
         }
         resetButtonState();

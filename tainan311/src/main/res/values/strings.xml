@@ -16,5 +16,6 @@
     <string name="next">下一步</string>
     <string name="previous">上一步</string>
     <string name="done">完成</string>
+    <string name="msg_drag_pin">請拖拉地圖並將箭頭對準問題發生的地點。</string>
 
 </resources>
