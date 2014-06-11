@@ -27,4 +27,9 @@ public class RequestResponse {
     public String getAccountId() {
         return account_id;
     }
+
+    @Override
+    public String toString() {
+        return service_request_id +"@" + token +"@" + service_notice;
+    }
 }

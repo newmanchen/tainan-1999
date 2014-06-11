@@ -14,23 +14,26 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import tn.opendata.tainan311.georeportv2.vo.*;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import com.google.common.util.concurrent.ListeningExecutorService;
+import tn.opendata.tainan311.postdata.RequestData;
 
 import static tn.opendata.tainan311.utils.EasyUtil.close;
 
@@ -39,12 +42,14 @@ import static tn.opendata.tainan311.utils.EasyUtil.close;
  */
 public class GeoReportV2 {
 
+    private static final String post_prefix = "http://fixmystreet.tw/";
     private static final String prefix = "http://fixmystreet.tw/open311/v2/";
     private static final ListeningExecutorService executor = MoreExecutors.listeningDecorator(Executors.newCachedThreadPool());
 
     private static final String PATH_SERVICE_LIST = "services.json";
     private static final String PATH_SERVICE_DEFINITION = "services/%s.json";
     private static final String PATH_REQUESTS = "requests.json";
+    private static final String PATH_POST_REQUEST = "report/new/mobile";
     private static final String PATH_SERVICE_REQUEST_ID_BY_TOKEN = "requests/%s.json";
     private static final String PATH_SERVICE_BY_REQUEST_ID = "requests/%s.json";
 
@@ -140,25 +145,59 @@ public class GeoReportV2 {
         return getServiceByRequestId(DEFAULT_JURISDICTION_ID, requestId);
     }
 
-    private static <K, V> RequestResponse getPostResponse(URL url, Map<K, V> postData) {
+    private static <V> FMSResponse getPostResponse(URL url, Map<String, V> postData) {
         Closer closer = Closer.create();
         try {
             HttpClient client = new DefaultHttpClient();
             HttpPost post = new HttpPost(url.toURI());
 
-            HttpResponse response = client.execute(post);
-            int status = response.getStatusLine().getStatusCode();
-            if ( status != 200 && status != 201 ) {
-                throw new RuntimeException("Failed : HTTP error code : " + status);
+            boolean hasFile = false;
+            Log.e("Vincent", "inner getPostResponse");
+            Charset charset = Charset.forName(HTTP.UTF_8);
+            if (postData.containsKey("photo")) {
+                File file = new File((String)postData.get("photo"));
+                if ( file.exists() ) {
+                    Log.e("Vincent", "file exists");
+                    MultipartEntityBuilder entity = MultipartEntityBuilder.create();
+                    entity.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+                    entity.setCharset(charset);
+                    entity.addBinaryBody("photo", file);
+                    for (String k : postData.keySet()) {
+                        if ( !"photo".equals(k) ) {
+                            entity.addTextBody(k, String.valueOf(postData.get(k)), ContentType.create("text/plain", charset));
+                        }
+                    }
+                    post.setEntity(entity.build());
+                    hasFile = true;
+                    Log.e("Vincent", "has file");
+                }
+            }
+            if ( !hasFile ) {
+                post.setEntity(new UrlEncodedFormEntity(convert(postData), HTTP.UTF_8));
             }
 
-            BufferedReader br = closer.register(new BufferedReader(new InputStreamReader(response.getEntity().getContent())));
-            Gson gson = new Gson();
-            Type type = new TypeToken<RequestResponse>(){}.getType();
 
-            return gson.fromJson(br, type);
+
+            HttpResponse response = client.execute(post);
+            int status = response.getStatusLine().getStatusCode();
+//            if ( status != 200 && status != 201 ) {
+//                throw new RuntimeException("Failed : HTTP error code : " + status);
+//            }
+
+            BufferedReader br = closer.register(new BufferedReader(new InputStreamReader(response.getEntity().getContent())));
+            String read;
+            StringBuilder sb = new StringBuilder();
+            while((read=br.readLine()) != null) {
+                sb.append(read);
+                Log.e("Vincent", read);
+            }
+            Gson gson = new Gson();
+            Type type = new TypeToken<FMSResponse>(){}.getType();
+
+            return gson.fromJson(sb.toString(), type);
         } catch (Throwable e) {
             try {
+                e.printStackTrace();
                 closer.rethrow(e);
             } catch (IOException e1) {
                 e1.printStackTrace();
@@ -330,10 +369,11 @@ public class GeoReportV2 {
         }
     }
 
-    private static List<NameValuePair> convert(Map<String,Object> args){
+    private static <K, V> List<NameValuePair> convert(Map<K,V> args){
         List<NameValuePair> params = Lists.newArrayList();
-        for(String k:args.keySet()){
-            params.add(new BasicNameValuePair(k, String.valueOf(args.get(k))));
+        for(K k:args.keySet()){
+            Log.e("Vincent", String.valueOf(k) + "=" + String.valueOf(args.get(k)));
+            params.add(new BasicNameValuePair(String.valueOf(k), String.valueOf(args.get(k))));
         }
 
         return params;
@@ -364,11 +404,11 @@ public class GeoReportV2 {
             this(DEFAULT_JURISDICTION_ID);
         }
 
-        public static QueryRequestBuilder newBuilder(String jurisdiction_id) {
+        public static QueryRequestBuilder create(String jurisdiction_id) {
             return new QueryRequestBuilder(jurisdiction_id);
         }
 
-        public static QueryRequestBuilder newBuilder() {
+        public static QueryRequestBuilder create() {
             return new QueryRequestBuilder();
         }
 
@@ -402,11 +442,15 @@ public class GeoReportV2 {
             return this;
         }
 
-        public ListenableFuture<List<Request>> build() {
+        public QueryRequestBuilder build() {
             if ( requestIdList.size() > 0 ) {
                 String requestList = TextUtils.join(",", requestIdList);
                 data.put("service_request_id", requestList);
             }
+            return this;
+        }
+
+        public ListenableFuture<List<Request>> execute() {
             return executor.submit(new Callable<List<Request>>() {
                 @Override
                 public List<Request> call() throws Exception {
@@ -425,10 +469,12 @@ public class GeoReportV2 {
 
         private PostRequestBuilder(String jurisdiction_id, String service_code) {
             data = AttributeBuilder.newBuilder();
-            data.put("jurisdiction_id", jurisdiction_id).put("service_code", service_code);
+            data.put("category", service_code).put("jurisdiction_id", jurisdiction_id).put("pc", 0);
+
+            service();
         }
 
-        private PostRequestBuilder(String jurisdiction_id, String service_code, long lat, long lon) {
+        private PostRequestBuilder(String jurisdiction_id, String service_code, double lat, double lon) {
             this(jurisdiction_id, service_code);
             location(lat, lon);
         }
@@ -443,8 +489,8 @@ public class GeoReportV2 {
             location(location_id);
         }
 
-        public PostRequestBuilder location(long lat, long lon) {
-            data.put("lat", lat).put("long", lon);
+        public PostRequestBuilder location(double lat, double lon) {
+            data.put("lat", lat).put("lon", lon);
             return this;
         }
 
@@ -456,6 +502,16 @@ public class GeoReportV2 {
         public PostRequestBuilder location(int location_id) {
             data.put("location_id",location_id);
             return this;
+        }
+
+        public PostRequestBuilder title(String title) {
+            data.put("title", title);
+            return this;
+        }
+
+        public PostRequestBuilder service() {
+            data.put("service", "android");
+            return  this;
         }
 
         public PostRequestBuilder email(String email) {
@@ -484,7 +540,8 @@ public class GeoReportV2 {
         }
 
         public PostRequestBuilder description(String description) {
-            data.put("description", description);
+            data.put("detail", description);
+//            data.put("description", description);
             return this;
         }
 
@@ -498,32 +555,62 @@ public class GeoReportV2 {
             return this;
         }
 
-        public ListenableFuture<RequestResponse> build() {
-            return executor.submit(new Callable<RequestResponse>(){
+        public PostRequestBuilder name(String name) {
+            data.put("name", name);
+            return this;
+        }
+
+        public PostRequestBuilder photo(String path) {
+            data.put("photo", path);
+            return this;
+        }
+
+        public PostRequestBuilder build() {
+
+            return this;
+        }
+
+        public ListenableFuture<FMSResponse> execute() {
+            return executor.submit(new Callable<FMSResponse>(){
 
                 @Override
-                public RequestResponse call() throws Exception {
-                    return getPostResponse(new URL(prefix + PATH_REQUESTS), data.build());
+                public FMSResponse call() throws Exception {
+                    return getPostResponse(new URL(post_prefix + PATH_POST_REQUEST), data.build());
                 }
             });
 
         }
 
-        public static PostRequestBuilder newBuilder(String jurisdiction_id, String service_code, long lat, long lon) {
+        public static PostRequestBuilder create(RequestData data) {
+            PostRequestBuilder builder = new PostRequestBuilder(DEFAULT_JURISDICTION_ID, data.getService_code(), data.getLatitude(), data.getLongitude());
+            return builder.accountId(data.getAccount_id())
+                    .description(data.getDescription())
+                    .deviceId(data.getDevice_id())
+                    .email(data.getEmail())
+                    .firstName(data.getFist_name())
+                    .lastName(data.getLast_name())
+                    .mediaUrl(data.getMedia_url())
+                    .phone(data.getPhone())
+                    .name(data.getName());
+        }
+
+        public static PostRequestBuilder create(String jurisdiction_id, String service_code, double lat, double lon) {
             return new PostRequestBuilder(jurisdiction_id, service_code, lat, lon);
         }
 
-        public static PostRequestBuilder newBuilder(String service_code, long lat, long lon) {
-            return new PostRequestBuilder(DEFAULT_JURISDICTION_ID, service_code, lat, lon);
+        public static PostRequestBuilder create(String service_code, double lat, double lon, String title, String detail, String name, String email) {
+            return new PostRequestBuilder(DEFAULT_JURISDICTION_ID, service_code, lat, lon)
+                    .title(title).description(detail).name(name).email(email);
         }
 
-        public static PostRequestBuilder newBuilder(String service_code, String address_string) {
+        public static PostRequestBuilder create(String service_code, String address_string) {
             return new PostRequestBuilder(DEFAULT_JURISDICTION_ID, service_code, address_string);
         }
 
-        public static PostRequestBuilder newBuilder(String service_code, int address_id) {
+        public static PostRequestBuilder create(String service_code, int address_id) {
             return new PostRequestBuilder(DEFAULT_JURISDICTION_ID, service_code, address_id);
         }
+
 
     }
 

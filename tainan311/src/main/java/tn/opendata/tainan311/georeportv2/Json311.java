@@ -25,6 +25,7 @@ public class Json311 {
 
         while ((read = br.readLine()) != null) {
             sb.append(read);
+            Log.e("Vincent", read);
         }
         String rawData = sb.toString();
         try {

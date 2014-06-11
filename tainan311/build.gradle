@@ -16,6 +16,11 @@ android {
     compileSdkVersion 19
     buildToolsVersion "19.1.0"
 
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+    }
     defaultConfig {
         minSdkVersion 9
         targetSdkVersion 19
@@ -37,5 +42,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.android.support:support-v13:19.+'
     compile 'com.google.android.gms:play-services:4.4.52'
+    compile 'org.apache.httpcomponents:httpcore:4.3.2'
+    compile 'org.apache.httpcomponents:httpmime:4.3.4'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
