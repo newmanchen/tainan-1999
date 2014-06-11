@@ -18,4 +18,6 @@
     <string name="done">完成</string>
     <string name="msg_drag_pin">請拖拉地圖並將箭頭對準問題發生的地點。</string>
 
+    <string name="status_open">OPEN</string>
+    <string name="status_close">CLOSE</string>
 </resources>

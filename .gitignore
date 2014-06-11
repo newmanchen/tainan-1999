@@ -1,5 +1,5 @@
 .gradle
-
+gradle/
 
 .idea/
 
@@ -7,7 +7,9 @@
 /.idea/workspace.xml
 .DS_Store
 
-
+ 
 
 tainan311/*.iml
-
+build/
+tainan-311.iml
+tainan311.iml

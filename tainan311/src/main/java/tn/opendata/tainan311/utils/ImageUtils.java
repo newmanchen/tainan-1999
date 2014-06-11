@@ -14,6 +14,8 @@ import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,9 +26,28 @@ import java.util.Set;
  */
 public final class ImageUtils {
 
-    public static Optional<Pair<String, Bitmap>> getBitmapFromIntentData(Context context, Intent data) {
+    public static Optional<String> saveBitmap(Bitmap bitmap) {
+        Optional<File> file = createImageFile();
+        if ( file.isPresent() ) {
+            FileOutputStream fout = null;
+            try {
+                fout = new FileOutputStream(file.get());
+                bitmap.compress(Bitmap.CompressFormat.PNG, 85, fout);
+                fout.flush();
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                EasyUtil.close(fout);
+            }
+
+
+        }
+        return Optional.absent();
+    }
+
+    public static Optional<Bitmap> getBitmapFromIntentData(Context context, Intent data) {
         Uri selectedImageUri = data.getData();
-        if ( selectedImageUri == null ) {
+        if ( selectedImageUri == null || context == null ) {
             return Optional.absent();
         }
         final String[] column = {MediaStore.Images.Media.DATA};
@@ -39,7 +60,7 @@ public final class ImageUtils {
                 BitmapFactory.Options opt = new BitmapFactory.Options();
                 opt.inSampleSize = 4;
                 opt.inPreferredConfig = Bitmap.Config.RGB_565;
-                return Optional.of(new Pair<String, Bitmap>(path, BitmapFactory.decodeFile(path, opt)));
+                return Optional.of(BitmapFactory.decodeFile(path, opt));
             }
         } finally {
             EasyUtil.close(cursor);
