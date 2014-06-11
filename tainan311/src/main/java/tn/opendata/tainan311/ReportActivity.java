@@ -105,6 +105,8 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
                     return ReportTipsFragment.newInstance();
                 case 1:
                     return PickMapFragment.newInstance();
+                case 2:
+                    return PickPhotoFragment.newInstance();
 
                 //TODO: ... add new here...
 
@@ -114,7 +116,7 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
 
         @Override
         public int getCount() {
-            return 2;    //TODO: ... don't forget it...
+            return 3;    //TODO: ... don't forget it...
         }
 
 
