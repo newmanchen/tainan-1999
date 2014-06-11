@@ -20,7 +20,7 @@ public class MainActivity extends Activity {
         Class<?> activity = null;
         switch (view.getId()) {
             case R.id.imageButton:
-                activity = NewRequestActivity.class;
+                activity = ReportActivity.class;
                 break;
             case R.id.imageButton2:
                 activity = RequestListActivity.class;

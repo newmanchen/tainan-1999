@@ -28,12 +28,33 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+
+    signingConfigs {
+        debug {
+            storeFile file('../platform.keystore')
+            storePassword "android"
+            keyAlias "androiddebugkey"
+            keyPassword "android"
+        }
+
+
+//        release {
+//            storeFile file('../../../.android/debug.keystore')
+//            storePassword "android"
+//            keyAlias "android"
+//        }
+
+    }
+
+
 }
 
 dependencies {
     compile 'com.android.support:support-v4:19.+'
+    compile 'com.android.support:support-v13:19.+'
     compile 'com.google.guava:guava:17.0'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.google.android.gms:play-services:4.4.52'
+    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.2'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
