@@ -35,5 +35,6 @@ dependencies {
     compile 'com.google.guava:guava:17.0'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.google.android.gms:play-services:4.4.52'
+    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.2'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }

@@ -9,5 +9,6 @@
     <string name="title_activity_request_list">RequestListActivity</string>
     <string name="title_activity_detail">DetailActivity</string>
     <string name="title_activity_my_request">MyRequestActivity</string>
-
+    <string name="status_open">OPEN</string>
+    <string name="status_close">CLOSE</string>
 </resources>

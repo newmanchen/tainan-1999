@@ -46,7 +46,8 @@
         </activity>
         <activity
             android:name="tn.opendata.tainan311.RequestListActivity"
-            android:label="@string/title_activity_request_list" >
+            android:label="@string/title_activity_request_list"
+            android:theme="@android:style/Theme.Holo.Light.DarkActionBar">
         </activity>
         <activity
             android:name="tn.opendata.tainan311.DetailActivity"
