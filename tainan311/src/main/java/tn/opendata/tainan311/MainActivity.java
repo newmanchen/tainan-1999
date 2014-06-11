@@ -32,6 +32,11 @@ public class MainActivity extends Activity {
                 // FIXME: donate activity
                 activity = DetailActivity.class;
                 break;
+
+            case R.id.imageButton5:
+
+                activity = ShowMapActivity.class;
+                break;
         }
         if (activity != null) {
             startActivity(new Intent(this, activity));

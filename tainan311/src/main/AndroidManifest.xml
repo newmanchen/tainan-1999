@@ -43,7 +43,7 @@
         <activity
             android:name="tn.opendata.tainan311.RequestListActivity"
             android:label="@string/title_activity_request_list"
-            android:theme="@android:style/Theme.Holo.Light.DarkActionBar">
+            android:theme="@android:style/Theme.Holo.Light.DarkActionBar" >
         </activity>
         <activity
             android:name="tn.opendata.tainan311.DetailActivity"
@@ -56,6 +56,10 @@
         <activity
             android:name="tn.opendata.tainan311.ReportActivity"
             android:label="@string/title_activity_report" >
+        </activity>
+        <activity
+            android:name="tn.opendata.tainan311.ShowMapActivity"
+            android:label="@string/title_activity_show_map" >
         </activity>
     </application>
 
