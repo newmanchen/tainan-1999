@@ -17,4 +17,6 @@
     <string name="previous">上一步</string>
     <string name="done">完成</string>
 
+    <string name="status_open">OPEN</string>
+    <string name="status_close">CLOSE</string>
 </resources>

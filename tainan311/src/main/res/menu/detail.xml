@@ -2,8 +2,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="tn.opendata.tainan311.DetailActivity" >
     
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
+    <item android:id="@+id/menu_green_close"
+        android:title="@string/status_close"
         android:orderInCategory="100"
-        android:showAsAction="never" />
+        android:showAsAction="always"
+        android:visible="false"
+        android:icon="@drawable/close_green" />
+    <item android:id="@+id/menu_red_open"
+        android:title="@string/status_open"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:visible="false"
+        android:icon="@drawable/open_red" />
 </menu>
