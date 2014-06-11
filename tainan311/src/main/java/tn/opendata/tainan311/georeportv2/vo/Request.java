@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.common.collect.Lists;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
@@ -32,6 +33,7 @@ public class Request implements Parcelable {
     private String zipcode;
     private String lat;
 
+    @SerializedName("long")
     private String lon;
     private String media_url;
 
