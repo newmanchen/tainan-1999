@@ -3,7 +3,7 @@
     tools:context="tn.opendata.tainan311.DetailActivity" >
     
     <item android:id="@+id/menu_green_close"
-        android:title="@string/status_close"
+        android:title="@string/status_closed"
         android:orderInCategory="100"
         android:showAsAction="always"
         android:visible="false"

@@ -21,6 +21,7 @@ public class Request implements Parcelable {
     private String service_name;
     private String service_code;
     private String description;
+    private String detail;
     private List<Recipient> agency_responsible;
     private String service_notice;
     private String requested_datetime;
@@ -80,6 +81,14 @@ public class Request implements Parcelable {
 
     public void setService_code(String service_code) {
         this.service_code = service_code;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 
     public String getDescription() {
@@ -196,6 +205,7 @@ public class Request implements Parcelable {
         service_name = in.readString();
         service_code = in.readString();
         description = in.readString();
+        detail = in.readString();
         agency_responsible = Lists.newArrayList();
         in.readTypedList(agency_responsible, Recipient.CREATOR);
         service_notice = in.readString();
@@ -224,6 +234,7 @@ public class Request implements Parcelable {
         parcel.writeString(service_name);
         parcel.writeString(service_code);
         parcel.writeString(description);
+        parcel.writeString(detail);
         parcel.writeTypedList(agency_responsible);
         parcel.writeString(service_notice);
         parcel.writeString(requested_datetime);

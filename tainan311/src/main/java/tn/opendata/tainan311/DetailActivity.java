@@ -54,7 +54,8 @@ public class DetailActivity extends Activity {
 
     private void updateActionBar() {
         ActionBar ab = getActionBar();
-        ab.setTitle(mRequest.getDescription());
+        ab.setTitle(mRequest.getTitle());
+        ab.setDisplayHomeAsUpEnabled(true);
     }
 
     private void initViews() {
@@ -81,8 +82,8 @@ public class DetailActivity extends Activity {
                 }
             });
         }
-        TextView description = EasyUtil.findView(this, R.id.description);
-        description.setText(mRequest.getDescription());
+        TextView detail = EasyUtil.findView(this, R.id.detail);
+        detail.setText(mRequest.getDetail());
         TextView serviceName = EasyUtil.findView(this, R.id.service_name);
         serviceName.setText(mRequest.getService_name());
     }
@@ -105,6 +106,16 @@ public class DetailActivity extends Activity {
                 redItem.setVisible(true);
                 greenItem.setVisible(false);
             }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
         }
         return true;
     }

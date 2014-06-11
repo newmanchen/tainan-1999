@@ -1,6 +1,7 @@
 package tn.opendata.tainan311;
 
 
+import android.app.ActionBar;
 import android.app.ListActivity;
 import android.app.Service;
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -53,6 +55,7 @@ public class RequestListActivity extends ListActivity {
         mSimpleDateFormatFrom = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSSSSSZ");
 
         initImageLoader();
+        initActionBar();
         loadRequest();
         getListView().setDivider(null);
     }
@@ -64,6 +67,12 @@ public class RequestListActivity extends ListActivity {
                 .cacheOnDisk(true)
                 .bitmapConfig(Bitmap.Config.RGB_565)
                 .build();
+    }
+
+    private void initActionBar() {
+        ActionBar ab = getActionBar();
+        ab.setTitle(R.string.request_list_title);
+        ab.setDisplayHomeAsUpEnabled(true);
     }
 
     private void loadRequest() {
@@ -113,7 +122,7 @@ public class RequestListActivity extends ListActivity {
                 view = mInflater.inflate(mResource, parent, false);
                 ViewHolder holder = new ViewHolder();
                 holder.cover = EasyUtil.findView(view, R.id.img);
-                holder.description = EasyUtil.findView(view, R.id.description);
+                holder.title = EasyUtil.findView(view, R.id.title);
                 holder.service_name = EasyUtil.findView(view, R.id.service_name);
                 holder.datetime = EasyUtil.findView(view, R.id.datetime);
                 holder.status = EasyUtil.findView(view, R.id.status);
@@ -149,7 +158,7 @@ public class RequestListActivity extends ListActivity {
                     }
                 });
             }
-            holder.description.setText(r.getDescription());
+            holder.title.setText(r.getTitle());
             holder.service_name.setText(r.getService_name());
             try {
                 Date date = mSimpleDateFormatFrom.parse(r.getRequested_datetime());
@@ -158,7 +167,7 @@ public class RequestListActivity extends ListActivity {
                 e.printStackTrace();
             }
             if (Request.STATUS_CLOSE.equals(r.getStatus())) {
-                holder.status.setText(R.string.status_close);
+                holder.status.setText(R.string.status_closed);
                 holder.status.setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
                 holder.status.setVisibility(View.VISIBLE);
             } else if (Request.STATUS_OPEN.equals(r.getStatus())) {
@@ -173,7 +182,7 @@ public class RequestListActivity extends ListActivity {
 
         private class ViewHolder {
             ImageView cover;
-            TextView description;
+            TextView title;
             TextView service_name;
             TextView datetime;
             TextView status;
@@ -185,5 +194,15 @@ public class RequestListActivity extends ListActivity {
             i.putExtra(DetailActivity.EXTRA_KEY_REQUEST, (Request) getItem(position));
             startActivity(i);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return true;
     }
 }
