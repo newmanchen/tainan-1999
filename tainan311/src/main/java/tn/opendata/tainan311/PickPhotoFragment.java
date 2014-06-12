@@ -150,7 +150,7 @@ public class PickPhotoFragment extends WizardFragment {
 
     @Override
     public Bundle onNextClick(Bundle acc) {
-        acc.putString("path", mPhoto);
+        acc.putString("photo", mPhoto);
         return acc;
     }
 }

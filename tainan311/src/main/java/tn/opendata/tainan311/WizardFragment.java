@@ -9,7 +9,7 @@ import android.os.Bundle;
  */
 public abstract class WizardFragment extends Fragment{
     private boolean mReady;
-    private FlowController conroller = DummyController;
+    private FlowController controller = DummyController;
 
     public boolean isReady() {
         return mReady;
@@ -17,7 +17,7 @@ public abstract class WizardFragment extends Fragment{
 
     public void setReady(boolean mReady) {
         this.mReady = mReady;
-        conroller.setNextEnabled(true);
+        controller.setNextEnabled(true);
     }
 
 
@@ -25,14 +25,18 @@ public abstract class WizardFragment extends Fragment{
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         if(activity instanceof  FlowController){
-            conroller =  (FlowController) activity;
+            controller =  (FlowController) activity;
         }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        conroller = DummyController;
+        controller = DummyController;
+    }
+
+    protected Bundle getData() {
+        return controller.getData();
     }
 
     public abstract Bundle onNextClick(Bundle acc);
@@ -40,11 +44,19 @@ public abstract class WizardFragment extends Fragment{
     public static  interface FlowController{
         public void setNextEnabled(boolean enabled);
 
+        public Bundle getData();
     }
 
     protected  static FlowController DummyController = new FlowController(){
 
         @Override
         public void setNextEnabled(boolean visible) {}
+
+        @Override
+        public Bundle getData() {
+            return new Bundle();
+        }
+
+
     };
 }

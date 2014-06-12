@@ -2,17 +2,19 @@ package tn.opendata.tainan311;
 
 import android.app.Activity;
 import android.database.DataSetObserver;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
-import android.widget.TextView;
+import android.widget.*;
+import com.google.common.base.Optional;
+import tn.opendata.tainan311.utils.ImageUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 
 
@@ -23,6 +25,10 @@ public class ReportDetailFragment extends WizardFragment {
     private TextView title;
     private TextView detail;
     private Spinner category;
+    private ImageView photo;
+
+    public ReportDetailFragment() {
+    }
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -60,11 +66,33 @@ public class ReportDetailFragment extends WizardFragment {
         spinArray.add("其他");
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, spinArray);
         category.setAdapter(adapter);
+
+        Bundle data = getData();
+        if (data.containsKey("photo")) {
+            Bitmap bitmap = BitmapFactory.decodeFile(data.getString("photo"));
+            photo = (ImageView) rootView.findViewById(R.id.photo);
+            photo.setImageBitmap(bitmap);
+            photo.setVisibility(View.VISIBLE);
+        }
+
         return rootView;
     }
 
     @Override
     public Bundle onNextClick(Bundle acc) {
+        if ( name.getText() != null ) {
+            acc.putString("name", name.getText().toString());
+        }
+        acc.putString("category", String.valueOf(category.getSelectedItem()));
+        if ( email.getText() != null ) {
+            acc.putString("email", email.getText().toString());
+        }
+        if ( title.getText() != null ) {
+            acc.putString("title", title.getText().toString());
+        }
+        if ( detail.getText() != null ) {
+            acc.putString("detail", detail.getText().toString());
+        }
 
         return acc;
     }

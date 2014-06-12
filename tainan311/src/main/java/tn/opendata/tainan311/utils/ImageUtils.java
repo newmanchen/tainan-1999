@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Pair;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
@@ -31,16 +32,17 @@ public final class ImageUtils {
         if ( file.isPresent() ) {
             FileOutputStream fout = null;
             try {
-                fout = new FileOutputStream(file.get());
+                File f = file.get();
+                fout = new FileOutputStream(f);
                 bitmap.compress(Bitmap.CompressFormat.PNG, 85, fout);
                 fout.flush();
+
+                return Optional.of(f.getAbsolutePath());
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
                 EasyUtil.close(fout);
             }
-
-
         }
         return Optional.absent();
     }
