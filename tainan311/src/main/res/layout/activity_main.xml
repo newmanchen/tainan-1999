@@ -34,6 +34,7 @@
                     android:onClick="onImageClick"
                     android:layout_weight="0.5"/>
         </LinearLayout>
+
         <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -53,6 +54,26 @@
                     android:onClick="onImageClick"
                     android:layout_weight="0.5"/>
         </LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:weightSum="1">
+            <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/fix_tool"
+                    android:id="@+id/imageButton5" android:layout_gravity="left"
+                    android:onClick="onImageClick"
+                    android:layout_weight="0.5"/>
+            <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/nearby"
+                    android:id="@+id/imageButton6" android:layout_gravity="right"
+                    android:onClick="onImageClick"
+                    android:layout_weight="0.5"/>
+        </LinearLayout>
+
     </LinearLayout>
 
 
