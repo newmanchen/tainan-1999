@@ -53,6 +53,7 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         if (ReportTipsFragment.getIgnorePref(this)){
+            //FIXME: item1 fragment could click back button even we skip item0 here
             //skip tips fragment.
             mViewPager.setCurrentItem(1);
         }
