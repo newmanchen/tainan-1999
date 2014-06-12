@@ -51,6 +51,12 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        if (ReportTipsFragment.getIgnorePref(this)){
+            //skip tips fragment.
+            mViewPager.setCurrentItem(1);
+        }
+
         resetButtonState();
     }
 
