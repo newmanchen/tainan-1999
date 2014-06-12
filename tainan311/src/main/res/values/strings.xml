@@ -17,12 +17,9 @@
     <string name="previous">上一步</string>
     <string name="done">完成</string>
     <string name="msg_drag_pin">請拖拉地圖並將箭頭對準問題發生的地點。</string>
-
     <string name="request_list_title">問題清單</string>
     <string name="status_open">OPEN</string>
     <string name="status_closed">CLOSED</string>
-
-
     <string name="tips_title">怎麼回報問題</string>
     <string name="tips_ignore">不再顯示</string>
     <string name="tips_step1">輸入一個附近的街道名稱或區域</string>
@@ -35,5 +32,12 @@
     <string name="tips_step3_no">3</string>
     <string name="tips_step4_no">4</string>
     <string name="tips_step5_no">5</string>
+    <string name="title_activity_show_map">ShowMapActivity</string>
+    <string name="title_activity_main_map">MainMapActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Example action</string>
+    <string name="label_report">回報問題</string>
+
 
 </resources>

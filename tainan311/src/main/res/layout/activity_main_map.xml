@@ -1,0 +1,56 @@
+<!-- A DrawerLayout is intended to be used as the top-level content view using match_parent for both width and height to consume the full space available. -->
+<android.support.v4.widget.DrawerLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="tn.opendata.tainan311.MainMapActivity">
+    <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent">
+        <fragment android:id="@+id/map"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  class="com.google.android.gms.maps.MapFragment"/>
+        <ImageView android:id="@+id/drawer_icon"
+                android:layout_width="28dp"
+                android:layout_height="50dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_drawer"
+                android:onClick="onDrawerClick"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="20dp"
+                android:background="#ff080d2e"
+                />
+
+        <Button android:id="@+id/btn_report"
+                android:background="@drawable/btn_report"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:textColor="@android:color/white"
+                android:text="@string/label_report"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="10dp"
+                android:onClick="onReportClick"
+
+
+                />
+
+    </RelativeLayout>
+    <!-- The navigation drawer -->
+    <ListView android:id="@+id/navigation_drawer"
+              android:layout_width="240dp"
+              android:layout_height="match_parent"
+              android:layout_gravity="start"
+              android:choiceMode="singleChoice"
+              android:divider="@android:color/transparent"
+              android:dividerHeight="0dp"
+              android:background="#cccccc"/>
+
+
+    a
+</android.support.v4.widget.DrawerLayout>

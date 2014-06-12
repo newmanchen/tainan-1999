@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+
 public class MainActivity extends Activity {
 
     @Override
@@ -31,6 +32,11 @@ public class MainActivity extends Activity {
             case R.id.imageButton4:
                 // FIXME: donate activity
                 activity = DetailActivity.class;
+                break;
+
+            case R.id.imageButton5:
+
+                activity = ShowMapActivity.class;
                 break;
         }
         if (activity != null) {
