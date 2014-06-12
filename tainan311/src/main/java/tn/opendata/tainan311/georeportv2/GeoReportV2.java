@@ -152,12 +152,10 @@ public class GeoReportV2 {
             HttpPost post = new HttpPost(url.toURI());
 
             boolean hasFile = false;
-            Log.e("Vincent", "inner getPostResponse");
             Charset charset = Charset.forName(HTTP.UTF_8);
             if (postData.containsKey("photo")) {
                 File file = new File((String)postData.get("photo"));
                 if ( file.exists() ) {
-                    Log.e("Vincent", "file exists");
                     MultipartEntityBuilder entity = MultipartEntityBuilder.create();
                     entity.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
                     entity.setCharset(charset);
@@ -169,7 +167,6 @@ public class GeoReportV2 {
                     }
                     post.setEntity(entity.build());
                     hasFile = true;
-                    Log.e("Vincent", "has file");
                 }
             }
             if ( !hasFile ) {
@@ -185,16 +182,10 @@ public class GeoReportV2 {
 //            }
 
             BufferedReader br = closer.register(new BufferedReader(new InputStreamReader(response.getEntity().getContent())));
-            String read;
-            StringBuilder sb = new StringBuilder();
-            while((read=br.readLine()) != null) {
-                sb.append(read);
-                Log.e("Vincent", read);
-            }
             Gson gson = new Gson();
             Type type = new TypeToken<FMSResponse>(){}.getType();
 
-            return gson.fromJson(sb.toString(), type);
+            return gson.fromJson(br, type);
         } catch (Throwable e) {
             try {
                 e.printStackTrace();
