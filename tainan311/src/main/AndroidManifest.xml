@@ -34,11 +34,7 @@
         <activity
             android:name="tn.opendata.tainan311.MainActivity"
             android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="tn.opendata.tainan311.RequestListActivity"
@@ -60,6 +56,16 @@
         <activity
             android:name="tn.opendata.tainan311.ShowMapActivity"
             android:label="@string/title_activity_show_map" >
+        </activity>
+        <activity
+            android:name="tn.opendata.tainan311.MainMapActivity"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar"
+            android:label="@string/title_activity_main_map" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 
