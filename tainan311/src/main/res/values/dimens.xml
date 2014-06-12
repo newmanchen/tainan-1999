@@ -7,4 +7,6 @@
     <dimen name="image_height">70dp</dimen>
     <dimen name="detail_image_height">200sp</dimen>
 
+    <dimen name="detail_map_height">120sp</dimen>
+
     </resources>

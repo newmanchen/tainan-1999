@@ -1,0 +1,76 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="tn.opendata.tainan311.ReportDetailFragment"
+    android:orientation="vertical">
+<LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="10dip" >
+    <!--
+    <fragment
+            android:id="@+id/map1"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/detail_map_height"
+            class="com.google.android.gms.maps.MapFragment"/>
+-->
+    <ImageView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:id="@+id/photo"
+            android:scaleType="fitXY"
+            android:visibility="gone"
+
+            />
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/category" />
+        <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/category" android:layout_weight="1"/>
+
+
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/title" />
+        <EditText android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:id="@+id/title" />
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            >
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/detail" />
+        <EditText android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:lines="5"
+                  android:id="@+id/detail" />
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/name" />
+        <EditText android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:id="@+id/name" />
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/email" />
+        <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:ems="10"
+                android:id="@+id/email" android:layout_weight="1"/>
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/password" />
+        <EditText android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:id="@+id/password" />
+    </LinearLayout>
+</LinearLayout>
+</ScrollView>

@@ -105,11 +105,12 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
             switch (position){
                 case 0:
                     return ReportTipsFragment.newInstance();
-                case 1:
+                case 3:
                     return PickMapFragment.newInstance();
-                case 2:
+                case 1:
                     return PickPhotoFragment.newInstance();
-
+                case 2:
+                    return ReportDetailFragment.newInstance();
                 //TODO: ... add new here...
 
             }
