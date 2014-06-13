@@ -11,13 +11,13 @@
     android:layout_height="0dp"
     android:layout_weight="1"
     tools:context="tn.opendata.tainan311.ReportActivity" />
-
+<!--android:background="#ff94ceca"-->
 <LinearLayout android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:background="#ff94ceca"
               android:padding="2dp"
         >
     <Button android:id="@+id/previous"
+            android:background="@drawable/shape_card"
             android:layout_width="0dp"
             android:layout_weight="0.5"
             android:layout_height="wrap_content"
@@ -26,8 +26,9 @@
              android:text="@string/previous"
              android:onClick="onClick"
             />
+    <!--android:textColor="#ff19ff00" -->
     <Button android:id="@+id/next"
-            android:textColor="#ff19ff00"
+            android:background="@drawable/shape_card"
             android:layout_width="0dp"
             android:layout_weight="0.5"
             android:layout_height="wrap_content"
@@ -38,7 +39,7 @@
             />
 
     <Button android:id="@+id/done"
-            android:textColor="#ff19ff00"
+            android:background="@drawable/shape_card_next_btn"
             android:layout_width="0dp"
             android:layout_weight="0.5"
             android:layout_height="wrap_content"
