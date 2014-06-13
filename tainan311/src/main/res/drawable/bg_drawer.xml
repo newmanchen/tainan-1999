@@ -11,10 +11,10 @@
 
 
             <stroke android:width="1dp"
-                    android:color="#ccaaaaaa"/>
+                    android:color="#cc999999"/>
 
 
-            <solid android:color="#aaf0f0f0"/>
+            <solid android:color="#bbffffff"/>
             <corners
                     android:bottomRightRadius="7dp"
                     android:topRightRadius="7dp"

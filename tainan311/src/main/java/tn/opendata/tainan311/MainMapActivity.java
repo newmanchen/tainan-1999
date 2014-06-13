@@ -9,22 +9,18 @@ import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.*;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.*;
+import com.google.common.collect.Maps;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.List;
+import java.util.Map;
 
 import tn.opendata.tainan311.georeportv2.GeoReportV2;
 import tn.opendata.tainan311.georeportv2.vo.Request;
@@ -33,27 +29,27 @@ import tn.opendata.tainan311.utils.MainThreadExecutor;
 import static tn.opendata.tainan311.utils.EasyUtil.findView;
 
 
-public class MainMapActivity extends FragmentActivity implements ListView.OnItemClickListener,DrawerLayout.DrawerListener  {
+public class MainMapActivity extends FragmentActivity implements ListView.OnItemClickListener,DrawerLayout.DrawerListener, GoogleMap.OnInfoWindowClickListener {
 
     private CharSequence mTitle;
     private GoogleMap map;
     private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
-    private View mDrawerView;
     private ImageView drawerButton;
-    private String[] drawer_text;
-
+    private Map<Marker,Request> requestMap = Maps.newConcurrentMap();
+    private ProgressBar progress;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_map);
 
-        drawer_text = getResources().getStringArray(R.array.drawer_text);
+        progress = findView(this,R.id.progress);
+
+        String[] drawer_text = getResources().getStringArray(R.array.drawer_text);
 
         drawerButton = findView(this,R.id.drawer_icon);
         mDrawerLayout = findView(this, R.id.drawer_layout);
-        mDrawerView =  findView(this, R.id.navigation_drawer);
-        mDrawerList = findView(this, R.id.navigation_list);
+        View mDrawerView = findView(this, R.id.navigation_drawer);
+        ListView mDrawerList = findView(this, R.id.navigation_list);
 
 
         mDrawerList.setAdapter(new ArrayAdapter<String>(this,
@@ -66,6 +62,9 @@ public class MainMapActivity extends FragmentActivity implements ListView.OnItem
         map.getUiSettings().setCompassEnabled(true);
         map.getUiSettings().setMyLocationButtonEnabled(true);
         map.setBuildingsEnabled(true);
+
+        map.setOnInfoWindowClickListener(this);
+
 
         //TODO:switch
         //map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
@@ -96,15 +95,22 @@ public class MainMapActivity extends FragmentActivity implements ListView.OnItem
         mDrawerLayout.closeDrawers();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        requestMap.clear();
+    }
 
     private void showProblems(){
+        progress.setVisibility(View.VISIBLE);
         //TODO: limit to 90 days
         GeoReportV2.QueryRequestBuilder builder = GeoReportV2.QueryRequestBuilder.create().build();
         final ListenableFuture<List<Request>> future = builder.execute();
-
         future.addListener(new Runnable() {
             @Override
             public void run() {
+                Map<Marker,Request> localMap = Maps.newConcurrentMap();
                 try {
                     for (Request r : future.get()) {
                         //only display point with Location...
@@ -119,11 +125,15 @@ public class MainMapActivity extends FragmentActivity implements ListView.OnItem
 
 
                             markerOpt.icon(BitmapDescriptorFactory.defaultMarker(color));
-                            map.addMarker(markerOpt);
+                            Marker m = map.addMarker(markerOpt);
+                            localMap.put(m,r);
                         }
+                        requestMap = localMap;
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                }finally{
+                    progress.setVisibility(View.GONE);
                 }
             }
         }, MainThreadExecutor.build());
@@ -169,6 +179,16 @@ public class MainMapActivity extends FragmentActivity implements ListView.OnItem
 
     }
 
+
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+
+        Intent i = new Intent(this, DetailActivity.class);
+        i.putExtra(DetailActivity.EXTRA_KEY_REQUEST, requestMap.get(marker));
+        startActivity(i);
+    }
+
     @Override
     public void onDrawerSlide(View drawerView, float slideOffset) {
 
@@ -188,4 +208,5 @@ public class MainMapActivity extends FragmentActivity implements ListView.OnItem
     public void onDrawerStateChanged(int newState) {
 
     }
+
 }

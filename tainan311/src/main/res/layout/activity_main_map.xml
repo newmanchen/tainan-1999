@@ -12,15 +12,15 @@
                   android:layout_height="match_parent"
                   class="com.google.android.gms.maps.MapFragment"/>
         <ImageView android:id="@+id/drawer_icon"
-                android:layout_width="28dp"
-                android:layout_height="50dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_drawer"
-                android:onClick="onDrawerClick"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/bg_drawer"
+                   android:layout_width="28dp"
+                   android:layout_height="50dp"
+                   android:scaleType="fitCenter"
+                   android:src="@drawable/ic_drawer"
+                   android:onClick="onDrawerClick"
+                   android:layout_alignParentLeft="true"
+                   android:layout_alignParentTop="true"
+                   android:layout_marginTop="80dp"
+                   android:background="@drawable/bg_drawer"
                 />
 
         <Button android:id="@+id/btn_report"
@@ -36,9 +36,14 @@
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="20dp"
-                android:onClick="onReportClick"
+                android:onClick="onReportClick"/>
 
-
+        <ProgressBar
+                android:id="@+id/progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
                 />
 
     </RelativeLayout>
@@ -49,7 +54,7 @@
                     android:background="#efefef"
                     android:id="@+id/navigation_drawer"
             >
-        <ImageView  android:id="@+id/logo"
+        <ImageView android:id="@+id/logo"
                    android:layout_width="match_parent"
                    android:layout_height="120dp"
                    android:scaleType="fitXY"
@@ -69,17 +74,15 @@
                   android:text="@string/app_name"
                 />
 
-         <ListView
-              android:id="@+id/navigation_list"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:layout_below="@id/logo"
-              android:layout_marginTop="20dp"
-              android:choiceMode="singleChoice"
-              android:divider="@android:color/transparent"
-              android:dividerHeight="1dp"/>
-
-
+        <ListView
+                android:id="@+id/navigation_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/logo"
+                android:layout_marginTop="20dp"
+                android:choiceMode="singleChoice"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="1dp"/>
 
 
     </RelativeLayout>
