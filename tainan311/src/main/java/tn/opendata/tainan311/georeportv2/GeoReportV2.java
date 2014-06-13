@@ -2,13 +2,16 @@ package tn.opendata.tainan311.georeportv2;
 
 import android.text.TextUtils;
 import android.util.Log;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.io.Closer;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -17,22 +20,31 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
-import tn.opendata.tainan311.georeportv2.vo.*;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
-import java.util.*;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
-import com.google.common.util.concurrent.ListeningExecutorService;
+
+import tn.opendata.tainan311.georeportv2.vo.Request;
+import tn.opendata.tainan311.georeportv2.vo.RequestId;
+import tn.opendata.tainan311.georeportv2.vo.Service;
+import tn.opendata.tainan311.georeportv2.vo.ServiceDefinition;
 import tn.opendata.tainan311.postdata.RequestData;
 
 import static tn.opendata.tainan311.utils.EasyUtil.close;
@@ -54,6 +66,9 @@ public class GeoReportV2 {
     private static final String PATH_SERVICE_BY_REQUEST_ID = "requests/%s.json";
 
     private static final String DEFAULT_JURISDICTION_ID = "tainan.fixmystreet.tw";
+
+    public static final String INTERFACE_USED_ANDROID = "android";
+    public static final String INTERFACE_USED_WEB = "Web interface";
 
     private GeoReportV2() {
     }
@@ -432,6 +447,11 @@ public class GeoReportV2 {
             return this;
         }
 
+        public QueryRequestBuilder endDate(String end) {
+            data.put("end_date", end);
+            return this;
+        }
+
         public QueryRequestBuilder open() {
             data.put("status", "open");
             return this;
@@ -439,6 +459,48 @@ public class GeoReportV2 {
 
         public QueryRequestBuilder closed() {
             data.put("status", "closed");
+            return this;
+        }
+
+        /**
+         * FixMyStreet Specific
+         * @param limit
+         * @return
+         */
+        public QueryRequestBuilder max_requests(int limit) {
+            data.put("max_requests", limit);
+            return this;
+        }
+
+        /**
+         * FixMyStreet Specific
+         * report via android/web/iphone...
+         * available value : INTERFACE_USED_ANDROID or INTERFACE_USED_WEB
+         * @return
+         */
+        public QueryRequestBuilder interface_used(String interfaceUsed) {
+            data.put("interface_used", interfaceUsed);
+            return this;
+        }
+
+        /**
+         * FixMyStreet Specific
+         * @param hasPhoto , true if need photo link in returned data
+         * @return
+         */
+        public QueryRequestBuilder has_photo(boolean hasPhoto) {
+            data.put("has_photo", hasPhoto ? 1 : 0);
+            return this;
+        }
+
+        /**
+         * FixMyStreet Specific
+         * @param agencyId , ID of government body receiving the request.
+         *                 Several IDs can be specified with | as a separator.
+         * @return
+         */
+        public QueryRequestBuilder agency_responsible(String agencyId) {
+            data.put("agency_responsible", agencyId);
             return this;
         }
 
@@ -461,6 +523,18 @@ public class GeoReportV2 {
             });
         }
 
+        @Override
+        public String toString() {
+            String path = "";
+            try {
+                Map<String, Object> map = data.build();
+                path = prefix + PATH_REQUESTS + "?" + encodeGetParameters(convert(map), HTTP.UTF_8);
+            } catch (Exception e) {
+                e.printStackTrace();
+                path = super.toString();
+            }
+            return path;
+        }
     }
 
     public static class PostRequestBuilder {
@@ -610,8 +684,5 @@ public class GeoReportV2 {
         public static PostRequestBuilder create(String service_code, int address_id) {
             return new PostRequestBuilder(DEFAULT_JURISDICTION_ID, service_code, address_id);
         }
-
-
     }
-
 }

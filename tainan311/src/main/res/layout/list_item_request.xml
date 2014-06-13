@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="@dimen/request_list_item_height"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"
@@ -50,7 +50,6 @@
                     android:layout_below="@id/service_name"
                     android:layout_marginBottom="3dp"
                     android:layout_alignParentLeft="true"
-                    android:layout_alignParentBottom="true"
                     android:textSize="12sp"
                     android:paddingLeft="2sp"
                     android:paddingRight="2sp"
@@ -65,7 +64,6 @@
                     android:layout_toRightOf="@id/status"
                     android:layout_marginLeft="5dp"
                     android:layout_marginBottom="3dp"
-                    android:layout_alignParentBottom="true"
                     android:layout_alignTop="@id/status"
                     android:textSize="12sp"
                     android:gravity="center"

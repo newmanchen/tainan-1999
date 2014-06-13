@@ -21,4 +21,8 @@
     <string name="request_list_title">問題清單</string>
     <string name="status_open">OPEN</string>
     <string name="status_closed">CLOSED</string>
+    <string name="text_issue_detail">問題描述</string>
+    <string name="text_service_name">問題類別</string>
+    <string name="text_request_date">提交日期</string>
+    <string name="text_location">問題地點</string>
 </resources>
