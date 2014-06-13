@@ -62,7 +62,7 @@
         <activity
             android:name="tn.opendata.tainan311.MainMapActivity"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar"
-            android:label="@string/title_activity_main_map" >
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

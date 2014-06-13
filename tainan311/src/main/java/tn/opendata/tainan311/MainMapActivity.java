@@ -38,21 +38,25 @@ public class MainMapActivity extends FragmentActivity implements ListView.OnItem
     private GoogleMap map;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
-    private ActionBarDrawerToggle mDrawerToggle;
+    private View mDrawerView;
     private ImageView drawerButton;
+    private String[] drawer_text;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_map);
 
+        drawer_text = getResources().getStringArray(R.array.drawer_text);
+
         drawerButton = findView(this,R.id.drawer_icon);
         mDrawerLayout = findView(this, R.id.drawer_layout);
-        mDrawerList = findView(this, R.id.navigation_drawer);
+        mDrawerView =  findView(this, R.id.navigation_drawer);
+        mDrawerList = findView(this, R.id.navigation_list);
 
 
         mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, new String[]{
-                "全部回報","我的回報","關於我們"}));
+                R.layout.drawer_item, drawer_text));
         mDrawerList.setOnItemClickListener(this);
         mDrawerLayout.setDrawerListener(this);
 
@@ -148,7 +152,7 @@ public class MainMapActivity extends FragmentActivity implements ListView.OnItem
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        switch(position){
+        switch(position){   //R.arrays.drawer_text
             case 0:
                 startActivity(new Intent(this,RequestListActivity.class));
                 break;
@@ -160,7 +164,7 @@ public class MainMapActivity extends FragmentActivity implements ListView.OnItem
                 break;
         }
 
-        mDrawerLayout.closeDrawer(mDrawerList);
+//        mDrawerLayout.closeDrawer(mDrawerView);
 
     }
 
