@@ -60,7 +60,7 @@ public final class ImageUtils {
                 final int columnIndex = cursor.getColumnIndex(column[0]);
                 final String path = cursor.getString(columnIndex);
                 BitmapFactory.Options opt = new BitmapFactory.Options();
-                opt.inSampleSize = 4;
+                opt.inSampleSize = 2;
                 opt.inPreferredConfig = Bitmap.Config.RGB_565;
                 return Optional.of(BitmapFactory.decodeFile(path, opt));
             }
