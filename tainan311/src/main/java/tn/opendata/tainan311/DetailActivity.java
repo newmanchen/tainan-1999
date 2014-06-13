@@ -52,8 +52,7 @@ public class DetailActivity extends Activity {
             updateActionBar();
 
             mSimpleDateFormatTo = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", getResources().getConfiguration().locale);
-            //2014-06-10T16:43:30.075028+08:00
-            mSimpleDateFormatFrom = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ");
+            mSimpleDateFormatFrom = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
             initViews();
         }
     }
@@ -103,7 +102,7 @@ public class DetailActivity extends Activity {
         serviceName.setText(mRequest.getService_name());
         TextView requestDate = EasyUtil.findView(this, R.id.request_date);
         try {
-            Date date = mSimpleDateFormatFrom.parse(mRequest.getRequested_datetime());
+            Date date = mSimpleDateFormatFrom.parse(removeFractionalSeconds(mRequest.getRequested_datetime()));
             requestDate.setText(mSimpleDateFormatTo.format(date));
         } catch (ParseException  e) {
             e.printStackTrace();
@@ -144,5 +143,10 @@ public class DetailActivity extends Activity {
                 break;
         }
         return true;
+    }
+
+    private String removeFractionalSeconds(String time) {
+        // 2014-06-10T16:43:30.075028+08:00
+        return time.replace(time.substring(19, 26), "");
     }
 }

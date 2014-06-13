@@ -35,6 +35,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import tn.opendata.tainan311.georeportv2.GeoReportV2;
 import tn.opendata.tainan311.georeportv2.vo.Request;
@@ -59,8 +60,10 @@ public class RequestListActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mSimpleDateFormatTo = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", getResources().getConfiguration().locale);
-        //2014-06-10T16:43:30.075028+08:00
-        mSimpleDateFormatFrom = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ");
+        // server format :: 2014-06-10T16:43:30.075028+08:00
+        // android format 小數點只有3位數 server來6位數會進位變成有機會多0-1000秒
+        // 所以先去掉小數點
+        mSimpleDateFormatFrom = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 
         mHasNext = true;
         mLoadingMore = false;
@@ -97,9 +100,16 @@ public class RequestListActivity extends ListActivity {
             GeoReportV2.QueryRequestBuilder builder = GeoReportV2.QueryRequestBuilder.create();
             builder.max_requests(MAX_REQUEST);
             if (!TextUtils.isEmpty(endDateTime)) {
-                builder.endDate(endDateTime);
+                try {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+                    Date dd = mSimpleDateFormatFrom.parse(removeFractionalSeconds(endDateTime));
+                    builder.endDate(sdf.format(dd));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
-//            Log.d(TAG, "newman::url to fetch data :: " + builder.toString());
+            Log.d(TAG, "newman::url to fetch data :: " + builder.toString());
             mLoadingMore = true;
             Futures.addCallback(builder.execute()
                     , new FutureCallback<List<Request>>() {
@@ -224,7 +234,7 @@ public class RequestListActivity extends ListActivity {
             holder.title.setText(r.getTitle());
             holder.service_name.setText(r.getService_name());
             try {
-                Date date = mSimpleDateFormatFrom.parse(r.getRequested_datetime());
+                Date date = mSimpleDateFormatFrom.parse(removeFractionalSeconds(r.getRequested_datetime()));
                 holder.datetime.setText(mSimpleDateFormatTo.format(date));
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -272,5 +282,10 @@ public class RequestListActivity extends ListActivity {
                 break;
         }
         return true;
+    }
+
+    private String removeFractionalSeconds(String time) {
+        // 2014-06-10T16:43:30.075028+08:00
+        return time.replace(time.substring(19, 26), "");
     }
 }
