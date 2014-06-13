@@ -67,7 +67,7 @@ public class PickMapFragment extends WizardFragment {
         map.getUiSettings().setCompassEnabled(true);
         map.getUiSettings().setMyLocationButtonEnabled(true);
         map.setBuildingsEnabled(true);
-        //map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
         CameraUpdate center = CameraUpdateFactory.newLatLngZoom(new LatLng(22.997144,120.212966),13); //台南火車站
 
