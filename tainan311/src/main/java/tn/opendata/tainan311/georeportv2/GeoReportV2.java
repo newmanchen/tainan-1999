@@ -627,6 +627,11 @@ public class GeoReportV2 {
             return this;
         }
 
+        public PostRequestBuilder password(String password) {
+            data.put("password", password);
+            return this;
+        }
+
         public PostRequestBuilder build() {
 
             return this;

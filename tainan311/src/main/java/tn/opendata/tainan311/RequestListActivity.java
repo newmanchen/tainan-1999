@@ -88,6 +88,7 @@ public class RequestListActivity extends ListActivity {
 
     private void initViews() {
         mLoadingMoreItem = (LinearLayout) ((LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE)).inflate(R.layout.list_item_loading_more, null);
+        getListView().addFooterView(mLoadingMoreItem);
     }
 
     private void loadRequest(String endDateTime) {
@@ -156,11 +157,11 @@ public class RequestListActivity extends ListActivity {
     };
 
     private void addLoadingMoreListItem() {
-        getListView().addFooterView(mLoadingMoreItem);
+        mLoadingMoreItem.setVisibility(View.VISIBLE);
     }
 
     private void removeLoadingMoreListItem() {
-        getListView().removeFooterView(mLoadingMoreItem);
+        mLoadingMoreItem.setVisibility(View.GONE);
     }
 
     private class RequestListArrayAdapter extends ArrayAdapter<Request> implements AdapterView.OnItemClickListener {

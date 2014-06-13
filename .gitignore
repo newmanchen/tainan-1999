@@ -1,5 +1,7 @@
 .gradle
 gradle/
+gradle/*
+gradle/wrapper/*.*
 
 .idea/
 

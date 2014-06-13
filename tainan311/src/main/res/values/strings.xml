@@ -48,6 +48,9 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
     <string name="label_report">回報問題</string>
+    <string name="no_data">no data received</string>
+    <string name="success">add request successfully</string>
+    <string name="failed">failed</string>
 
 
     <string name="text_issue_detail">問題描述</string>

@@ -98,14 +98,14 @@ public class PickPhotoFragment extends WizardFragment {
                 Optional<Bitmap> bitmap = ImageUtils.getBitmapFromIntentData(getActivity(), data);
                 if (bitmap.isPresent()) {
                     Bitmap bmp = bitmap.get();
-                    mPhotoView.setImageBitmap(bmp);
+                    mPhotoView.setImageBitmap(bmp); //ImageUtils.cropCenterBitmap()
                     mPhoto = getImagePath(bmp);
                 }
             } else if ( requestCode == REQUEST_CODE_IMAGE_CAPTURE ) {
                 Bundle bundle = data.getExtras();
                 Bitmap imageBitmap = null;
                 if ( bundle != null && (imageBitmap = (Bitmap)bundle.get("data")) != null ) {
-                    mPhotoView.setImageBitmap(imageBitmap);
+                    mPhotoView.setImageBitmap(ImageUtils.cropCenterBitmap(imageBitmap));
                     mPhoto = getImagePath(imageBitmap);
                 }
             }

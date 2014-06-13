@@ -2,7 +2,7 @@
 <resources>
     <string-array name="drawer_text">
         <item>全部回報</item>
-        <item>我的回報</item>
+        <item>回報問題</item>
         <item>關於我們</item>
     </string-array>
 </resources>

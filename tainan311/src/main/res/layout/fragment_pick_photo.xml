@@ -10,10 +10,11 @@
                       android:id="@+id/photo_layout" android:gravity="center">
             <ImageView
                     android:layout_width="320dip"
-                    android:layout_height="240dip"
-                    android:scaleType="fitXY"
+                    android:layout_height="320dip"
+                    android:scaleType="fitStart"
                     android:id="@+id/photo"
                     android:src="@drawable/photo"
+                    android:layout_gravity="center_horizontal"
                     />
         </LinearLayout>
 
