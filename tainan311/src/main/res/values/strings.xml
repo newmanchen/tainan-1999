@@ -16,7 +16,7 @@
     <string name="next">下一步</string>
     <string name="previous">上一步</string>
     <string name="done">完成</string>
-    <string name="msg_drag_pin">請拖拉地圖並將箭頭對準問題發生的地點。</string>
+    <string name="msg_drag_pin">將箭頭對準問題發生位置</string>
 
     <string name="request_list_title">問題清單</string>
     <string name="status_open">OPEN</string>
@@ -31,12 +31,12 @@
     <string name="category">category</string>
 
     <string name="tips_title">怎麼回報問題</string>
-    <string name="tips_ignore">不再顯示</string>
-    <string name="tips_step1">輸入一個附近的街道名稱或區域</string>
-    <string name="tips_step2">把問題標記在地圖上</string>
-    <string name="tips_step3">上傳照片</string>
-    <string name="tips_step4">輸入問題的描述</string>
-    <string name="tips_step5">完成回報，我們會通知所屬機關</string>
+    <string name="tips_ignore">下次不要再顯示此頁</string>
+    <string name="tips_step1">把問題位置標記在地圖上</string>
+    <string name="tips_step2">拍照</string>
+    <string name="tips_step3">描述問題</string>
+    <string name="tips_step4">上傳問題並點選確認信</string>
+    <string name="tips_step5">完成回報</string>
     <string name="tips_step1_no">1</string>
     <string name="tips_step2_no">2</string>
     <string name="tips_step3_no">3</string>

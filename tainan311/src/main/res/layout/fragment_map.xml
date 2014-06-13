@@ -2,17 +2,11 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingTop="@dimen/activity_vertical_margin"
+                android:padding="8dp"
                 tools:context="tn.opendata.tainan311.ReportActivity$PlaceholderFragment">
 
     <TextView android:id="@+id/msg"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:textSize="18sp"
-              android:singleLine="false"
-              android:layout_marginBottom="16dp"
-              android:layout_marginLeft="8dp"
-              android:layout_marginRight="8dp"
+              style="@style/WizardTitle"
               android:text="@string/msg_drag_pin"
 
             />
@@ -20,12 +14,14 @@
 
     <RelativeLayout android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/shape_card"
+                    android:padding="3dp"
                     android:layout_below="@id/msg">
         <fragment
                 android:id="@+id/map"
                 android:name="com.google.android.gms.maps.MapFragment"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:clickable="true"
                 />
 

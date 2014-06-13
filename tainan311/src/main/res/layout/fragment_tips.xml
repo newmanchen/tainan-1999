@@ -1,47 +1,68 @@
-<LinearLayout android:orientation="vertical" android:background="#ffdfdfdf" android:layout_width="fill_parent" android:layout_height="fill_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:scrollbarStyle="outsideOverlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+    <LinearLayout android:orientation="vertical" android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:padding="8dp">
+        <TextView android:id="@+id/tips_title"
+                  style="@style/WizardTitle"
+                  android:text="@string/tips_title"/>
 
-    <LinearLayout android:layout_gravity="center" android:orientation="horizontal" android:id="@+id/layout_preserve_for_header" android:layout_width="320.0dip" android:layout_height="20.0dip" android:layout_weight="0.0" />
+        <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/tips_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:columnCount="2"
+                    android:rowCount="2"
 
-
-
-    <ScrollView android:scrollbarStyle="outsideOverlay" android:id="@+id/scrollView1" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_weight="1.0">
-        <LinearLayout  android:orientation="vertical"  android:layout_width="fill_parent" android:layout_height="wrap_content">
-            <TextView android:id="@+id/tips_title"  android:layout_centerVertical="true" android:padding="10.0dip" android:textSize="25.0sp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/tips_title" />
-
-            <LinearLayout android:id="@+id/tips_container" android:orientation="vertical" android:background="@drawable/shape_card" android:padding="10.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_margin="5.0dip">
-                <RelativeLayout  android:orientation="vertical"   android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_margin="5.0dip">
-                    <TextView android:id="@+id/tips1_no" android:layout_alignParentLeft="true" android:layout_centerVertical="true"  android:padding="10.0dip" android:textSize="30.0sp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#CCCCCCCC" android:text="@string/tips_step1_no" />
-                    <TextView android:id="@+id/tips1" android:layout_toRightOf="@+id/tips1_no" android:layout_centerVertical="true" android:padding="10.0dip" android:textSize="20.0sp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/tips_step1" />
-                </RelativeLayout>
-
-                <RelativeLayout  android:orientation="vertical"  android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_margin="5.0dip">
-                    <TextView android:id="@+id/tips2_no" android:layout_alignParentLeft="true" android:layout_centerVertical="true"  android:padding="10.0dip" android:textSize="30.0sp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#CCCCCCCC" android:text="@string/tips_step2_no" />
-                    <TextView android:id="@+id/tips2" android:layout_toRightOf="@+id/tips2_no" android:layout_centerVertical="true" android:padding="10.0dip" android:textSize="20.0sp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/tips_step2" />
-                </RelativeLayout>
-
-                <RelativeLayout  android:orientation="vertical"  android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_margin="5.0dip">
-                    <TextView android:id="@+id/tips3_no" android:layout_alignParentLeft="true" android:layout_centerVertical="true"  android:padding="10.0dip" android:textSize="30.0sp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#CCCCCCCC" android:text="@string/tips_step3_no" />
-                    <TextView android:id="@+id/tips3" android:layout_toRightOf="@+id/tips3_no" android:layout_centerVertical="true" android:padding="10.0dip" android:textSize="20.0sp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/tips_step3" />
-                </RelativeLayout>
-
-                <RelativeLayout  android:orientation="vertical"  android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_margin="5.0dip">
-                    <TextView android:id="@+id/tips4_no" android:layout_alignParentLeft="true" android:layout_centerVertical="true"  android:padding="10.0dip" android:textSize="30.0sp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#CCCCCCCC" android:text="@string/tips_step4_no" />
-                    <TextView android:id="@+id/tips4" android:layout_toRightOf="@+id/tips4_no" android:layout_centerVertical="true" android:padding="10.0dip" android:textSize="20.0sp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/tips_step4" />
-                </RelativeLayout>
-
-                <RelativeLayout  android:orientation="vertical"   android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_margin="5.0dip">
-                    <TextView android:id="@+id/tips5_no" android:layout_alignParentLeft="true" android:layout_centerVertical="true"  android:padding="10.0dip" android:textSize="30.0sp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#CCCCCCCC" android:text="@string/tips_step5_no" />
-                    <TextView android:id="@+id/tips5" android:layout_toRightOf="@+id/tips5_no" android:layout_centerVertical="true" android:padding="10.0dip" android:textSize="20.0sp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/tips_step5" />
-                </RelativeLayout>
-            </LinearLayout>
-
-            <LinearLayout android:orientation="vertical" android:background="@drawable/shape_card" android:padding="10.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_margin="5.0dip">
-                <CheckBox android:id="@+id/checkbox_ignore_tips" android:layout_width="wrap_content" android:layout_height="wrap_content" android:checked="false" android:text="@string/tips_ignore" />
-            </LinearLayout>
-        </LinearLayout>
+                    android:orientation="horizontal"
+                    android:background="@drawable/shape_card">
 
 
-    </ScrollView>
+            <TextView android:id="@+id/tips1_no"
+                      style="@style/TipIndex"
+                      android:text="@string/tips_step1_no"/>
+            <TextView android:id="@+id/tips1"
+                      style="@style/TipText"
+                      android:text="@string/tips_step1"/>
+            <TextView android:id="@+id/tips2_no"
+                      style="@style/TipIndex"
+                      android:text="@string/tips_step2_no"/>
+            <TextView android:id="@+id/tips2"
+                      style="@style/TipText"
+                      android:text="@string/tips_step2"/>
+            <TextView android:id="@+id/tips3_no"
+                      style="@style/TipIndex"
+                      android:text="@string/tips_step3_no"/>
+            <TextView android:id="@+id/tips3"
+                      style="@style/TipText"
+                      android:text="@string/tips_step3"/>
+            <TextView android:id="@+id/tips4_no"
+                      style="@style/TipIndex"
+                      android:text="@string/tips_step4_no"/>
+            <TextView android:id="@+id/tips4"
+                      style="@style/TipText"
+                      android:text="@string/tips_step4"/>
+            <TextView android:id="@+id/tips5_no"
+                      style="@style/TipIndex"
+                      android:text="@string/tips_step5_no"/>
+            <TextView android:id="@+id/tips5"
+                      style="@style/TipText"
+                      android:text="@string/tips_step5"/>
+        </GridLayout>
 
-</LinearLayout>
+
+        <CheckBox android:id="@+id/checkbox_ignore_tips"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:checked="false"
+                  android:textSize="20sp"
+                  android:layout_marginTop="5dp"
+                  android:text="@string/tips_ignore"/>
+    </LinearLayout>
+
+
+</ScrollView>
+
+

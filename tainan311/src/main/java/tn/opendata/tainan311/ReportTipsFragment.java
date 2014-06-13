@@ -39,14 +39,7 @@ public class ReportTipsFragment extends WizardFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        //FIXME: only for test..
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                setReady(true);
-            }
-        }, 1000);
+        setReady(true);
     }
 
     @Override

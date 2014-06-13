@@ -12,5 +12,33 @@
         <item name="android:background">#ffbcc8ce</item>
     </style>
 
+    <style name="TipIndex">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#CCCCCCCC</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:textSize">48sp</item>
+        <item name="android:gravity">bottom</item>
+    </style>
+
+    <style name="TipText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="WizardTitle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
 
 </resources>
