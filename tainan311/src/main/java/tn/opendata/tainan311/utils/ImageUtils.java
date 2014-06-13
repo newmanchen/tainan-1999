@@ -34,7 +34,7 @@ public final class ImageUtils {
             try {
                 File f = file.get();
                 fout = new FileOutputStream(f);
-                bitmap.compress(Bitmap.CompressFormat.PNG, 85, fout);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 85, fout);
                 fout.flush();
 
                 return Optional.of(f.getAbsolutePath());
@@ -81,5 +81,30 @@ public final class ImageUtils {
             e.printStackTrace();
         }
         return Optional.absent();
+    }
+
+    public static Bitmap cropCenterBitmap(Bitmap srcBmp) {
+        Bitmap dstBmp;
+        if (srcBmp.getWidth() >= srcBmp.getHeight()){
+
+            dstBmp = Bitmap.createBitmap(
+                    srcBmp,
+                    srcBmp.getWidth()/2 - srcBmp.getHeight()/2,
+                    0,
+                    srcBmp.getHeight(),
+                    srcBmp.getHeight()
+            );
+
+        }else{
+
+            dstBmp = Bitmap.createBitmap(
+                    srcBmp,
+                    0,
+                    srcBmp.getHeight()/2 - srcBmp.getWidth()/2,
+                    srcBmp.getWidth(),
+                    srcBmp.getWidth()
+            );
+        }
+        return dstBmp;
     }
 }

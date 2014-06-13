@@ -12,7 +12,7 @@ public class FMSResponse {
 
     private class FMSError {
         private String category;
-
+        private String photo;
 
         public String getCategory() {
             return category;
@@ -21,6 +21,10 @@ public class FMSResponse {
         @Override
         public String toString() {
             return category;
+        }
+
+        public String getPhoto() {
+            return photo;
         }
     }
 
