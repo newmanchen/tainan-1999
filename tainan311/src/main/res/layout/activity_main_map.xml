@@ -24,17 +24,18 @@
                 />
 
         <Button android:id="@+id/btn_report"
-                android:background="@drawable/btn_report"
+                android:background="@drawable/bg_btn_report"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="24sp"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:textColor="@android:color/white"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:textColor="#efefef"
                 android:text="@string/label_report"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="20dp"
                 android:onClick="onReportClick"
 
 
