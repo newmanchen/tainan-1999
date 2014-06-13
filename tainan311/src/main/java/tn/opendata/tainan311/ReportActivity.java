@@ -85,6 +85,17 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
         resetButtonState();
     }
 
+    @Override
+    public void onBackPressed() {
+        boolean first = mViewPager.getCurrentItem() == 0;
+        if(first){
+          super.onBackPressed();
+        }else{
+            previousButton.performClick();
+        }
+
+    }
+
     private void createNewRequest() {
         Intent intent = new Intent(ReportActivity.this, NewRequestIntentService.class);
         intent.putExtra("data", data);
