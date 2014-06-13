@@ -51,10 +51,20 @@
     <string name="no_data">no data received</string>
     <string name="success">add request successfully</string>
     <string name="failed">failed</string>
+    <string name="text_setting">設定</string>
 
 
     <string name="text_issue_detail">問題描述</string>
     <string name="text_service_name">問題類別</string>
     <string name="text_request_date">提交日期</string>
     <string name="text_location">問題地點</string>
+    <string name="text_setting_general">一般</string>
+    <string name="text_show_tips">顯示回報問題提示</string>
+    <string name="text_show_tips_summary">在回報問題顯示提示</string>
+    <string name="text_setting_report_issue">回報問題</string>
+    <string name="text_issue_reporter_name">預設回報者名字</string>
+    <string name="text_issue_input_reporter_name">請輸入回報者名字</string>
+    <string name="text_no_default">沒有預設</string>
+    <string name="text_issue_reporter_email">預設回報者電子信箱</string>
+    <string name="text_issue_input_reporter_email">請輸入回報者電子信箱</string>
 </resources>

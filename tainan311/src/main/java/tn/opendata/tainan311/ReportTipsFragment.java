@@ -1,15 +1,14 @@
 package tn.opendata.tainan311;
 
-import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.content.SharedPreferences;
+
+import tn.opendata.tainan311.utils.Constant;
 
 /**
  * Created by sam on 2014/6/11.
@@ -34,7 +33,6 @@ public class ReportTipsFragment extends WizardFragment {
     private ReportTipsFragment() {
     }
 
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -45,7 +43,6 @@ public class ReportTipsFragment extends WizardFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
-
         boolean isIgnore = ReportTipsFragment.getIgnorePref(getActivity());
         View rootView = inflater.inflate(R.layout.fragment_tips, container, false);
         mCheck_ignore_tips = (CheckBox)rootView.findViewById(R.id.checkbox_ignore_tips);
@@ -66,21 +63,14 @@ public class ReportTipsFragment extends WizardFragment {
             setIgnoreTipPref(getActivity(),mCheck_ignore_tips.isChecked());
     }
 
-    private static final String PREFS_NAME = "tn.opendata.tainan311.tips";
-    private static final String PREFS_KEY = "tn.opendata.tainan311.tips.ignore";
-
     public static boolean getIgnorePref(Context context){
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
-        return prefs.getBoolean(PREFS_KEY, false);
+        SharedPreferences prefs = context.getSharedPreferences(Constant.PREF_NAME, 0);
+        return !prefs.getBoolean(Constant.KEY_SHOW_TIPS, true); // default show tip
     }
 
     private void setIgnoreTipPref(Context context,boolean ignore){
-        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.putBoolean(PREFS_KEY, ignore);
+        SharedPreferences.Editor prefs = context.getSharedPreferences(Constant.PREF_NAME, 0).edit();
+        prefs.putBoolean(Constant.KEY_SHOW_TIPS, !ignore);
         prefs.commit();
     }
-
-
-
 }
-

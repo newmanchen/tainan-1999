@@ -99,7 +99,7 @@ public class RequestListActivity extends ListActivity {
             if (!TextUtils.isEmpty(endDateTime)) {
                 builder.endDate(endDateTime);
             }
-//            Log.d(TAG, "url to fetch data :: " + builder.toString());
+//            Log.d(TAG, "newman::url to fetch data :: " + builder.toString());
             mLoadingMore = true;
             Futures.addCallback(builder.execute()
                     , new FutureCallback<List<Request>>() {
