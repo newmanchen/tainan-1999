@@ -1,5 +1,7 @@
 package tn.opendata.tainan311;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -32,7 +34,7 @@ public class PickMapFragment extends WizardFragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
     private GoogleMap map;
-
+    private Handler handler = new Handler();
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -48,6 +50,8 @@ public class PickMapFragment extends WizardFragment {
 
     private PickMapFragment() {
     }
+
+
 
 
     @Override
@@ -128,6 +132,32 @@ public class PickMapFragment extends WizardFragment {
 
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
         return rootView;
+    }
+
+
+    @Override
+    public void onDestroyView(){
+        super.onDestroyView();
+
+        //workaround for nested MapFragment
+        handler.postAtTime(new Runnable(){
+            @Override
+            public void run() {
+                Fragment fragment = (getFragmentManager().findFragmentById(R.id.map));
+                FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
+                ft.remove(fragment);
+                ft.commit();
+            }
+        },"removemap",300) ;
+
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        //workaround for nested MapFragment
+        handler.removeCallbacksAndMessages("removemap");
     }
 
 
