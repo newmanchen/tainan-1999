@@ -95,6 +95,15 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
         boolean last = (mViewPager.getCurrentItem() == mViewPager.getAdapter().getCount() -1);
         boolean first = mViewPager.getCurrentItem() == 0;
 
+        if(first){
+            nextButton.setText(R.string.next_to_report);
+        }else if (mViewPager.getCurrentItem() == 1){
+            nextButton.setText(R.string.next);
+            previousButton.setText(R.string.previous_tips);
+        }else{
+            nextButton.setText(R.string.next);
+            previousButton.setText(R.string.previous);
+        }
 
         doneButton.setVisibility(last ? View.VISIBLE : View.GONE);
         nextButton.setVisibility(last ? View.GONE : View.VISIBLE);

@@ -15,6 +15,8 @@
     <string name="title_section3">Section 3</string>
     <string name="next">下一步</string>
     <string name="previous">上一步</string>
+    <string name="previous_tips">HELP</string>
+    <string name="next_to_report">開始</string>
     <string name="done">完成</string>
     <string name="msg_drag_pin">將箭頭對準問題發生位置</string>
 
