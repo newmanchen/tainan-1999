@@ -99,7 +99,7 @@ public class RequestListActivity extends ListActivity {
             if (!TextUtils.isEmpty(endDateTime)) {
                 builder.endDate(endDateTime);
             }
-//            Log.d(TAG, "url to fetch data :: " + builder.toString());
+            Log.d(TAG, "newman::url to fetch data :: " + builder.toString());
             mLoadingMore = true;
             Futures.addCallback(builder.execute()
                     , new FutureCallback<List<Request>>() {
@@ -152,6 +152,8 @@ public class RequestListActivity extends ListActivity {
             if((lastInScreen == totalItemCount) && !(mLoadingMore)){
                 Request r = mRequestListArrayAdapter.getItem(mRequestListArrayAdapter.getCount()-1);
                 loadRequest(r.getRequested_datetime());
+                Log.d(TAG, "newman::r.getTitle():: " + r.getTitle());
+                Log.d(TAG, "newman::r.getRequested_datetime():: " + r.getRequested_datetime());
             }
         }
     };

@@ -1,21 +1,18 @@
 package tn.opendata.tainan311;
 
-import android.app.Activity;
-import android.database.DataSetObserver;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
-import com.google.common.base.Optional;
-import tn.opendata.tainan311.utils.ImageUtils;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.TextView;
 
-import java.io.File;
 import java.util.ArrayList;
 
 
@@ -55,7 +52,9 @@ public class ReportDetailFragment extends WizardFragment {
 
         View rootView = inflater.inflate(R.layout.fragment_report_detail, container, false);
         name = (TextView)rootView.findViewById(R.id.name);
+        name.setText(getDefaultNamePref(getActivity()));
         email = (TextView)rootView.findViewById(R.id.email);
+        email.setText(getDefaultEmailPref(getActivity()));
         title = (TextView)rootView.findViewById(R.id.title);
         detail = (TextView)rootView.findViewById(R.id.detail);
         category = (Spinner)rootView.findViewById(R.id.category);
@@ -109,5 +108,17 @@ public class ReportDetailFragment extends WizardFragment {
         return acc;
     }
 
+    private static final String PREFS_NAME = "tn.opendata.tainan311_preferences";
+    private static final String PREFS_KEY_DEFAULT_NAME = "reporter_name_preference";
+    private static final String PREFS_KEY_DEFAULT_EMAIL = "reporter_email_preference";
 
+    public static String getDefaultNamePref(Context context){
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
+        return prefs.getString(PREFS_KEY_DEFAULT_NAME, "");
+    }
+
+    public static String getDefaultEmailPref(Context context){
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
+        return prefs.getString(PREFS_KEY_DEFAULT_EMAIL, "");
+    }
 }
