@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="request_detail_separator" type="color">@android:color/holo_orange_light</item>
+</resources>

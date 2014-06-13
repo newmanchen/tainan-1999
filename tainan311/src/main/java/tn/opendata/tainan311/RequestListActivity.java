@@ -14,10 +14,13 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.FutureCallback;
@@ -47,16 +50,24 @@ public class RequestListActivity extends ListActivity {
     private SimpleDateFormat mSimpleDateFormatTo;
     private SimpleDateFormat mSimpleDateFormatFrom;
     private RequestListArrayAdapter mRequestListArrayAdapter;
+    private LinearLayout mLoadingMoreItem;
+    private static final int MAX_REQUEST = 10; // request 10 issues at a time
+    // NOTICE :: if size of max request is less than size of one page, weird thing would happen, do not ask just set larger
+    private boolean mHasNext;
+    private boolean mLoadingMore;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mSimpleDateFormatTo = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", getResources().getConfiguration().locale);
+        mSimpleDateFormatTo = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", getResources().getConfiguration().locale);
         //2014-06-10T16:43:30.075028+08:00
-        mSimpleDateFormatFrom = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSSSSSZ");
+        mSimpleDateFormatFrom = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ");
 
+        mHasNext = true;
+        mLoadingMore = false;
         initImageLoader();
         initActionBar();
-        loadRequest();
+        initViews();
+        loadRequest(null);
         getListView().setDivider(null);
     }
 
@@ -75,32 +86,81 @@ public class RequestListActivity extends ListActivity {
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
-    private void loadRequest() {
-        Futures.addCallback(GeoReportV2.QueryRequestBuilder.create().build().execute()
-                , new FutureCallback<List<Request>>() {
-            @Override
-            public void onSuccess(List<Request> result) {
-                Log.d(TAG, "callback onSuccess");
-                if (result != null && result.size() > 0) {
-                    for (Request r : result) {
-                        Log.d(TAG, r.toString());
-                    }
+    private void initViews() {
+        mLoadingMoreItem = (LinearLayout) ((LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE)).inflate(R.layout.list_item_loading_more, null);
+    }
 
-                    if (mRequestListArrayAdapter == null) {
-                        mRequestListArrayAdapter = new RequestListArrayAdapter(RequestListActivity.this, result);
+    private void loadRequest(String endDateTime) {
+        if (mHasNext) {
+            addLoadingMoreListItem();
+            GeoReportV2.QueryRequestBuilder builder = GeoReportV2.QueryRequestBuilder.create();
+            builder.max_requests(MAX_REQUEST);
+            if (!TextUtils.isEmpty(endDateTime)) {
+                builder.endDate(endDateTime);
+            }
+//            Log.d(TAG, "url to fetch data :: " + builder.toString());
+            mLoadingMore = true;
+            Futures.addCallback(builder.execute()
+                    , new FutureCallback<List<Request>>() {
+                @Override
+                public void onSuccess(List<Request> result) {
+                    mLoadingMore = false;
+                    removeLoadingMoreListItem();
+                    Log.d(TAG, "callback onSuccess");
+                    if (result != null && result.size() > 0) {
+                        if (result.size() < MAX_REQUEST) {
+                            mHasNext = false;
+                        }
+
+                        if (mRequestListArrayAdapter == null) {
+                            mRequestListArrayAdapter = new RequestListArrayAdapter(RequestListActivity.this, result);
+                            setListAdapter(mRequestListArrayAdapter);
+                            getListView().setOnItemClickListener(mRequestListArrayAdapter);
+                            getListView().setOnScrollListener(mOnScrollListener);
+                        } else {
+                            mRequestListArrayAdapter.addAll(result);
+                            mRequestListArrayAdapter.updateReqeustList(result);
+                        }
                     }
-                    setListAdapter(mRequestListArrayAdapter);
-                    getListView().setOnItemClickListener(mRequestListArrayAdapter);
                 }
-            }
 
-            @Override
-            public void onFailure(Throwable t) {
-                Log.d(TAG, "callback onFail");
-                t.printStackTrace();
-                //TODO
+                @Override
+                public void onFailure(Throwable t) {
+                    mLoadingMore = false;
+                    removeLoadingMoreListItem();
+                    Log.d(TAG, "callback onFail");
+                    t.printStackTrace();
+                    //TODO
+                    Toast.makeText(RequestListActivity.this, "沒有網路或抓取失敗", Toast.LENGTH_LONG).show();
+                }
+            }, new MainThreadExecutor());
+        } else {
+            Log.d(TAG, "NO MORE DATA");
+        }
+    }
+
+    private AbsListView.OnScrollListener mOnScrollListener = new AbsListView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(AbsListView absListView, int i) {
+        }
+
+        @Override
+        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+            int lastInScreen = firstVisibleItem + visibleItemCount;
+            //is the bottom item visible & not loading more already ? Load more !
+            if((lastInScreen == totalItemCount) && !(mLoadingMore)){
+                Request r = mRequestListArrayAdapter.getItem(mRequestListArrayAdapter.getCount()-1);
+                loadRequest(r.getRequested_datetime());
             }
-        } , new MainThreadExecutor());
+        }
+    };
+
+    private void addLoadingMoreListItem() {
+        getListView().addFooterView(mLoadingMoreItem);
+    }
+
+    private void removeLoadingMoreListItem() {
+        getListView().removeFooterView(mLoadingMoreItem);
     }
 
     private class RequestListArrayAdapter extends ArrayAdapter<Request> implements AdapterView.OnItemClickListener {
@@ -157,6 +217,8 @@ public class RequestListActivity extends ListActivity {
 
                     }
                 });
+            } else {
+                holder.cover.setVisibility(View.GONE);
             }
             holder.title.setText(r.getTitle());
             holder.service_name.setText(r.getService_name());
@@ -193,6 +255,11 @@ public class RequestListActivity extends ListActivity {
             Intent i = new Intent(RequestListActivity.this, DetailActivity.class);
             i.putExtra(DetailActivity.EXTRA_KEY_REQUEST, (Request) getItem(position));
             startActivity(i);
+        }
+
+        public void updateReqeustList(List<Request> list) {
+            mRequestList.addAll(list);
+            mRequestListArrayAdapter.notifyDataSetChanged();
         }
     }
 

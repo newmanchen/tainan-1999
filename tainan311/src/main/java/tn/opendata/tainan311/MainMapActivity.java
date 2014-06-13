@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -22,17 +23,17 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.common.util.concurrent.ListenableFuture;
+
+import java.util.List;
+
 import tn.opendata.tainan311.georeportv2.GeoReportV2;
 import tn.opendata.tainan311.georeportv2.vo.Request;
 import tn.opendata.tainan311.utils.MainThreadExecutor;
 
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-
 import static tn.opendata.tainan311.utils.EasyUtil.findView;
 
 
-public class MainMapActivity extends FragmentActivity implements ListView.OnItemClickListener,DrawerLayout.DrawerListener {
+public class MainMapActivity extends FragmentActivity implements ListView.OnItemClickListener,DrawerLayout.DrawerListener  {
 
     private CharSequence mTitle;
     private GoogleMap map;

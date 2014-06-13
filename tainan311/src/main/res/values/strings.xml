@@ -17,6 +17,7 @@
     <string name="previous">上一步</string>
     <string name="done">完成</string>
     <string name="msg_drag_pin">請拖拉地圖並將箭頭對準問題發生的地點。</string>
+
     <string name="request_list_title">問題清單</string>
     <string name="status_open">OPEN</string>
     <string name="status_closed">CLOSED</string>
@@ -49,4 +50,8 @@
     <string name="label_report">回報問題</string>
 
 
+    <string name="text_issue_detail">問題描述</string>
+    <string name="text_service_name">問題類別</string>
+    <string name="text_request_date">提交日期</string>
+    <string name="text_location">問題地點</string>
 </resources>
