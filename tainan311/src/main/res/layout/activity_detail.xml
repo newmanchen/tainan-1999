@@ -7,23 +7,81 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:orientation="vertical"
-    tools:context="tn.opendata.tainan311.DetailActivity">
+    tools:context="tn.opendata.tainan311.DetailActivity" >
 
-    <ImageView
-        android:id="@+id/image"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/detail_image_height"
-        android:scaleType="fitXY"
-        android:visibility="gone"/>
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/detail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/service_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/detail_image_height"
+                android:scaleType="fitXY"
+                android:visibility="gone"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:padding="3dp"
+                android:text="@string/text_issue_detail"
+                android:background="@color/request_detail_separator" />
+
+            <TextView
+                android:id="@+id/detail"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="@string/text_service_name"
+                android:background="@android:color/holo_orange_light" />
+
+            <TextView
+                android:id="@+id/service_name"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="@string/text_request_date"
+                android:background="@android:color/holo_orange_light" />
+
+            <TextView
+                android:id="@+id/request_date"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="@string/text_location"
+                android:background="@android:color/holo_orange_light" />
+
+            <fragment
+                android:id="@+id/map"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                class="com.google.android.gms.maps.MapFragment"/>
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

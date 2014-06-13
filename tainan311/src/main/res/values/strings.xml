@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Tainan 311</string>
+    <string name="app_name">台南311</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="tainan_311">Tainan 311</string>
@@ -17,6 +17,7 @@
     <string name="previous">上一步</string>
     <string name="done">完成</string>
     <string name="msg_drag_pin">請拖拉地圖並將箭頭對準問題發生的地點。</string>
+
     <string name="request_list_title">問題清單</string>
     <string name="status_open">OPEN</string>
     <string name="status_closed">CLOSED</string>
@@ -52,4 +53,8 @@
     <string name="failed">failed</string>
 
 
+    <string name="text_issue_detail">問題描述</string>
+    <string name="text_service_name">問題類別</string>
+    <string name="text_request_date">提交日期</string>
+    <string name="text_location">問題地點</string>
 </resources>

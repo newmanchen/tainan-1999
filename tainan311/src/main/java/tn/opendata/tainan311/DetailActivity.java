@@ -11,11 +11,20 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import tn.opendata.tainan311.georeportv2.vo.Request;
 import tn.opendata.tainan311.utils.EasyUtil;
@@ -27,6 +36,8 @@ public class DetailActivity extends Activity {
 
     protected ImageLoader mImageLoader = ImageLoader.getInstance();
     private DisplayImageOptions mOptions;
+    private SimpleDateFormat mSimpleDateFormatTo;
+    private SimpleDateFormat mSimpleDateFormatFrom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +50,10 @@ public class DetailActivity extends Activity {
         } else {
             initImageLoader();
             updateActionBar();
+
+            mSimpleDateFormatTo = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", getResources().getConfiguration().locale);
+            //2014-06-10T16:43:30.075028+08:00
+            mSimpleDateFormatFrom = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ");
             initViews();
         }
     }
@@ -86,6 +101,17 @@ public class DetailActivity extends Activity {
         detail.setText(mRequest.getDetail());
         TextView serviceName = EasyUtil.findView(this, R.id.service_name);
         serviceName.setText(mRequest.getService_name());
+        TextView requestDate = EasyUtil.findView(this, R.id.request_date);
+        try {
+            Date date = mSimpleDateFormatFrom.parse(mRequest.getRequested_datetime());
+            requestDate.setText(mSimpleDateFormatTo.format(date));
+        } catch (ParseException  e) {
+            e.printStackTrace();
+        }
+        GoogleMap map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+        LatLng issueLocation = new LatLng(Double.valueOf(mRequest.getLat()), Double.valueOf(mRequest.getLon()));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(issueLocation, 13));
+        map.addMarker(new MarkerOptions().title(mRequest.getTitle()).position(issueLocation));
     }
 
     @Override
