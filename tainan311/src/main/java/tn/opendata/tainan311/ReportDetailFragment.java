@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,15 +68,26 @@ public class ReportDetailFragment extends WizardFragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, spinArray);
         category.setAdapter(adapter);
 
-        Bundle data = getData();
-        if (data.containsKey("photo")) {
-            Bitmap bitmap = BitmapFactory.decodeFile(data.getString("photo"));
-            photo = (ImageView) rootView.findViewById(R.id.photo);
-            photo.setImageBitmap(bitmap);
-            photo.setVisibility(View.VISIBLE);
-        }
+        photo = (ImageView) rootView.findViewById(R.id.photo);
 
         return rootView;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if ( isVisibleToUser ) {
+            Bundle data = getData();
+            if (data.containsKey("photo")) {
+                // put this to non ui thread
+                Bitmap bitmap = BitmapFactory.decodeFile(data.getString("photo"));
+
+                photo.setImageBitmap(bitmap);
+                photo.setVisibility(View.VISIBLE);
+            } else {
+                photo.setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override

@@ -272,7 +272,6 @@ public class GeoReportV2 {
             return gson.fromJson(br, type);
         } catch (Throwable e) {
             try {
-                Log.e("Vincent", e.toString());
                 closer.rethrow(e);
             } catch (IOException e1) {
                 e1.printStackTrace();
@@ -328,7 +327,6 @@ public class GeoReportV2 {
 
             return gson.fromJson(data, type);
         } catch (Throwable e) {
-            Log.e("Vincent", e.toString());
             try {
                 closer.rethrow(e);
             } catch (IOException e1) {
@@ -363,7 +361,6 @@ public class GeoReportV2 {
     private static <K, V> List<NameValuePair> convert(Map<K,V> args){
         List<NameValuePair> params = Lists.newArrayList();
         for(K k:args.keySet()){
-            Log.e("Vincent", String.valueOf(k) + "=" + String.valueOf(args.get(k)));
             params.add(new BasicNameValuePair(String.valueOf(k), String.valueOf(args.get(k))));
         }
 
