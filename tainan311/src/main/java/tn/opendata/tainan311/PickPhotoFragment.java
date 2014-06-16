@@ -17,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 import com.google.common.base.Optional;
+import tn.opendata.tainan311.georeportv2.GeoReportV2;
 import tn.opendata.tainan311.utils.ImageUtils;
 
 import java.io.File;
@@ -85,6 +86,7 @@ public class PickPhotoFragment extends WizardFragment {
                 }
             });
         }
+
         return rootView;
     }
 

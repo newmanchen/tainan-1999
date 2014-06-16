@@ -39,6 +39,8 @@ public class ReportDetailFragment extends WizardFragment {
 
     private Handler mNonUiHandler;
 
+    private boolean mNeedRegister = false;
+
     public ReportDetailFragment() {
     }
 
@@ -86,7 +88,10 @@ public class ReportDetailFragment extends WizardFragment {
         mDetail = (TextView)rootView.findViewById(R.id.detail);
         mPassword = (TextView)rootView.findViewById(R.id.password);
         mCategory = (Spinner)rootView.findViewById(R.id.category);
+
+
         ArrayList<String> spinArray = new ArrayList<String>();
+        spinArray.add("others");
         spinArray.add("市容整潔");
         spinArray.add("號誌與路燈故障");
         spinArray.add("路霸與騎樓佔用");
@@ -120,7 +125,11 @@ public class ReportDetailFragment extends WizardFragment {
             final String password = prefs.getString(Constant.KEY_PASSWORD, "");
 
             if ( TextUtils.isEmpty(account) ) {
+                // first time...
                 account = AccountUtils.getEmailAccount(context);
+                mNeedRegister = true;
+            } else {
+                mNeedRegister = false;
             }
 
             final String mail = account;
@@ -176,6 +185,7 @@ public class ReportDetailFragment extends WizardFragment {
         final String name;
         final String email;
         final String password;
+        final Context context = getActivity();
         if ( mName.getText() != null ) {
             name = mName.getText().toString();
             acc.putString("name", name);
@@ -195,16 +205,22 @@ public class ReportDetailFragment extends WizardFragment {
             acc.putString("detail", mDetail.getText().toString());
         }
         if (mPassword.getText() != null) {
+            SharedPreferences prefs = context.getSharedPreferences(Constant.PREF_NAME, 0);
             password = mPassword.getText().toString();
+            String oldPassword = prefs.getString("password", "");
+            if (!password.equals(oldPassword)) {
+                mNeedRegister = true;
+            }
             acc.putString("password", password);
         } else {
             password = "";
         }
+        acc.putBoolean("register", mNeedRegister);
 
         mNonUiHandler.post(new Runnable() {
             @Override
             public void run() {
-                SharedPreferences prefs = getActivity().getSharedPreferences(Constant.PREF_NAME, 0);
+                SharedPreferences prefs = context.getSharedPreferences(Constant.PREF_NAME, 0);
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putString(Constant.KEY_NAME, name);
                 editor.putString(Constant.KEY_ACCOUNT, email);

@@ -14,9 +14,11 @@ import com.google.gson.reflect.TypeToken;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.cookie.Cookie;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
@@ -34,10 +36,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 
@@ -64,6 +63,8 @@ public class GeoReportV2 {
     private static final String PATH_POST_REQUEST = "report/new/mobile";
     private static final String PATH_SERVICE_REQUEST_ID_BY_TOKEN = "requests/%s.json";
     private static final String PATH_SERVICE_BY_REQUEST_ID = "requests/%s.json";
+    private static final String PATH_SIGN_OUT = "auth/sign_out";
+    private static final String PATH_SIGN_IN = "auth";
 
     private static final String DEFAULT_JURISDICTION_ID = "tainan.fixmystreet.tw";
 
@@ -78,7 +79,7 @@ public class GeoReportV2 {
     }
 
     public static ListenableFuture<List<Service>> getServiceList(final String id) {
-        return executor.submit(new Callable<List<Service>>(){
+        return executor.submit(new Callable<List<Service>>() {
 
             @Override
             public List<Service> call() throws Exception {
@@ -117,6 +118,14 @@ public class GeoReportV2 {
         return getServiceDefinition(DEFAULT_JURISDICTION_ID, service_code);
     }
 
+    public static <T> ListenableFuture<List<Cookie>> signIn(final String email, final String password) {
+        return executor.submit(new Callable<List<Cookie>>() {
+            @Override
+            public List<Cookie> call() throws Exception {
+                return doSignIn(new URL(post_prefix + PATH_SIGN_IN), email, password);
+            }
+        });
+    }
 
     public static ListenableFuture<RequestId> getRequestIdByToken(final String jurisdiction_id, final String token) {
         return executor.submit(new Callable<RequestId>() {
@@ -160,34 +169,39 @@ public class GeoReportV2 {
         return getServiceByRequestId(DEFAULT_JURISDICTION_ID, requestId);
     }
 
-    private static <V> FMSResponse getPostResponse(URL url, Map<String, V> postData) {
+    private static <V> FMSResponse getPostResponse(URL url, Map<String, V> postData, List<Cookie> cookies) {
         Closer closer = Closer.create();
         try {
             HttpClient client = new DefaultHttpClient();
             HttpPost post = new HttpPost(url.toURI());
 
+            if (cookies != null) {
+                for(Cookie c : cookies) {
+                    post.setHeader("Cookie", c.getName() + "=" + c.getValue());
+                }
+            }
             boolean hasFile = false;
             Charset charset = Charset.forName(HTTP.UTF_8);
             if (postData.containsKey("photo")) {
-                File file = new File((String)postData.get("photo"));
-                if ( file.exists() ) {
-                    MultipartEntityBuilder entity = MultipartEntityBuilder.create();
-                    entity.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-                    entity.setCharset(charset);
-                    entity.addBinaryBody("photo", file);
-                    for (String k : postData.keySet()) {
-                        if ( !"photo".equals(k) ) {
-                            entity.addTextBody(k, String.valueOf(postData.get(k)), ContentType.create("text/plain", charset));
-                        }
-                    }
-                    post.setEntity(entity.build());
-                    hasFile = true;
+
+            }
+            String path = (String)postData.get("photo");
+            File file = null;
+            if ( !TextUtils.isEmpty(path) ) {
+                file = new File(path);
+            }
+            MultipartEntityBuilder entity = MultipartEntityBuilder.create();
+            entity.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+            entity.setCharset(charset);
+            if (file != null && file.exists()) {
+                entity.addBinaryBody("photo", file);
+            }
+            for (String k : postData.keySet()) {
+                if (!"photo".equals(k)) {
+                    entity.addTextBody(k, String.valueOf(postData.get(k)), ContentType.create("text/plain", charset));
                 }
             }
-            if ( !hasFile ) {
-                post.setEntity(new UrlEncodedFormEntity(convert(postData), HTTP.UTF_8));
-            }
-
+            post.setEntity(entity.build());
 
 
             HttpResponse response = client.execute(post);
@@ -268,6 +282,47 @@ public class GeoReportV2 {
         } finally {
             close(closer);
         }
+    }
+
+    private static <V> List<Cookie> doSignIn(URL url, String email, String password) {
+        Closer closer = Closer.create();
+        try {
+            DefaultHttpClient client = new DefaultHttpClient();
+            HttpPost post = new HttpPost(url.toURI());
+
+//            HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
+//            int status = urlConnection.getResponseCode();
+
+//            if ( status != 200 && status != 201 ) {
+//                throw new RuntimeException("Failed : HTTP error code : " + status);
+//            }
+
+            HashMap<String, String> postData = Maps.newHashMap();
+            postData.put("email", email);
+            postData.put("password_sign_in", password);
+            postData.put("name", "");
+            postData.put("sign_in", "登入");
+            postData.put("password_register", "");
+            postData.put("remember_me", "1");
+
+            post.setEntity(new UrlEncodedFormEntity(convert(postData), HTTP.UTF_8));
+
+            HttpResponse response = client.execute(post);
+
+            BufferedReader br = closer.register(new BufferedReader(new InputStreamReader(response.getEntity().getContent())));
+            String read;
+            while((read=br.readLine()) !=null) {
+                // do nothing
+                read = read;
+            }
+            CookieStore cookieStore = client.getCookieStore();
+            return cookieStore.getCookies();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(closer);
+        }
+        return null;
     }
 
     private static ServiceDefinition getServiceDefinitionResponse(URL url) {
@@ -528,10 +583,11 @@ public class GeoReportV2 {
     public static class PostRequestBuilder {
         // required
         private AttributeBuilder data;
+        private List<Cookie> cookies;
 
         private PostRequestBuilder(String jurisdiction_id, String service_code) {
             data = AttributeBuilder.newBuilder();
-            data.put("category", service_code).put("jurisdiction_id", jurisdiction_id).put("pc", 0);
+            data.put("category", service_code).put("pc", 0);
 
             service();
         }
@@ -618,7 +674,10 @@ public class GeoReportV2 {
         }
 
         public PostRequestBuilder name(String name) {
-            data.put("name", name);
+            if (!TextUtils.isEmpty(name)) {
+                data.put("name", name);
+                data.put("may_show_name", 1);
+            }
             return this;
         }
 
@@ -627,8 +686,17 @@ public class GeoReportV2 {
             return this;
         }
 
-        public PostRequestBuilder password(String password) {
-            data.put("password", password);
+        public PostRequestBuilder password(boolean needRegister, String password) {
+            if (needRegister) {
+                data.put("password_register", password);
+                data.put("submit_register", "Submit");
+            } else {
+                //data.put("password_register", password);
+                data.put("password_sign_in", password);
+                data.put("submit_sign_in", 1);
+                data.put("remember_me", 1);
+                data.put("submit_problem", 1);
+            }
             return this;
         }
 
@@ -637,12 +705,19 @@ public class GeoReportV2 {
             return this;
         }
 
+        public PostRequestBuilder addCookie(List<Cookie> cookie) {
+            if ( cookie != null ) {
+                cookies = new ArrayList<Cookie>(cookie);
+            }
+            return this;
+        }
+
         public ListenableFuture<FMSResponse> execute() {
             return executor.submit(new Callable<FMSResponse>(){
 
                 @Override
                 public FMSResponse call() throws Exception {
-                    return getPostResponse(new URL(post_prefix + PATH_POST_REQUEST), data.build());
+                    return getPostResponse(new URL(post_prefix + PATH_POST_REQUEST), data.build(), cookies);
                 }
             });
 

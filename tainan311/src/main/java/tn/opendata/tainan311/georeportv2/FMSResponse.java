@@ -7,12 +7,15 @@ import android.text.TextUtils;
  */
 public class FMSResponse {
     private String success;
-    private FMSError errors;
+    private String report;
+    //private FMSError errors;
+    private String errors;
 
 
     private class FMSError {
         private String category;
         private String photo;
+        private String password;
 
         public String getCategory() {
             return category;
@@ -20,12 +23,27 @@ public class FMSResponse {
 
         @Override
         public String toString() {
-            return category;
+            if ( category != null ) {
+                return category;
+            }
+            if ( photo != null ) {
+                return photo;
+            }
+            if ( password != null ) {
+                return password;
+            }
+            return "Unknown error";
         }
 
         public String getPhoto() {
             return photo;
         }
+
+        public String getPassword() {
+            return password;
+        }
+
+
     }
 
     public FMSResponse() {
