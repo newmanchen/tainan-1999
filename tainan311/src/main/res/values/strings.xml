@@ -16,7 +16,7 @@
     <string name="done">送出</string>
     <string name="msg_drag_pin">將箭頭對準問題發生位置</string>
 
-    <string name="request_list_title">問題清單</string>
+    <string name="request_list_title">全部問題</string>
     <string name="status_open">OPEN</string>
     <string name="status_closed">CLOSED</string>
 
@@ -50,7 +50,7 @@
     <string name="success">add request successfully</string>
     <string name="failed">failed</string>
     <string name="text_setting">設定</string>
-
+    <string name="text_about_us">關於我們</string>
 
     <string name="text_issue_detail">問題描述</string>
     <string name="text_service_name">問題類別</string>

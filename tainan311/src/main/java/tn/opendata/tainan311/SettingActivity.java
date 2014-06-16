@@ -6,6 +6,7 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.text.TextUtils;
+import android.view.MenuItem;
 
 /**
  * Created by newman on 6/13/14.
@@ -18,7 +19,7 @@ public class SettingActivity extends PreferenceActivity {
 
         getFragmentManager().beginTransaction().replace(android.R.id.content,
                 new SettingFragment()).commit();
-
+        getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private static final String PREFS_KEY_DEFAULT_NAME = "reporter_name_preference";
@@ -69,5 +70,15 @@ public class SettingActivity extends PreferenceActivity {
                 }
             }
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return true;
     }
 }

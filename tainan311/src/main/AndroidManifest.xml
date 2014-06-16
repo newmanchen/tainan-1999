@@ -36,26 +36,31 @@
 
         <activity
             android:name="tn.opendata.tainan311.RequestListActivity"
-            android:label="@string/title_activity_request_list" >
+            android:label="@string/title_activity_request_list"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="tn.opendata.tainan311.DetailActivity"
-            android:label="@string/title_activity_detail" >
+            android:label="@string/title_activity_detail"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="tn.opendata.tainan311.MyRequestActivity"
-            android:label="@string/title_activity_my_request" >
+            android:label="@string/title_activity_my_request"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="tn.opendata.tainan311.ReportActivity"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar"
-            android:label="@string/title_activity_report" >
+            android:label="@string/title_activity_report"
+            android:screenOrientation="portrait" >
         </activity>
 
         <activity
             android:name="tn.opendata.tainan311.MainMapActivity"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -64,7 +69,12 @@
         </activity>
 
         <activity android:name=".SettingActivity"
-            android:label="@string/text_setting" />
+            android:label="@string/text_setting"
+            android:screenOrientation="portrait" />
+
+        <activity android:name=".AboutActivity"
+            android:label="@string/text_about_us"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

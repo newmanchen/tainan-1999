@@ -178,7 +178,7 @@ public class MainMapActivity extends FragmentActivity implements ListView.OnItem
                 startActivity(new Intent(this,ReportActivity.class));
                 break;
             case 2:
-                startActivity(new Intent(this,DetailActivity.class));
+                startActivity(new Intent(this, AboutActivity.class));
                 break;
             case 3:
                 startActivity(new Intent(this, SettingActivity.class));

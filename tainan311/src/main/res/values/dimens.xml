@@ -11,4 +11,6 @@
     <dimen name="detail_image_height">200sp</dimen>
     <dimen name="navigation_drawer_width">240dp</dimen>
 
+    <dimen name="about_icon_width">58dip</dimen>
+    <dimen name="about_icon_height">58dip</dimen>
 </resources>
