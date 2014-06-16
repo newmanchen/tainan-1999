@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android"
+          android:exitFadeDuration="@android:integer/config_shortAnimTime">
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <stroke
+                    android:width="1px"
+                    android:color="@color/map_tile_bg_stroke_pressed"/>
+            <solid android:color="@color/map_tile_bg_solid_pressed"/>
+            <corners android:radius="1dp"/>
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <stroke
+                    android:width="1px"
+                    android:color="@color/map_tile_bg_stroke"/>
+            <solid android:color="@color/map_tile_bg_solid"/>
+            <corners android:radius="1dp"/>
+        </shape>
+    </item>
+
+</selector>

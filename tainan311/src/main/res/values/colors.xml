@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="request_detail_separator" type="color">@android:color/holo_orange_light</item>
+
+    <color name="map_tile_bg_solid">#aaffffff</color>
+    <color name="map_tile_bg_stroke">#aa333333</color>
+    <color name="map_tile_bg_solid_pressed">#aa0ea3ee</color>
+    <color name="map_tile_bg_stroke_pressed">#aa333333</color>
 </resources>
