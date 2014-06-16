@@ -109,7 +109,7 @@ public class DetailActivity extends Activity {
         }
         GoogleMap map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
         LatLng issueLocation = new LatLng(Double.valueOf(mRequest.getLat()), Double.valueOf(mRequest.getLon()));
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(issueLocation, 13));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(issueLocation, 17));
         map.addMarker(new MarkerOptions().title(mRequest.getTitle()).position(issueLocation));
     }
 
