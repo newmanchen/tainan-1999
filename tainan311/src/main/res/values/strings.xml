@@ -2,7 +2,6 @@
 <resources>
 
     <string name="app_name">台南311</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="tainan_311">Tainan 311</string>
     <string name="title_activity_new_request">NewRequestActivity</string>
@@ -10,15 +9,14 @@
     <string name="title_activity_detail">DetailActivity</string>
     <string name="title_activity_my_request">MyRequestActivity</string>
     <string name="title_activity_report">ReportActivity</string>
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
     <string name="next">下一步</string>
     <string name="previous">上一步</string>
-    <string name="done">完成</string>
+    <string name="previous_tips">說明</string>
+    <string name="next_to_report">點我開始</string>
+    <string name="done">送出</string>
     <string name="msg_drag_pin">將箭頭對準問題發生位置</string>
 
-    <string name="request_list_title">問題清單</string>
+    <string name="request_list_title">全部問題</string>
     <string name="status_open">OPEN</string>
     <string name="status_closed">CLOSED</string>
 
@@ -51,11 +49,22 @@
     <string name="no_data">no data received</string>
     <string name="success">add request successfully</string>
     <string name="failed">failed</string>
-
+    <string name="text_setting">設定</string>
+    <string name="text_about_us">關於我們</string>
 
     <string name="text_issue_detail">問題描述</string>
     <string name="text_service_name">問題類別</string>
     <string name="text_request_date">提交日期</string>
     <string name="text_location">問題地點</string>
     <string name="confirm_mail">You\'ll receive a confirm mail soon</string>
+
+    <string name="text_setting_general">一般</string>
+    <string name="text_show_tips">顯示回報問題提示</string>
+    <string name="text_show_tips_summary">在回報問題顯示提示</string>
+    <string name="text_setting_report_issue">回報問題</string>
+    <string name="text_issue_reporter_name">預設回報者名字</string>
+    <string name="text_issue_input_reporter_name">請輸入回報者名字</string>
+    <string name="text_no_default">沒有預設</string>
+    <string name="text_issue_reporter_email">預設回報者電子信箱</string>
+    <string name="text_issue_input_reporter_email">請輸入回報者電子信箱</string>
 </resources>

@@ -35,7 +35,7 @@ import java.util.concurrent.ExecutionException;
 /**
  * Created by sam on 2014/6/11.
  */
-public class PickMapFragment extends WizardFragment {
+public class PickMapFragment extends WizardFragment implements View.OnClickListener{
 
     private static final String ARG_SECTION_NUMBER = "section_number";
     private GoogleMap map;
@@ -136,6 +136,8 @@ public class PickMapFragment extends WizardFragment {
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
+        rootView.findViewById(R.id.btn_map_type).setOnClickListener(this);
+
         return rootView;
     }
 
@@ -194,6 +196,15 @@ public class PickMapFragment extends WizardFragment {
         acc.putParcelable("location", map.getCameraPosition().target);
 
         return acc;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(map.getMapType() == GoogleMap.MAP_TYPE_HYBRID){
+            map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        }else{
+            map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        }
     }
 }
 

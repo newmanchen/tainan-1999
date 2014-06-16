@@ -38,7 +38,19 @@
                    android:layout_centerHorizontal="true"
                    android:layout_above="@id/fakeView"
                    android:src="@drawable/arrow_down"
-
                 />
+        <ImageView android:id="@+id/btn_map_type"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="4dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="80dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/bg_map_tile"
+                android:src="@android:drawable/ic_menu_mapmode"
+ />
+
+
     </RelativeLayout>
 </RelativeLayout>

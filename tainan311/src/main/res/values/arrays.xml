@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="drawer_text">
-        <item>全部回報</item>
+        <item>@string/request_list_title</item>
         <item>回報問題</item>
-        <item>關於我們</item>
+        <item>@string/text_about_us</item>
+        <item>@string/text_setting</item>
     </string-array>
 </resources>

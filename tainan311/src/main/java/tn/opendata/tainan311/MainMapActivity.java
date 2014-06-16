@@ -3,19 +3,26 @@ package tn.opendata.tainan311;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.model.*;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.common.collect.Maps;
 import com.google.common.util.concurrent.ListenableFuture;
 
@@ -126,7 +133,7 @@ public class MainMapActivity extends FragmentActivity implements ListView.OnItem
 
                             markerOpt.icon(BitmapDescriptorFactory.defaultMarker(color));
                             Marker m = map.addMarker(markerOpt);
-                            localMap.put(m,r);
+                            localMap.put(m, r);
                         }
                         requestMap = localMap;
                     }
@@ -171,8 +178,10 @@ public class MainMapActivity extends FragmentActivity implements ListView.OnItem
                 startActivity(new Intent(this,ReportActivity.class));
                 break;
             case 2:
-                startActivity(new Intent(this,DetailActivity.class));
+                startActivity(new Intent(this, AboutActivity.class));
                 break;
+            case 3:
+                startActivity(new Intent(this, SettingActivity.class));
         }
 
 //        mDrawerLayout.closeDrawer(mDrawerView);

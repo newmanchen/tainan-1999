@@ -3,28 +3,24 @@ package tn.opendata.tainan311;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.database.DataSetObserver;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
-import com.google.common.base.Optional;
-import tn.opendata.tainan311.utils.AccountUtils;
-import tn.opendata.tainan311.utils.Constant;
-import tn.opendata.tainan311.utils.ImageUtils;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.TextView;
 
-import java.io.File;
 import java.util.ArrayList;
 
+import tn.opendata.tainan311.utils.AccountUtils;
+import tn.opendata.tainan311.utils.Constant;
 
 public class ReportDetailFragment extends WizardFragment {
 
@@ -86,9 +82,8 @@ public class ReportDetailFragment extends WizardFragment {
         mEmail = (TextView)rootView.findViewById(R.id.email);
         mTitle = (TextView)rootView.findViewById(R.id.title);
         mDetail = (TextView)rootView.findViewById(R.id.detail);
-        mPassword = (TextView)rootView.findViewById(R.id.password);
         mCategory = (Spinner)rootView.findViewById(R.id.category);
-
+        mPassword = (TextView)rootView.findViewById(R.id.password);
 
         ArrayList<String> spinArray = new ArrayList<String>();
         spinArray.add("others");
@@ -120,7 +115,7 @@ public class ReportDetailFragment extends WizardFragment {
         if (context != null ) {
             SharedPreferences prefs = context.getSharedPreferences(Constant.PREF_NAME, 0);
 
-            String account = prefs.getString(Constant.KEY_ACCOUNT, "");
+            String account = prefs.getString(Constant.KEY_ACCOUNT_MAIL, "");
             final String name = prefs.getString(Constant.KEY_NAME, "");
             final String password = prefs.getString(Constant.KEY_PASSWORD, "");
 
@@ -223,7 +218,7 @@ public class ReportDetailFragment extends WizardFragment {
                 SharedPreferences prefs = context.getSharedPreferences(Constant.PREF_NAME, 0);
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putString(Constant.KEY_NAME, name);
-                editor.putString(Constant.KEY_ACCOUNT, email);
+                editor.putString(Constant.KEY_ACCOUNT_MAIL, email);
                 editor.putString(Constant.KEY_PASSWORD, password);
                 editor.apply();
             }
@@ -232,6 +227,4 @@ public class ReportDetailFragment extends WizardFragment {
 
         return acc;
     }
-
-
 }

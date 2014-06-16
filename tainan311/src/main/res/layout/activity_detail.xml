@@ -22,7 +22,7 @@
                 android:id="@+id/image"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/detail_image_height"
-                android:scaleType="fitXY"
+                android:scaleType="fitCenter"
                 android:visibility="gone"/>
 
             <TextView
