@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 
 
 import static android.provider.ContactsContract.CommonDataKinds.*;
@@ -56,16 +57,17 @@ public class ProfileUtil {
                     } else if (mime_type.equals(StructuredName.CONTENT_ITEM_TYPE)) {
                         name = getString(cursor, StructuredName.DISPLAY_NAME);
 
+                        if (TextUtils.isEmpty(name)) {
+                            //mark below... and use display name instead
+                            String fname = getString(cursor, StructuredName.FAMILY_NAME);
+                            //TODO: should really check alphabet
+                            if (fname.length() < 2) { //must be chinese...
+                                name = getString(cursor, StructuredName.FAMILY_NAME) + getString(cursor, StructuredName.GIVEN_NAME);
 
-                        //mark below... and use display name instead
-//                        String fname = getString(cursor, StructuredName.FAMILY_NAME);
-//                        //TODO: should really check alphabet
-//                        if (fname.length() < 2) { //must be chinese...
-//                            name = getString(cursor, StructuredName.FAMILY_NAME) + getString(cursor, StructuredName.GIVEN_NAME);
-//
-//                        } else {
-//                            name = getString(cursor, StructuredName.GIVEN_NAME) + " " + getString(cursor, StructuredName.FAMILY_NAME);
-//                        }
+                            } else {
+                                name = getString(cursor, StructuredName.GIVEN_NAME) + " " + getString(cursor, StructuredName.FAMILY_NAME);
+                            }
+                        }
                     }
                 }
             } catch (Exception e) {
@@ -92,12 +94,14 @@ public class ProfileUtil {
 
     public static final class UserProfile {
         public final String email;
-        private final String name;  //do not use this.. use getUserName
+        public final String name;  //do not use this.. use getUserName
 
         public UserProfile(String email, String name) {
             this.email = email;
             this.name = name;
         }
+
+
     }
 
     /**

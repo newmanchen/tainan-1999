@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 import tn.opendata.tainan311.utils.AccountUtils;
 import tn.opendata.tainan311.utils.Constant;
+import tn.opendata.tainan311.utils.ProfileUtil;
 
 public class ReportDetailFragment extends WizardFragment {
 
@@ -86,7 +87,6 @@ public class ReportDetailFragment extends WizardFragment {
         mPassword = (TextView)rootView.findViewById(R.id.password);
 
         ArrayList<String> spinArray = new ArrayList<String>();
-        spinArray.add("others");
         spinArray.add("市容整潔");
         spinArray.add("號誌與路燈故障");
         spinArray.add("路霸與騎樓佔用");
@@ -134,7 +134,8 @@ public class ReportDetailFragment extends WizardFragment {
                     mEmail.setText(mail);
                     String nameValue = name;
                     if (TextUtils.isEmpty(name)) {
-                        nameValue = mail.substring(0, mail.indexOf("@"));
+                        //nameValue = mail.substring(0, mail.indexOf("@"));
+                        nameValue = ProfileUtil.getUserName(getActivity());
                     }
                     mName.setText(nameValue);
                     String passValue = password;
