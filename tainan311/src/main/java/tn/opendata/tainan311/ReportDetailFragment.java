@@ -196,6 +196,11 @@ public class ReportDetailFragment extends WizardFragment {
             mEmail.setError(context.getString(R.string.must_have));
             throw new IllegalStateException();
         } else {
+            SharedPreferences prefs = context.getSharedPreferences(Constant.PREF_NAME, 0);
+            String oldEmail = prefs.getString("email", "");
+            if (!email.equals(oldEmail)) {
+                mNeedRegister = true;
+            }
             acc.putString("email", email);
         }
 

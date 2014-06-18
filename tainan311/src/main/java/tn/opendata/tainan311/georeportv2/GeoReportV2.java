@@ -587,7 +587,7 @@ public class GeoReportV2 {
 
         private PostRequestBuilder(String jurisdiction_id, String service_code) {
             data = AttributeBuilder.newBuilder();
-            data.put("category", service_code).put("pc", 0);
+            data.put("category", service_code).put("pc", 0).put("may_show_name", 1);
 
             service();
         }
