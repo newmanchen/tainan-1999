@@ -166,6 +166,8 @@ public class RequestListActivity extends ListActivity {
         }
     };
 
+
+
     private void addLoadingMoreListItem() {
         mLoadingMoreItem.setVisibility(View.VISIBLE);
     }

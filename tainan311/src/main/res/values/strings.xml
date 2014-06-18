@@ -46,8 +46,8 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
     <string name="label_report">回報問題</string>
-    <string name="no_data">no data received</string>
-    <string name="success">add request successfully</string>
+    <string name="no_data">新增失敗: 資料不完整</string>
+    <string name="success">新增成功</string>
     <string name="failed">failed</string>
     <string name="text_setting">設定</string>
     <string name="text_about_us">關於我們</string>
@@ -56,7 +56,7 @@
     <string name="text_service_name">問題類別</string>
     <string name="text_request_date">提交日期</string>
     <string name="text_location">問題地點</string>
-    <string name="confirm_mail">You\'ll receive a confirm mail soon</string>
+    <string name="confirm_mail">初次使用或更改密碼需要郵件確認,請留意您的信箱</string>
 
     <string name="text_setting_general">一般</string>
     <string name="text_show_tips">顯示回報問題提示</string>
@@ -72,4 +72,6 @@
     <string name="hint_title">例如: 紅綠燈故障</string>
     <string name="detail_title">描述問題及送出回報</string>
     <string name="must_have">必填欄位</string>
+    <string name="add_request">新增中...</string>
+    <string name="add_failed">新增失敗:</string>
 </resources>

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Toast;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
@@ -61,6 +62,7 @@ public class NewRequestIntentService extends IntentService {
     }
 
     private void postRequest(Bundle data, List<Cookie> cookies) {
+        showNotification(getString(R.string.add_request));
         if (data != null) {
             final boolean needRegister = data.getBoolean("register");
             LatLng location = data.getParcelable("location");
@@ -88,7 +90,7 @@ public class NewRequestIntentService extends IntentService {
 
                 @Override
                 public void onFailure(Throwable t) {
-                    showNotification(t.getMessage());
+                    showNotification(getString(R.string.add_failed) + t.getMessage());
                 }
             });
         } else {
@@ -97,12 +99,15 @@ public class NewRequestIntentService extends IntentService {
     }
 
     private void showNotification(String message) {
-        Notification notification = new NotificationCompat.Builder(getApplicationContext())
-                .setContentTitle(getString(R.string.app_name))
-                .setContentText(message)
-                .setSmallIcon(R.drawable.ic_launcher)
-                .build();
-        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        nm.notify(NOTIFICATION_ID, notification);
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+        // use Toast instead...
+
+//        Notification notification = new NotificationCompat.Builder(getApplicationContext())
+//                .setContentTitle(getString(R.string.app_name))
+//                .setContentText(message)
+//                .setSmallIcon(R.drawable.ic_launcher)
+//                .build();
+//        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//        nm.notify(NOTIFICATION_ID, notification);
     }
 }
