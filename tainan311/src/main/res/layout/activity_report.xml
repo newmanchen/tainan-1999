@@ -31,9 +31,10 @@
 
     <Button android:id="@+id/done"
             style="@style/WizardButton"
-            android:background="@drawable/shape_card_next_btn"
             android:text="@string/done"
             android:visibility="gone"
+            android:textStyle="bold"
+            android:textColor="#ffcd0000"
             android:onClick="onClick"
             />
 

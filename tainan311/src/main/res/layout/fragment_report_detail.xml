@@ -1,83 +1,83 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="tn.opendata.tainan311.ReportDetailFragment"
-    android:orientation="vertical">
-<LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_margin="10dip"
-        >
-    <!--
-    <fragment
-            android:id="@+id/map1"
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/detail_map_height"
-            class="com.google.android.gms.maps.MapFragment"/>
--->
+            android:layout_height="match_parent"
+            tools:context="tn.opendata.tainan311.ReportDetailFragment"
+            android:orientation="vertical">
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical"
+                  android:padding="8dp">
 
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content">
-        <TextView android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:text="@string/category" />
-        <Spinner
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/category" android:layout_weight="1"/>
+        <TextView
+                  style="@style/WizardTitle"
+                  android:text="@string/detail_title"/>
+
+
+        <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/tips_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:columnCount="2"
+                    android:rowCount="2"
+
+                    android:orientation="horizontal"
+                    android:background="@drawable/shape_card">
+            <TextView style="@style/ReportItem"
+                      android:text="@string/category"/>
+
+
+            <Spinner style="@style/ReportItem"
+                     android:id="@+id/category"/>
+
+            <TextView style="@style/ReportItem"
+                      android:text="@string/title"/>
+            <EditText style="@style/ReportItem"
+                      android:id="@+id/title"
+                      android:layout_gravity="fill_horizontal"
+                      android:hint="@string/hint_title"
+                      android:inputType="textEmailSubject"/>
+            <TextView style="@style/ReportItem"
+                      android:text="@string/detail"/>
+            <EditText style="@style/ReportItem"
+                      android:singleLine="false"
+                      android:hint="@string/hint_desc"
+                      android:layout_gravity="fill_horizontal"
+                      android:id="@+id/detail" android:inputType="textMultiLine"/>
+
+            <TextView style="@style/ReportItem"
+                      android:text="@string/name"/>
+            <EditText style="@style/ReportItem"
+                      android:hint="@string/hint_name"
+                      android:layout_gravity="fill_horizontal"
+                      android:id="@+id/name" android:inputType="textPersonName"/>
+
+            <TextView style="@style/ReportItem"
+                      android:text="@string/email"/>
+            <EditText
+                    style="@style/ReportItem"
+                    android:inputType="textEmailAddress"
+                    android:layout_gravity="fill"
+                    android:id="@+id/email" />
+            <TextView style="@style/ReportItem"
+                      android:text="@string/password"/>
+
+            <EditText style="@style/ReportItem"
+                      android:id="@+id/password" android:inputType="textVisiblePassword"/>
+
+
+        </GridLayout>
+
+        <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                   android:id="@+id/map_snapshot"
+                   android:layout_gravity="center_horizontal"/>
+        <ImageView android:layout_width="320dip" android:layout_height="320dip"
+                   android:id="@+id/photo"
+                   android:scaleType="fitStart"
+                   android:visibility="gone"
+                   android:layout_gravity="center_horizontal"
+                />
 
 
     </LinearLayout>
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content">
-        <TextView android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:text="@string/title" />
-        <EditText android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:id="@+id/title" />
-    </LinearLayout>
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-            >
-        <TextView android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:text="@string/detail" />
-        <EditText android:layout_width="match_parent" android:layout_height="wrap_content"
-                  android:lines="5"
-                  android:id="@+id/detail" />
-    </LinearLayout>
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content">
-        <TextView android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:text="@string/name" />
-        <EditText android:layout_width="match_parent" android:layout_height="wrap_content"
-                  android:id="@+id/name" />
-    </LinearLayout>
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content">
-        <TextView android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:text="@string/email" />
-        <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:ems="10"
-                android:id="@+id/email" android:layout_weight="1"/>
-    </LinearLayout>
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content">
-        <TextView android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:text="@string/password" />
-        <EditText android:layout_width="match_parent" android:layout_height="wrap_content"
-                  android:id="@+id/password" />
-    </LinearLayout>
-
-    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-               android:id="@+id/map_snapshot"
-               android:layout_gravity="center_horizontal" />
-    <ImageView android:layout_width="320dip" android:layout_height="320dip"
-               android:id="@+id/photo"
-               android:scaleType="fitStart"
-               android:visibility="gone"
-               android:layout_gravity="center_horizontal"
-            />
-
-</LinearLayout>
 </ScrollView>

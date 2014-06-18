@@ -93,11 +93,20 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
         }else{
             String tag = makeFragmentName(R.id.pager,mViewPager.getCurrentItem());
             WizardFragment f = (WizardFragment)getFragmentManager().findFragmentByTag(tag);
-            data.putAll(f.onNextClick((Bundle)data.clone()));
 
-            createNewRequest();
+            try {
+                Bundle result = f.onNextClick((Bundle) data.clone());
+                data.putAll(f.onNextClick((Bundle) data.clone()));
+                createNewRequest();
+                finish();
+            }catch(IllegalStateException e){
+                e.printStackTrace();
+                //just ignore and skip click..
+            }
 
-            finish();
+
+
+
         }
         resetButtonState();
     }

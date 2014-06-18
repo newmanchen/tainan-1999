@@ -86,13 +86,10 @@ public class ReportDetailFragment extends WizardFragment {
         mCategory = (Spinner)rootView.findViewById(R.id.category);
         mPassword = (TextView)rootView.findViewById(R.id.password);
 
-        ArrayList<String> spinArray = new ArrayList<String>();
-        spinArray.add("市容整潔");
-        spinArray.add("號誌與路燈故障");
-        spinArray.add("路霸與騎樓佔用");
-        spinArray.add("道路問題");
-        spinArray.add("其他");
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, spinArray);
+
+        //TODO: should query from Server (service_code)
+        String[] spinArray = getResources().getStringArray(R.array.categories);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, spinArray);
         mCategory.setAdapter(adapter);
 
         photo = (ImageView) rootView.findViewById(R.id.photo);
@@ -182,21 +179,37 @@ public class ReportDetailFragment extends WizardFragment {
         final String email;
         final String password;
         final Context context = getActivity();
-        if ( mName.getText() != null ) {
-            name = mName.getText().toString();
+
+        name = mName.getText().toString();
+
+        if ( TextUtils.isEmpty(name)) {
+            mName.setError(context.getString(R.string.must_have));
+            throw new IllegalStateException();
+
+        } else {
             acc.putString("name", name);
-        } else {
-            name = "";
         }
-        if ( mEmail.getText() != null ) {
-            email = mEmail.getText().toString();
+
+        email = mEmail.getText().toString();
+
+        if ( TextUtils.isEmpty(email)) {
+            mEmail.setError(context.getString(R.string.must_have));
+            throw new IllegalStateException();
+        } else {
             acc.putString("email", email);
+        }
+
+
+        String title = mTitle.getText().toString();
+
+        if ( TextUtils.isEmpty(title)) {
+            mTitle.setError(context.getString(R.string.must_have));
+            throw new IllegalStateException();
         } else {
-            email = "";
+            acc.putString("title", title);
         }
-        if ( mTitle.getText() != null ) {
-            acc.putString("title", mTitle.getText().toString());
-        }
+
+
         if ( mDetail.getText() != null ) {
             acc.putString("detail", mDetail.getText().toString());
         }

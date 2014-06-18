@@ -6,4 +6,15 @@
         <item>@string/text_about_us</item>
         <item>@string/text_setting</item>
     </string-array>
+
+
+    <!-- TODO: should query from server-->
+    <string-array name="categories">
+        <item>市容整潔</item>
+        <item>號誌與路燈故障</item>
+        <item>路霸與騎樓佔用</item>
+        <item>道路問題</item>
+        <item>其他</item>
+    </string-array>
+
 </resources>

@@ -20,13 +20,13 @@
     <string name="status_open">OPEN</string>
     <string name="status_closed">CLOSED</string>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title">title</string>
-    <string name="detail">detail</string>
-    <string name="name">name</string>
+
+    <string name="title">標題</string>
+    <string name="detail">描述</string>
+    <string name="name">姓名</string>
     <string name="email">email</string>
-    <string name="password">password</string>
-    <string name="category">category</string>
+    <string name="password">密碼</string>
+    <string name="category">類別</string>
 
     <string name="tips_title">怎麼回報問題</string>
     <string name="tips_ignore">下次不要再顯示此頁</string>
@@ -67,4 +67,9 @@
     <string name="text_no_default">沒有預設</string>
     <string name="text_issue_reporter_email">預設回報者電子信箱</string>
     <string name="text_issue_input_reporter_email">請輸入回報者電子信箱</string>
+    <string name="hint_name">輸入你的名字</string>
+    <string name="hint_desc">請簡潔的描述問題,\n可多行輸入。</string>
+    <string name="hint_title">例如: 紅綠燈故障</string>
+    <string name="detail_title">描述問題及送出回報</string>
+    <string name="must_have">必填欄位</string>
 </resources>
