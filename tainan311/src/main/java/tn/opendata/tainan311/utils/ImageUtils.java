@@ -78,6 +78,10 @@ public final class ImageUtils {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String path = timeStamp;
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        if (!storageDir.exists()) {
+            storageDir.mkdirs();
+        }
+
         File image = null;
         try {
             return Optional.of(File.createTempFile(path, ".jpg", storageDir));
