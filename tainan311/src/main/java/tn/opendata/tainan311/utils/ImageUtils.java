@@ -33,6 +33,10 @@ public final class ImageUtils {
             FileOutputStream fout = null;
             try {
                 File f = file.get();
+                File parent = f.getParentFile();
+                if (!parent.exists()) {
+                    parent.mkdirs();
+                }
                 fout = new FileOutputStream(f);
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 85, fout);
                 fout.flush();
@@ -76,7 +80,7 @@ public final class ImageUtils {
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         File image = null;
         try {
-            return Optional.of(File.createTempFile(path, ".png", storageDir));
+            return Optional.of(File.createTempFile(path, ".jpg", storageDir));
         } catch (IOException e) {
             e.printStackTrace();
         }

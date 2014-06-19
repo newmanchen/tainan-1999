@@ -216,7 +216,11 @@ public class ReportDetailFragment extends WizardFragment {
 
 
         if ( mDetail.getText() != null ) {
-            acc.putString("detail", mDetail.getText().toString());
+            String detail = mDetail.getText().toString();
+            if ( TextUtils.isEmpty(detail) ) {
+                detail = context.getString(R.string.str_empty);
+            }
+            acc.putString("detail", detail);
         }
         if (mPassword.getText() != null) {
             SharedPreferences prefs = context.getSharedPreferences(Constant.PREF_NAME, 0);

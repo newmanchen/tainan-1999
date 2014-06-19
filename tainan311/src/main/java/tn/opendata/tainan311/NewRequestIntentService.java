@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
@@ -27,10 +28,19 @@ public class NewRequestIntentService extends IntentService {
     private static final int NOTIFICATION_ID = 100;
 
     private Bundle data = null;
+    private Handler mHandler;
 
     public NewRequestIntentService() {
         super("NewRequest");
     }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        mHandler = new Handler();
+    }
+
     @Override
     protected void onHandleIntent(Intent intent) {
         data = intent.getBundleExtra("data");
@@ -98,8 +108,14 @@ public class NewRequestIntentService extends IntentService {
         }
     }
 
-    private void showNotification(String message) {
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+    private void showNotification(final String message) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(NewRequestIntentService.this, message, Toast.LENGTH_LONG).show();
+            }
+        });
+
         // use Toast instead...
 
 //        Notification notification = new NotificationCompat.Builder(getApplicationContext())

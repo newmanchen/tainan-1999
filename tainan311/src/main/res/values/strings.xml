@@ -74,4 +74,5 @@
     <string name="must_have">必填欄位</string>
     <string name="add_request">新增中...</string>
     <string name="add_failed">新增失敗:</string>
+    <string name="str_empty">(無)</string>
 </resources>
