@@ -172,7 +172,8 @@ public class MainMapActivity extends FragmentActivity implements ListView.OnItem
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         switch(position){   //R.arrays.drawer_text
             case 0:
-                startActivity(new Intent(this,RequestListActivity.class));
+//                startActivity(new Intent(this,RequestListActivity.class));
+                startActivity(new Intent(this, TainanRequestListActivity.class));
                 break;
             case 1:
                 startActivity(new Intent(this,ReportActivity.class));

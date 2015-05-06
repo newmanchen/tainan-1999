@@ -1,6 +1,5 @@
 package tn.opendata.tainan311;
 
-
 import android.app.ActionBar;
 import android.app.ListActivity;
 import android.app.Service;
@@ -41,7 +40,6 @@ import tn.opendata.tainan311.georeportv2.GeoReportV2;
 import tn.opendata.tainan311.georeportv2.vo.Request;
 import tn.opendata.tainan311.utils.EasyUtil;
 import tn.opendata.tainan311.utils.MainThreadExecutor;
-
 
 public class RequestListActivity extends ListActivity {
     private static final String TAG = RequestListActivity.class.getSimpleName();
@@ -242,11 +240,11 @@ public class RequestListActivity extends ListActivity {
                 e.printStackTrace();
             }
             if (Request.STATUS_CLOSE.equals(r.getStatus())) {
-                holder.status.setText(R.string.status_closed);
+                holder.status.setText(R.string.status_finished);
                 holder.status.setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
                 holder.status.setVisibility(View.VISIBLE);
             } else if (Request.STATUS_OPEN.equals(r.getStatus())) {
-                holder.status.setText(R.string.status_open);
+                holder.status.setText(R.string.status_not_taken);
                 holder.status.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
                 holder.status.setVisibility(View.VISIBLE);
             } else {

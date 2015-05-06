@@ -2,14 +2,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="tn.opendata.tainan311.DetailActivity" >
     
-    <item android:id="@+id/menu_green_close"
-        android:title="@string/status_closed"
+    <item android:id="@+id/menu_green_finished"
+        android:title="@string/status_finished"
         android:orderInCategory="100"
         android:showAsAction="always"
         android:visible="false"
         android:icon="@drawable/close_green" />
-    <item android:id="@+id/menu_red_open"
-        android:title="@string/status_open"
+    <item android:id="@+id/menu_orange_inprogress"
+        android:title="@string/status_inprogress"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:visible="false"
+        android:icon="@drawable/ic_drawer" />
+    <item android:id="@+id/menu_red_not_taken"
+        android:title="@string/status_not_taken"
         android:orderInCategory="100"
         android:showAsAction="always"
         android:visible="false"

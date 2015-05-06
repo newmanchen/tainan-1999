@@ -17,9 +17,9 @@
     <string name="msg_drag_pin">將箭頭對準問題發生位置</string>
 
     <string name="request_list_title">全部問題</string>
-    <string name="status_open">OPEN</string>
-    <string name="status_closed">CLOSED</string>
-
+    <string name="status_not_taken">未處理</string>
+    <string name="status_inprogress">處理中</string>
+    <string name="status_finished">已完成</string>
 
     <string name="title">標題</string>
     <string name="detail">描述</string>

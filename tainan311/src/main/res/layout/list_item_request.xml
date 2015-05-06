@@ -61,6 +61,7 @@
 
                 <TextView
                     android:id="@+id/datetime"
+                    android:layout_below="@id/service_name"
                     android:layout_toRightOf="@id/status"
                     android:layout_marginLeft="5dp"
                     android:layout_marginBottom="3dp"
