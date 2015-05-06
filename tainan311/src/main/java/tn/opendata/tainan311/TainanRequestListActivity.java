@@ -6,7 +6,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,20 +28,23 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
 import tn.opendata.tainan311.tainan1999.TainanReport1999;
 import tn.opendata.tainan311.tainan1999.rpc.QueryRequest;
 import tn.opendata.tainan311.tainan1999.util.TainanConstant;
 import tn.opendata.tainan311.tainan1999.vo.QueryResponse;
-import tn.opendata.tainan311.utils.EasyUtil;
 import tn.opendata.tainan311.utils.LogUtils;
 
 /**
  * Created by newman on 5/5/15.
  */
 public class TainanRequestListActivity extends ListActivity {
+    @InjectView(R.id.normal_plus) AddFloatingActionButton addRequestButton;
     private static final String TAG = TainanRequestListActivity.class.getSimpleName();
     // View
     private LinearLayout mLoadingMoreItem;
@@ -54,18 +56,18 @@ public class TainanRequestListActivity extends ListActivity {
     // Value
     private boolean mLoadingMore;
     // Constant
-    private static final String DEFAULT_START_TIME = "2015-05-05 12:00:00";
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tainan_query_list);
+        ButterKnife.inject(this);
         mSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", getResources().getConfiguration().locale);
 
         mLoadingMore = false;
         initImageLoader();
         initActionBar();
         initViews();
-        loadQueryRequest();
+        loadQueryRequest(true);
     }
 
     private void initActionBar() {
@@ -78,23 +80,28 @@ public class TainanRequestListActivity extends ListActivity {
         getListView().setDivider(null);
         mLoadingMoreItem = (LinearLayout) ((LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE)).inflate(R.layout.list_item_loading_more, null);
         getListView().addFooterView(mLoadingMoreItem);
-
-        AddFloatingActionButton addRequestButton = (AddFloatingActionButton) findViewById(R.id.normal_plus);
-        addRequestButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(TainanRequestListActivity.this, ReportActivity.class));
-            }
-        });
     }
 
-    //TODO to update
-    private void loadQueryRequest() {
+    @OnClick(R.id.normal_plus)
+    public void clickAdd(View view) {
+        startActivity(new Intent(TainanRequestListActivity.this, ReportActivity.class));
+    }
+
+    private Calendar cal = Calendar.getInstance();
+    private void loadQueryRequest(boolean firstTimeQuery) {
+        LogUtils.d(TAG, "loadQueryRequest firstTimeQuery:", firstTimeQuery);
         addLoadingMoreListItem();
 
         QueryRequest.Builder builder = QueryRequest.Builder.create();
-        builder.setStartTime(DEFAULT_START_TIME);
-        builder.setEndTime(mSimpleDateFormat.format(new Date()));
+        builder.setEndTime(mSimpleDateFormat.format(cal.getTime()));
+        if (firstTimeQuery) {
+            cal.set(Calendar.HOUR, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 1);
+        } else {
+            cal.add(Calendar.DAY_OF_YEAR, -1);
+        }
+        builder.setStartTime(mSimpleDateFormat.format(cal.getTime()));
         LogUtils.d(TAG, "builder.build() is ", builder.build());
 
         mLoadingMore = true;
@@ -117,7 +124,7 @@ public class TainanRequestListActivity extends ListActivity {
                                 getListView().setOnScrollListener(mOnScrollListener);
                             } else {
                                 mQueryRequestArrayAdapter.addAll(result);
-                                mQueryRequestArrayAdapter.updateReqeustList(result);
+                                mQueryRequestArrayAdapter.updateRequestList(result);
                             }
                         }
                     }
@@ -148,7 +155,7 @@ public class TainanRequestListActivity extends ListActivity {
         mLoadingMoreItem.setVisibility(View.GONE);
     }
 
-    private class QueryRequestArrayAdapter extends ArrayAdapter<QueryResponse> implements AdapterView.OnItemClickListener {
+    public class QueryRequestArrayAdapter extends ArrayAdapter<QueryResponse> implements AdapterView.OnItemClickListener {
         private final LayoutInflater mInflater;
         private final int mResource;
         private final List<QueryResponse> mRequestList = Lists.newArrayList();
@@ -161,22 +168,13 @@ public class TainanRequestListActivity extends ListActivity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            View view = null;
-
             if (convertView == null) {
-                view = mInflater.inflate(mResource, parent, false);
-                ViewHolder holder = new ViewHolder();
-                holder.cover = EasyUtil.findView(view, R.id.img);
-                holder.title = EasyUtil.findView(view, R.id.title);
-                holder.service_name = EasyUtil.findView(view, R.id.service_name);
-                holder.datetime = EasyUtil.findView(view, R.id.datetime);
-                holder.status = EasyUtil.findView(view, R.id.status);
-                view.setTag(holder);
-            } else {
-                view = convertView;
+                convertView = mInflater.inflate(mResource, parent, false);
+                ViewHolder holder = new ViewHolder(convertView);
+                convertView.setTag(holder);
             }
             QueryResponse r = getItem(position);
-            final ViewHolder holder = (ViewHolder) view.getTag();
+            final ViewHolder holder = (ViewHolder) convertView.getTag();
             //TODO due to the api design is not well and put this task as to-do
             // image
 //            if (!TextUtils.isEmpty(r.getMedia_url())) {
@@ -213,7 +211,6 @@ public class TainanRequestListActivity extends ListActivity {
             holder.service_name.setText(r.getService_name());
             // requested date and time
             holder.datetime.setText(r.getRequested_datetime());
-            LogUtils.d(TAG, "r.getStatus() : ", r.getStatus());
             if (TainanConstant.STATUS_FINISH.equals(r.getStatus())) {
                 holder.status.setText(R.string.status_finished);
                 holder.status.setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
@@ -229,15 +226,19 @@ public class TainanRequestListActivity extends ListActivity {
             } else {
                 holder.status.setVisibility(View.GONE);
             }
-            return view;
+            return convertView;
         }
 
-        private class ViewHolder {
-            ImageView cover;
-            TextView title;
-            TextView service_name;
-            TextView datetime;
-            TextView status;
+        public class ViewHolder {
+            public ViewHolder(View view) {
+                ButterKnife.inject(this, view);
+            }
+
+            @InjectView(R.id.img) ImageView cover;
+            @InjectView(R.id.title) TextView title;
+            @InjectView(R.id.service_name) TextView service_name;
+            @InjectView(R.id.datetime) TextView datetime;
+            @InjectView(R.id.status) TextView status;
         }
 
         @Override
@@ -247,7 +248,7 @@ public class TainanRequestListActivity extends ListActivity {
             startActivity(i);
         }
 
-        public void updateReqeustList(List<QueryResponse> list) {
+        public void updateRequestList(List<QueryResponse> list) {
             mRequestList.addAll(list);
             mQueryRequestArrayAdapter.notifyDataSetChanged();
         }
@@ -283,9 +284,8 @@ public class TainanRequestListActivity extends ListActivity {
             int lastInScreen = firstVisibleItem + visibleItemCount;
             //is the bottom item visible & not loading more already ? Load more !
             if((lastInScreen == totalItemCount) && !(mLoadingMore)){
-                QueryResponse r = mQueryRequestArrayAdapter.getItem(mQueryRequestArrayAdapter.getCount()-1);
                 //TODO send a another request
-//                loadQueryRequest(r.getRequested_datetime());
+                loadQueryRequest(false);
             }
         }
     };

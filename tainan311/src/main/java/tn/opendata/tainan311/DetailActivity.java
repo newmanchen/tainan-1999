@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -17,12 +18,20 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import tn.opendata.tainan311.tainan1999.util.TainanConstant;
 import tn.opendata.tainan311.tainan1999.vo.QueryResponse;
 import tn.opendata.tainan311.utils.EasyUtil;
 import tn.opendata.tainan311.utils.LogUtils;
 
 public class DetailActivity extends Activity {
+    @InjectView(R.id.image) ImageView imageView;
+    @InjectView(R.id.detail) TextView detail;
+    @InjectView(R.id.service_name) TextView serviceName;
+    @InjectView(R.id.request_date) TextView requestDate;
+    @InjectView(R.id.request_area) TextView area;
+
     private static final String TAG = DetailActivity.class.getSimpleName();
     public static final String EXTRA_KEY_REQUEST = "extra_key_request";
     private QueryResponse mRequest;
@@ -34,6 +43,7 @@ public class DetailActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        ButterKnife.inject(this);
 
         mRequest = getIntent().getParcelableExtra(EXTRA_KEY_REQUEST);
         if (mRequest == null) {
@@ -84,12 +94,10 @@ public class DetailActivity extends Activity {
 //                }
 //            });
 //        }
-        TextView detail = EasyUtil.findView(this, R.id.detail);
         detail.setText(mRequest.getDescription_request());
-        TextView serviceName = EasyUtil.findView(this, R.id.service_name);
         serviceName.setText(mRequest.getService_name());
-        TextView requestDate = EasyUtil.findView(this, R.id.request_date);
         requestDate.setText(mRequest.getRequested_datetime());
+        area.setText(mRequest.getArea());
         GoogleMap map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
         LatLng issueLocation = new LatLng(Double.valueOf(mRequest.getLatitude()), Double.valueOf(mRequest.getLongitude()));
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(issueLocation, 17));

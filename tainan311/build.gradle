@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.10.+'
+        classpath 'com.android.tools.build:gradle:1.1.0'
     }
 }
 apply plugin: 'android'
@@ -36,7 +36,6 @@ android {
 
     signingConfigs {
         debug {
-
         }
 //        release {
 //            storeFile file('../../../.android/debug.keystore')
@@ -58,5 +57,6 @@ dependencies {
     compile 'org.apache.httpcomponents:httpmime:4.3.4'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.2'
     compile 'com.getbase:floatingactionbutton:1.9.0'
+    compile 'com.jakewharton:butterknife:6.1.0'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }

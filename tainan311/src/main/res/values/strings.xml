@@ -75,4 +75,5 @@
     <string name="add_request">新增中...</string>
     <string name="add_failed">新增失敗:</string>
     <string name="str_empty">(無)</string>
+    <string name="text_area">行政區域</string>
 </resources>

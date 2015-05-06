@@ -16,6 +16,9 @@ import android.widget.Button;
 import android.widget.Toast;
 import com.google.android.gms.maps.MapFragment;
 import com.google.common.collect.ImmutableList;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import tn.opendata.tainan311.utils.FixedSpeedScroller;
 
 import java.lang.reflect.Field;
@@ -25,35 +28,26 @@ import java.util.Locale;
 import static tn.opendata.tainan311.utils.EasyUtil.NOT_IMPLELENT;
 import static tn.opendata.tainan311.utils.EasyUtil.findView;
 
-
 public class ReportActivity extends Activity implements WizardFragment.FlowController {
+    @InjectView(R.id.previous) Button previousButton;
+    @InjectView(R.id.next) Button nextButton;
+    @InjectView(R.id.done) Button doneButton;
+    @InjectView(R.id.pager) ViewPager mViewPager;
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    private Button nextButton;
-    private Button doneButton;
-    private Button previousButton;
     private final Bundle data = new Bundle(); //TODO: handle config change
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
-
-        previousButton = findView(this, R.id.previous);
-        nextButton = findView(this, R.id.next);
-        doneButton = findView(this, R.id.done);
+        ButterKnife.inject(this);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         if (ReportTipsFragment.getIgnorePref(this)){
@@ -74,7 +68,6 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
         } catch (Exception e) {
            e.printStackTrace();
         }
-
 
         resetButtonState();
     }
@@ -103,10 +96,6 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
                 e.printStackTrace();
                 //just ignore and skip click..
             }
-
-
-
-
         }
         resetButtonState();
     }
@@ -121,7 +110,6 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
         }else{
             previousButton.performClick();
         }
-
     }
 
     private void createNewRequest() {
@@ -134,12 +122,12 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
         boolean last = (mViewPager.getCurrentItem() == mViewPager.getAdapter().getCount() -1);
         boolean first = mViewPager.getCurrentItem() == 0;
 
-        if(first){
+        if (first){
             nextButton.setText(R.string.next_to_report);
-        }else if (mViewPager.getCurrentItem() == 1){
+        } else if (mViewPager.getCurrentItem() == 1){
             nextButton.setText(R.string.next);
             previousButton.setText(R.string.previous_tips);
-        }else{
+        } else {
             nextButton.setText(R.string.next);
             previousButton.setText(R.string.previous);
         }
@@ -163,7 +151,6 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
         return data;
     }
 
-
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -181,7 +168,6 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
                 case 3:
                     return ReportDetailFragment.newInstance();
                 //TODO: ... add new here...
-
             }
             return null;
         }
@@ -190,15 +176,11 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
         public int getCount() {
             return 4;    //TODO: ... don't forget it...
         }
-
-
     }
-
 
     private static String makeFragmentName(int viewId, int index){
         return "android:switcher:" + viewId + ":" + index;
     }
-
 
     private static class ZoomOutPageTransformer implements ViewPager.PageTransformer {
         private static final float MIN_SCALE = 0.85f;

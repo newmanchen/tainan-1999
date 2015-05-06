@@ -11,7 +11,6 @@ import java.io.Closeable;
 import java.io.IOException;
 
 public class EasyUtil {
-
     public static  <T extends View> T findView(View v,int id){
         return  (v != null) ? (T) v.findViewById(id) : null;
     }
@@ -28,7 +27,6 @@ public class EasyUtil {
                 e.printStackTrace();
             }
         }
-
     }
 
     /** If the argument is non-null, close the cursor. */
@@ -38,10 +36,8 @@ public class EasyUtil {
         }
     }
 
-
     public static String defaultText(String text,String defaultText){
         return TextUtils.isEmpty(text) ? defaultText : text;
-
     }
 
     public static void NOT_IMPLELENT(Context c){
