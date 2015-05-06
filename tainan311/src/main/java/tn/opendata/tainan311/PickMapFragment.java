@@ -36,7 +36,6 @@ import java.util.concurrent.ExecutionException;
  * Created by sam on 2014/6/11.
  */
 public class PickMapFragment extends WizardFragment implements View.OnClickListener{
-
     private static final String ARG_SECTION_NUMBER = "section_number";
     private GoogleMap map;
     private Handler handler = new Handler();
@@ -56,9 +55,6 @@ public class PickMapFragment extends WizardFragment implements View.OnClickListe
     private PickMapFragment() {
     }
 
-
-
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -72,8 +68,6 @@ public class PickMapFragment extends WizardFragment implements View.OnClickListe
         CameraUpdate center = CameraUpdateFactory.newLatLngZoom(new LatLng(22.997144,120.212966),13); //台南火車站
 
         map.moveCamera(center);
-
-
         map.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
             @Override
             public void onMyLocationChange(Location location) {
@@ -83,21 +77,14 @@ public class PickMapFragment extends WizardFragment implements View.OnClickListe
                         .zoom(map.getMaxZoomLevel() - 3)
 //                        .tilt(30)
                         .build();
-
                 map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 2000, null);
-
-                map.setOnMyLocationChangeListener(null);  //once...
+                map.setOnMyLocationChangeListener(null);
             }
         });
 
-
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DAY_OF_YEAR, -5);
-
-
-        GeoReportV2.QueryRequestBuilder builder = GeoReportV2.QueryRequestBuilder.create()
-                .open().build();
-
+        GeoReportV2.QueryRequestBuilder builder = GeoReportV2.QueryRequestBuilder.create().open().build();
         final ListenableFuture<List<Request>> future = builder.execute();
 
         future.addListener(new Runnable() {
@@ -122,8 +109,6 @@ public class PickMapFragment extends WizardFragment implements View.OnClickListe
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 }
-
-
             }
         }, MainThreadExecutor.build());
 
@@ -134,10 +119,8 @@ public class PickMapFragment extends WizardFragment implements View.OnClickListe
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
-
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
         rootView.findViewById(R.id.btn_map_type).setOnClickListener(this);
-
         return rootView;
     }
 
@@ -156,8 +139,6 @@ public class PickMapFragment extends WizardFragment implements View.OnClickListe
                 ft.commit();
             }
         },"removemap",300) ;
-
-
     }
 
     @Override
@@ -166,7 +147,6 @@ public class PickMapFragment extends WizardFragment implements View.OnClickListe
         //workaround for nested MapFragment
         handler.removeCallbacksAndMessages("removemap");
     }
-
 
     @Override
     public Bundle onNextClick(Bundle acc) {
@@ -200,11 +180,10 @@ public class PickMapFragment extends WizardFragment implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        if(map.getMapType() == GoogleMap.MAP_TYPE_HYBRID){
+        if (map.getMapType() == GoogleMap.MAP_TYPE_HYBRID) {
             map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        }else{
+        } else {
             map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         }
     }
 }
-

@@ -7,14 +7,126 @@
         <item>@string/text_setting</item>
     </string-array>
 
-
     <!-- TODO: should query from server-->
-    <string-array name="categories">
-        <item>市容整潔</item>
-        <item>號誌與路燈故障</item>
-        <item>路霸與騎樓佔用</item>
-        <item>道路問題</item>
-        <item>其他</item>
+    <string-array name="service_name">
+        <item>違規停車</item>
+        <item>路燈故障</item>
+        <item>噪音舉發</item>
+        <item>騎樓舉發</item>
+        <item>道路維修</item>
+        <item>交通運輸</item>
+        <item>髒亂及汙染</item>
+        <item>民生管線</item>
+        <item>動物救援</item>
+    </string-array>
+
+    <!-- 違規停車 -->
+    <string-array name="subproject_pv">
+        <item>違規停車</item>
+    </string-array>
+
+    <!-- 路燈故障 -->
+    <string-array name="subproject_sb">
+        <item>9盞以下路燈故障</item>
+        <item>10盞以上路燈故障</item>
+    </string-array>
+
+    <!-- 噪音舉發 -->
+    <string-array name="subproject_n">
+        <item>場所連續噪音</item>
+        <item>妨害安寧</item>
+    </string-array>
+
+    <!-- 騎樓舉發 -->
+    <string-array name="subproject_ao">
+        <item>騎樓舉發</item>
+    </string-array>
+
+    <!-- 道路維修 -->
+    <string-array name="subproject_r">
+        <item>路面坑洞</item>
+        <item>寬頻管線、孔蓋損壞</item>
+        <item>路面下陷、凹陷</item>
+        <item>路面掏空、塌陷</item>
+        <item>路樹傾倒</item>
+        <item>地下道積水</item>
+        <item>人孔蓋或溝蓋聲響、鬆動</item>
+        <item>人孔蓋凹陷坑洞</item>
+    </string-array>
+
+    <!-- 交通運輸 -->
+    <string-array name="subproject_t">
+        <item>號誌故障</item>
+        <item>號誌秒差調整</item>
+        <item>公車動態LED跑馬燈資訊顯示異常</item>
+        <item>交通疏導</item>
+        <item>佔用道路</item>
+    </string-array>
+
+    <!-- 髒亂及污染 -->
+    <string-array name="subproject_ap">
+        <item>空氣汙染</item>
+        <item>其他汙染舉發</item>
+        <item>環境髒亂</item>
+        <item>道路散落物</item>
+        <item>小廣告、旗幟</item>
+        <item>大型廢棄物清運</item>
+        <item>市區道路路面油漬</item>
+    </string-array>
+
+    <!-- 民生管線 -->
+    <string-array name="subproject_p">
+        <item>停電、漏電、電線掉落、孔蓋鬆動</item>
+        <item>天然氣外洩</item>
+        <item>瓦斯管溝修補、孔蓋鬆動</item>
+        <item>電信孔蓋鬆動、電信線路掉落、電信桿傾倒</item>
+        <item>漏水、停水、消防栓漏水或損壞</item>
+    </string-array>
+
+    <!-- 動物救援 -->
+    <string-array name="subproject_ar">
+        <item>遊蕩犬隻捕捉管制</item>
+        <item>犬貓急難救援</item>
+    </string-array>
+
+    <string-array name="area">
+        <item>新營區</item>
+        <item>鹽水區</item>
+        <item>白河區</item>
+        <item>柳營區</item>
+        <item>後壁區</item>
+        <item>東山區</item>
+        <item>麻豆區</item>
+        <item>下營區</item>
+        <item>六甲區</item>
+        <item>官田區</item>
+        <item>大內區</item>
+        <item>佳里區</item>
+        <item>學甲區</item>
+        <item>西港區</item>
+        <item>七股區</item>
+        <item>將軍區</item>
+        <item>北門區</item>
+        <item>新化區</item>
+        <item>善化區</item>
+        <item>新市區</item>
+        <item>安定區</item>
+        <item>山上區</item>
+        <item>玉井區</item>
+        <item>楠西區</item>
+        <item>南化區</item>
+        <item>左鎮區</item>
+        <item>仁德區</item>
+        <item>歸仁區</item>
+        <item>關廟區</item>
+        <item>龍崎區</item>
+        <item>永康區</item>
+        <item>東 區</item>
+        <item>南 區</item>
+        <item>北 區</item>
+        <item>安南區</item>
+        <item>安平區</item>
+        <item>中西區</item>
     </string-array>
 
 </resources>

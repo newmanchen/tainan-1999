@@ -1,83 +1,102 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context="tn.opendata.tainan311.ReportDetailFragment"
-            android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="tn.opendata.tainan311.ReportDetailFragment"
+    android:orientation="vertical">
+
     <LinearLayout android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:orientation="vertical"
-                  android:padding="8dp">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp">
 
         <TextView
-                  style="@style/WizardTitle"
-                  android:text="@string/detail_title"/>
-
+            style="@style/WizardTitle"
+            android:text="@string/detail_title"/>
 
         <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/tips_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:columnCount="2"
-                    android:rowCount="2"
+            android:id="@+id/tips_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:rowCount="2"
+            android:orientation="horizontal"
+            android:background="@drawable/shape_card">
 
-                    android:orientation="horizontal"
-                    android:background="@drawable/shape_card">
             <TextView style="@style/ReportItem"
-                      android:text="@string/category"/>
-
+                android:text="@string/text_service_name"/>
 
             <Spinner style="@style/ReportItem"
-                     android:id="@+id/category"/>
+                android:id="@+id/service_name"/>
 
             <TextView style="@style/ReportItem"
-                      android:text="@string/title"/>
-            <EditText style="@style/ReportItem"
-                      android:id="@+id/title"
-                      android:layout_gravity="fill_horizontal"
-                      android:hint="@string/hint_title"
-                      android:inputType="textEmailSubject"/>
-            <TextView style="@style/ReportItem"
-                      android:text="@string/detail"/>
-            <EditText style="@style/ReportItem"
-                      android:singleLine="false"
-                      android:hint="@string/hint_desc"
-                      android:layout_gravity="fill_horizontal"
-                      android:id="@+id/detail" android:inputType="textMultiLine"/>
+                android:text="@string/text_subproject"/>
+
+            <Spinner style="@style/ReportItem"
+                android:id="@+id/subproject"/>
 
             <TextView style="@style/ReportItem"
-                      android:text="@string/name"/>
-            <EditText style="@style/ReportItem"
-                      android:hint="@string/hint_name"
-                      android:layout_gravity="fill_horizontal"
-                      android:id="@+id/name" android:inputType="textPersonName"/>
+                android:text="@string/text_area"/>
+
+            <Spinner style="@style/ReportItem"
+                android:id="@+id/area"/>
 
             <TextView style="@style/ReportItem"
-                      android:text="@string/email"/>
+                android:text="@string/description"/>
+
+            <EditText style="@style/ReportItem"
+                android:singleLine="false"
+                android:hint="@string/hint_desc"
+                android:layout_gravity="fill_horizontal"
+                android:id="@+id/description" android:inputType="textMultiLine"/>
+
+            <TextView style="@style/ReportItem"
+                android:text="@string/address" />
+
+            <EditText style="@style/ReportItem"
+                android:id="@+id/address"
+                android:layout_gravity="fill_horizontal"
+                android:inputType="textEmailSubject"/>
+
+            <TextView style="@style/ReportItem"
+                android:text="@string/name"/>
+
+            <EditText style="@style/ReportItem"
+                android:hint="@string/hint_name"
+                android:layout_gravity="fill_horizontal"
+                android:id="@+id/name" android:inputType="textPersonName"/>
+
+            <TextView style="@style/ReportItem"
+                android:text="@string/phone"/>
+
+            <EditText style="@style/ReportItem"
+                android:layout_gravity="fill_horizontal"
+                android:id="@+id/phone" android:inputType="numberDecimal"/>
+
+            <TextView style="@style/ReportItem"
+                android:text="@string/email"/>
+
             <EditText
-                    style="@style/ReportItem"
-                    android:inputType="textEmailAddress"
-                    android:layout_gravity="fill"
-                    android:id="@+id/email" />
+                style="@style/ReportItem"
+                android:inputType="textEmailAddress"
+                android:layout_gravity="fill"
+                android:id="@+id/email" />
+
             <TextView style="@style/ReportItem"
-                      android:text="@string/password"/>
+                android:text="@string/password"/>
 
             <EditText style="@style/ReportItem"
-                      android:id="@+id/password" android:inputType="textVisiblePassword"/>
-
-
+                android:id="@+id/password" android:inputType="textVisiblePassword"/>
         </GridLayout>
 
         <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                   android:id="@+id/map_snapshot"
-                   android:layout_gravity="center_horizontal"/>
+            android:id="@+id/map_snapshot"
+            android:layout_gravity="center_horizontal"/>
+
         <ImageView android:layout_width="320dip" android:layout_height="320dip"
-                   android:id="@+id/photo"
-                   android:scaleType="fitStart"
-                   android:visibility="gone"
-                   android:layout_gravity="center_horizontal"
-                />
-
-
+            android:id="@+id/photo"
+            android:scaleType="fitStart"
+            android:visibility="gone"
+            android:layout_gravity="center_horizontal" />
     </LinearLayout>
 </ScrollView>

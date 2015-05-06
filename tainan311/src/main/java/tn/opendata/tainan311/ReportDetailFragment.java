@@ -12,30 +12,32 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import tn.opendata.tainan311.utils.AccountUtils;
 import tn.opendata.tainan311.utils.Constant;
 import tn.opendata.tainan311.utils.ProfileUtil;
 
 public class ReportDetailFragment extends WizardFragment {
-
-    private TextView mName;
-    private TextView mEmail;
-    private TextView mTitle;
-    private TextView mDetail;
-    private TextView mPassword;
-    private Spinner mCategory;
-    private ImageView photo;
-    private ImageView mapview;
+    //FIXME add mush have fields 
+    @InjectView(R.id.name) TextView name;
+    @InjectView(R.id.email) TextView email;
+    @InjectView(R.id.address) TextView address;
+    @InjectView(R.id.detail) TextView detail;
+    @InjectView(R.id.password) TextView password;
+    @InjectView(R.id.service_name) Spinner serviceName;
+    @InjectView(R.id.area) Spinner area;
+    @InjectView(R.id.subproject) Spinner subProject;
+    @InjectView(R.id.photo) ImageView photo;
+    @InjectView(R.id.map_snapshot) ImageView mapview;
 
     private Handler mNonUiHandler;
-
     private boolean mNeedRegister = false;
 
     public ReportDetailFragment() {
@@ -56,13 +58,11 @@ public class ReportDetailFragment extends WizardFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         HandlerThread ht = new HandlerThread("nonUi");
         ht.start();
         mNonUiHandler = new Handler(ht.getLooper());
@@ -77,23 +77,21 @@ public class ReportDetailFragment extends WizardFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
-
         View rootView = inflater.inflate(R.layout.fragment_report_detail, container, false);
-        mName = (TextView)rootView.findViewById(R.id.name);
-        mEmail = (TextView)rootView.findViewById(R.id.email);
-        mTitle = (TextView)rootView.findViewById(R.id.title);
-        mDetail = (TextView)rootView.findViewById(R.id.detail);
-        mCategory = (Spinner)rootView.findViewById(R.id.category);
-        mPassword = (TextView)rootView.findViewById(R.id.password);
-
+        ButterKnife.inject(this, rootView);
 
         //TODO: should query from Server (service_code)
-        String[] spinArray = getResources().getStringArray(R.array.categories);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, spinArray);
-        mCategory.setAdapter(adapter);
+        String[] serviceNameArray = getResources().getStringArray(R.array.service_name);
+        ArrayAdapter<String> serviceNameAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, serviceNameArray);
+        serviceName.setAdapter(serviceNameAdapter);
+        serviceName.setOnItemSelectedListener(mOnItemSelectListener);
+        String[] subProjectArray = getResources().getStringArray(R.array.subproject_pv);
+        ArrayAdapter<String> subprojectAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, subProjectArray);
+        subProject.setAdapter(subprojectAdapter);
 
-        photo = (ImageView) rootView.findViewById(R.id.photo);
-        mapview = (ImageView) rootView.findViewById(R.id.map_snapshot);
+        String[] areaArray = getResources().getStringArray(R.array.area);
+        ArrayAdapter<String> areaAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, areaArray);
+        area.setAdapter(areaAdapter);
 
         mNonUiHandler.post(new Runnable() {
             @Override
@@ -101,14 +99,58 @@ public class ReportDetailFragment extends WizardFragment {
                 loadPreference();
             }
         });
-
         return rootView;
     }
 
+    private AdapterView.OnItemSelectedListener mOnItemSelectListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+            int arrayResId = R.array.subproject_pv; // default and case 0
+            switch (position) {
+                case 1:
+                    arrayResId = R.array.subproject_sb;
+                    break;
+
+                case 2:
+                    arrayResId = R.array.subproject_n;
+                    break;
+
+                case 3:
+                    arrayResId = R.array.subproject_ao;
+                    break;
+
+                case 4:
+                    arrayResId = R.array.subproject_r;
+                    break;
+
+                case 5:
+                    arrayResId = R.array.subproject_t;
+                    break;
+
+                case 6:
+                    arrayResId = R.array.subproject_ap;
+                    break;
+
+                case 7:
+                    arrayResId = R.array.subproject_p;
+                    break;
+
+                case 8:
+                    arrayResId = R.array.subproject_ar;
+                    break;
+            }
+            String[] subProjectArray = getResources().getStringArray(arrayResId);
+            ArrayAdapter<String> subprojectAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, subProjectArray);
+            subProject.setAdapter(subprojectAdapter);
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+        }
+    };
+
     private void loadPreference() {
         Activity context = getActivity();
-
-
         if (context != null ) {
             SharedPreferences prefs = context.getSharedPreferences(Constant.PREF_NAME, 0);
 
@@ -128,22 +170,21 @@ public class ReportDetailFragment extends WizardFragment {
             context.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mEmail.setText(mail);
+                    email.setText(mail);
                     String nameValue = name;
                     if (TextUtils.isEmpty(name)) {
                         //nameValue = mail.substring(0, mail.indexOf("@"));
                         nameValue = ProfileUtil.getUserName(getActivity());
                     }
-                    mName.setText(nameValue);
+                    ReportDetailFragment.this.name.setText(nameValue);
                     String passValue = password;
                     if (TextUtils.isEmpty(password)) {
                         passValue = String.valueOf((int)(Math.random()*9000+1000));
                     }
-                    mPassword.setText(passValue);
+                    ReportDetailFragment.this.password.setText(passValue);
                 }
             });
         }
-
     }
 
     @Override
@@ -156,7 +197,6 @@ public class ReportDetailFragment extends WizardFragment {
                 String path = data.getString("photo");
                 if (!TextUtils.isEmpty(path)) {
                     Bitmap bitmap = BitmapFactory.decodeFile(path);
-
                     photo.setImageBitmap(bitmap);
                     photo.setVisibility(View.VISIBLE);
                 }
@@ -174,26 +214,26 @@ public class ReportDetailFragment extends WizardFragment {
 
     @Override
     public Bundle onNextClick(Bundle acc) {
-        acc.putString("category", String.valueOf(mCategory.getSelectedItem()));
+        //TODO area, subproject
+        acc.putString("category", String.valueOf(serviceName.getSelectedItem()));
         final String name;
         final String email;
         final String password;
         final Context context = getActivity();
 
-        name = mName.getText().toString();
+        name = this.name.getText().toString();
 
-        if ( TextUtils.isEmpty(name)) {
-            mName.setError(context.getString(R.string.must_have));
+        if (TextUtils.isEmpty(name)) {
+            this.name.setError(context.getString(R.string.must_have));
             throw new IllegalStateException();
-
         } else {
             acc.putString("name", name);
         }
 
-        email = mEmail.getText().toString();
+        email = this.email.getText().toString();
 
-        if ( TextUtils.isEmpty(email)) {
-            mEmail.setError(context.getString(R.string.must_have));
+        if (TextUtils.isEmpty(email)) {
+            this.email.setError(context.getString(R.string.must_have));
             throw new IllegalStateException();
         } else {
             SharedPreferences prefs = context.getSharedPreferences(Constant.PREF_NAME, 0);
@@ -204,27 +244,25 @@ public class ReportDetailFragment extends WizardFragment {
             acc.putString("email", email);
         }
 
+        String address = this.address.getText().toString();
 
-        String title = mTitle.getText().toString();
-
-        if ( TextUtils.isEmpty(title)) {
-            mTitle.setError(context.getString(R.string.must_have));
+        if ( TextUtils.isEmpty(address)) {
+            this.address.setError(context.getString(R.string.must_have));
             throw new IllegalStateException();
         } else {
-            acc.putString("title", title);
+            acc.putString("title", address);
         }
 
-
-        if ( mDetail.getText() != null ) {
-            String detail = mDetail.getText().toString();
+        if ( detail.getText() != null ) {
+            String detail = this.detail.getText().toString();
             if ( TextUtils.isEmpty(detail) ) {
                 detail = context.getString(R.string.str_empty);
             }
             acc.putString("detail", detail);
         }
-        if (mPassword.getText() != null) {
+        if (this.password.getText() != null) {
             SharedPreferences prefs = context.getSharedPreferences(Constant.PREF_NAME, 0);
-            password = mPassword.getText().toString();
+            password = this.password.getText().toString();
             String oldPassword = prefs.getString("password", "");
             if (!password.equals(oldPassword)) {
                 mNeedRegister = true;
@@ -246,8 +284,6 @@ public class ReportDetailFragment extends WizardFragment {
                 editor.apply();
             }
         });
-
-
         return acc;
     }
 }

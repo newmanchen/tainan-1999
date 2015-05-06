@@ -22,7 +22,7 @@
     <string name="status_finished">已完成</string>
 
     <string name="title">標題</string>
-    <string name="detail">描述</string>
+    <string name="description">描述</string>
     <string name="name">姓名</string>
     <string name="email">email</string>
     <string name="password">密碼</string>
@@ -33,13 +33,11 @@
     <string name="tips_step1">把問題位置標記在地圖上</string>
     <string name="tips_step2">拍照</string>
     <string name="tips_step3">描述問題</string>
-    <string name="tips_step4">上傳問題並點選確認信</string>
-    <string name="tips_step5">完成回報</string>
+    <string name="tips_step4">完成回報</string>
     <string name="tips_step1_no">1</string>
     <string name="tips_step2_no">2</string>
     <string name="tips_step3_no">3</string>
     <string name="tips_step4_no">4</string>
-    <string name="tips_step5_no">5</string>
     <string name="title_activity_show_map">ShowMapActivity</string>
     <string name="title_activity_main_map">MainMapActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -52,8 +50,8 @@
     <string name="text_setting">設定</string>
     <string name="text_about_us">關於我們</string>
 
-    <string name="text_issue_detail">問題描述</string>
-    <string name="text_service_name">問題類別</string>
+    <string name="text_issue_detail">描述</string>
+    <string name="text_service_name">類型</string>
     <string name="text_request_date">提交日期</string>
     <string name="text_location">問題地點</string>
     <string name="confirm_mail">初次使用或更改密碼需要郵件確認,請留意您的信箱</string>
@@ -75,5 +73,8 @@
     <string name="add_request">新增中...</string>
     <string name="add_failed">新增失敗:</string>
     <string name="str_empty">(無)</string>
-    <string name="text_area">行政區域</string>
+    <string name="text_area">行政區</string>
+    <string name="text_subproject">事項</string>
+    <string name="phone">電話</string>
+    <string name="address">地點</string>
 </resources>

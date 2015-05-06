@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import tn.opendata.tainan311.tainan1999.util.TainanConstant;
 import tn.opendata.tainan311.tainan1999.util.TainanRequestXmlUtils;
 import tn.opendata.tainan311.tainan1999.vo.QueryResponse;
 import tn.opendata.tainan311.utils.EasyUtil;
@@ -20,10 +21,9 @@ import tn.opendata.tainan311.utils.LogUtils;
 /**
  * Created by newman on 5/4/15.
  */
-public class QueryRequest {
+public class QueryRequest extends BaseRequest {
     private static final String TAG = QueryRequest.class.getSimpleName();
-    private static final String ns = null;
-    private static final String root = "root";
+    //-------------------------------------Response------------------------------------------------------
     private static final String returncode = "returncode"; // 0表示成功，其它表示不成功
     private static final String description_fail = "description"; // 錯誤說明【操作失敗才會顯示】
     private static final String stacktrace = "stacktrace"; // 錯誤Log【操作失敗才會顯示】
@@ -52,9 +52,9 @@ public class QueryRequest {
     private static final String file = "file"; // 檔案資料
 
     private static List readResponse(XmlPullParser parser) throws XmlPullParserException, IOException {
-        List records = Lists.newArrayList();
+        List responses = Lists.newArrayList();
 
-        parser.require(XmlPullParser.START_TAG, ns, root);
+        parser.require(XmlPullParser.START_TAG, ns, TAG_ROOT);
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
@@ -73,26 +73,14 @@ public class QueryRequest {
             } else if (name.equals(stacktrace)) {
                 String stackTrace = readData(parser, stacktrace);
                 LogUtils.d(TAG, "stackTrace : ", stackTrace);
-            } else if (name.equals(QueryRequest.records)) {
-            } else if (name.equals(QueryRequest.record)) {
-                records.add(readRecord(parser));
+            } else if (name.equals(records)) {
+            } else if (name.equals(record)) {
+                responses.add(readRecord(parser));
             } else {
                 skip(parser);
             }
         }
-        return records;
-    }
-
-    /**
-     *  Common reader for the tag that depth has only 1
-     *  @param parser
-     *  @param tag
-     */
-    private static String readData (XmlPullParser parser, String tag) throws IOException, XmlPullParserException {
-        parser.require(XmlPullParser.START_TAG, ns, tag);
-        String data = readText(parser);
-        parser.require(XmlPullParser.END_TAG, ns, tag);
-        return data;
+        return responses;
     }
 
     /**
@@ -173,38 +161,6 @@ public class QueryRequest {
         return pic;
     }
 
-    private static String readText(XmlPullParser parser) throws IOException, XmlPullParserException {
-        String result = "";
-        if (parser.next() == XmlPullParser.TEXT) {
-            result = parser.getText();
-            parser.nextTag();
-        }
-        return result;
-    }
-
-    /**
-     * skip unused tag
-     * @param parser
-     * @throws XmlPullParserException
-     * @throws IOException
-     */
-    private static void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
-        if (parser.getEventType() != XmlPullParser.START_TAG) {
-            throw new IllegalStateException();
-        }
-        int depth = 1;
-        while (depth != 0) {
-            switch (parser.next()) {
-                case XmlPullParser.END_TAG:
-                    depth--;
-                    break;
-                case XmlPullParser.START_TAG:
-                    depth++;
-                    break;
-            }
-        }
-    }
-
     /**
      *
      * @param in input stream from query result
@@ -224,6 +180,7 @@ public class QueryRequest {
         }
     }
 
+    //-------------------------------------Request------------------------------------------------------
     public static final String TAG_ROOT = "root";
     private static final String TAG_CITY_ID = "city_id"; // 城市識別碼
     private static final String TAG_SERVICE_REQUEST_ID = "service_request_id"; // 案件編號, 多筆以逗號(,)分隔
@@ -237,10 +194,10 @@ public class QueryRequest {
 
         private Builder() {
             list = Lists.newArrayList();
+            list.add(new BasicNameValuePair(TAG_CITY_ID, TainanConstant.CITY_ID)); //add by default
         }
 
-        public static Builder create() {
-            return new Builder();
+        public static Builder create() { return new Builder();
         }
 
         /**
@@ -267,7 +224,7 @@ public class QueryRequest {
          *
          * @param serviceName for multiple input, user "," to separate eg. 違規停車,路燈故障,噪音舉發
          * @return Builder
-         * @see tn.opendata.tainan311.utils.Constant
+         * @see TainanConstant
          */
         public Builder setServiceName(String serviceName) {
             list.add(new BasicNameValuePair(TAG_SERVICE_NAME, serviceName));
@@ -298,7 +255,7 @@ public class QueryRequest {
          *
          * @param status 處理中 or 已完成
          * @return Builder
-         * @see tn.opendata.tainan311.utils.Constant
+         * @see TainanConstant
          */
         public Builder setStatus(String status) {
             list.add(new BasicNameValuePair(TAG_STATUS, status));

@@ -1,65 +1,59 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:scrollbarStyle="outsideOverlay"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    android:scrollbarStyle="outsideOverlay"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <LinearLayout android:orientation="vertical" android:layout_width="fill_parent"
-                  android:layout_height="wrap_content"
-                  android:padding="8dp">
+        android:layout_height="wrap_content"
+        android:padding="8dp">
         <TextView android:id="@+id/tips_title"
-                  style="@style/WizardTitle"
-                  android:text="@string/tips_title"/>
+            style="@style/WizardTitle"
+            android:text="@string/tips_title"/>
 
         <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/tips_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:columnCount="2"
-                    android:rowCount="2"
+            android:id="@+id/tips_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:rowCount="2"
 
-                    android:orientation="horizontal"
-                    android:background="@drawable/shape_card">
+            android:orientation="horizontal"
+            android:background="@drawable/shape_card">
 
 
             <TextView android:id="@+id/tips1_no"
-                      style="@style/TipIndex"
-                      android:text="@string/tips_step1_no"/>
+                style="@style/TipIndex"
+                android:text="@string/tips_step1_no"/>
             <TextView android:id="@+id/tips1"
-                      style="@style/TipText"
-                      android:text="@string/tips_step1"/>
+                style="@style/TipText"
+                android:text="@string/tips_step1"/>
             <TextView android:id="@+id/tips2_no"
-                      style="@style/TipIndex"
-                      android:text="@string/tips_step2_no"/>
+                style="@style/TipIndex"
+                android:text="@string/tips_step2_no"/>
             <TextView android:id="@+id/tips2"
-                      style="@style/TipText"
-                      android:text="@string/tips_step2"/>
+                style="@style/TipText"
+                android:text="@string/tips_step2"/>
             <TextView android:id="@+id/tips3_no"
-                      style="@style/TipIndex"
-                      android:text="@string/tips_step3_no"/>
+                style="@style/TipIndex"
+                android:text="@string/tips_step3_no"/>
             <TextView android:id="@+id/tips3"
-                      style="@style/TipText"
-                      android:text="@string/tips_step3"/>
+                style="@style/TipText"
+                android:text="@string/tips_step3"/>
             <TextView android:id="@+id/tips4_no"
-                      style="@style/TipIndex"
-                      android:text="@string/tips_step4_no"/>
+                style="@style/TipIndex"
+                android:text="@string/tips_step4_no"/>
             <TextView android:id="@+id/tips4"
-                      style="@style/TipText"
-                      android:text="@string/tips_step4"/>
-            <TextView android:id="@+id/tips5_no"
-                      style="@style/TipIndex"
-                      android:text="@string/tips_step5_no"/>
-            <TextView android:id="@+id/tips5"
-                      style="@style/TipText"
-                      android:text="@string/tips_step5"/>
+                style="@style/TipText"
+                android:text="@string/tips_step4"/>
         </GridLayout>
 
 
         <CheckBox android:id="@+id/checkbox_ignore_tips"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:checked="false"
-                  android:textSize="20sp"
-                  android:layout_marginTop="5dp"
-                  android:text="@string/tips_ignore"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:textSize="20sp"
+            android:layout_marginTop="5dp"
+            android:text="@string/tips_ignore"/>
     </LinearLayout>
 
 

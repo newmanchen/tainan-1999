@@ -8,16 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import tn.opendata.tainan311.utils.Constant;
 
 /**
  * Created by sam on 2014/6/11.
  */
 public class ReportTipsFragment extends WizardFragment {
-
+    @InjectView(R.id.checkbox_ignore_tips) CheckBox mCheck_ignore_tips;
     private static final String ARG_SECTION_NUMBER = "section_number";
-    private CheckBox mCheck_ignore_tips;
-
     /**
      * Returns a new instance of this fragment for the given section
      * number.
@@ -36,7 +36,6 @@ public class ReportTipsFragment extends WizardFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         setReady(true);
     }
 
@@ -45,7 +44,7 @@ public class ReportTipsFragment extends WizardFragment {
                              Bundle savedInstanceState) {
         boolean isIgnore = ReportTipsFragment.getIgnorePref(getActivity());
         View rootView = inflater.inflate(R.layout.fragment_tips, container, false);
-        mCheck_ignore_tips = (CheckBox)rootView.findViewById(R.id.checkbox_ignore_tips);
+        ButterKnife.inject(this, rootView);
         mCheck_ignore_tips.setChecked(isIgnore);
         return rootView;
     }
@@ -58,7 +57,6 @@ public class ReportTipsFragment extends WizardFragment {
     @Override
     public void onStop() {
         super.onStop();
-
         if(mCheck_ignore_tips !=null)
             setIgnoreTipPref(getActivity(),mCheck_ignore_tips.isChecked());
     }

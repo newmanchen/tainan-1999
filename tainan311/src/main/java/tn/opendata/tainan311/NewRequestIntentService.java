@@ -23,8 +23,8 @@ import java.util.List;
 /**
  * Created by vincent on 2014/6/12.
  */
+//TODO to send add request to tainan1999
 public class NewRequestIntentService extends IntentService {
-
     private static final int NOTIFICATION_ID = 100;
 
     private Bundle data = null;
@@ -47,28 +47,7 @@ public class NewRequestIntentService extends IntentService {
         if (data == null ) {
             return;
         }
-
-        boolean needRegister = data.getBoolean("register");
-
-        if ( !needRegister ) {
-            String email = data.getString("email");
-            String password = data.getString("password");
-            ListenableFuture<List<Cookie>> future = GeoReportV2.signIn(email, password);
-            Futures.addCallback(future, new FutureCallback<List<Cookie>>() {
-                @Override
-                public void onSuccess(List<Cookie> result) {
-                    postRequest(data, result);
-                }
-
-                @Override
-                public void onFailure(Throwable t) {
-                }
-            });
-        } else {
-            postRequest(data, null);
-        }
-
-
+        // postRequest(data, null); //FIXME do nothing at this moment
     }
 
     private void postRequest(Bundle data, List<Cookie> cookies) {
@@ -115,15 +94,5 @@ public class NewRequestIntentService extends IntentService {
                 Toast.makeText(NewRequestIntentService.this, message, Toast.LENGTH_LONG).show();
             }
         });
-
-        // use Toast instead...
-
-//        Notification notification = new NotificationCompat.Builder(getApplicationContext())
-//                .setContentTitle(getString(R.string.app_name))
-//                .setContentText(message)
-//                .setSmallIcon(R.drawable.ic_launcher)
-//                .build();
-//        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//        nm.notify(NOTIFICATION_ID, notification);
     }
 }
