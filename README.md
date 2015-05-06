@@ -1,8 +1,12 @@
 ## Tainan 1999 ##
 
-### 目前進度 #
+### 目前進度 ### 
 ---
-現在是開發, 從以前開發的台南311 (參與 [2014台南黑客松-HackTainan](http://tdcp.kktix.cc/events/hacktainan2014/) 的 app ) 為基礎改成符合 Open1999 的格式
+開發中 : 如果想用 google map , 請自己設定 signinConfig 和 申請 API key
+
+### 想法 ###
+---
+從以前開發的台南311 (參與 [2014台南黑客松-HackTainan](http://tdcp.kktix.cc/events/hacktainan2014/) 的 app ) 為基礎改成符合 Open1999 的格式
 
 ### 目標 ###
 ---
