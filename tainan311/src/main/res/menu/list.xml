@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="tn.opendata.tainan311.TainanRequestListActivity" >
+    
+    <item android:id="@+id/menu_show_map"
+        android:title="@string/status_finished"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:visible="true"
+        android:icon="@android:drawable/ic_menu_mapmode" />
+</menu>

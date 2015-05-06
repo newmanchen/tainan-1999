@@ -6,8 +6,10 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.getbase.floatingactionbutton.AddFloatingActionButton;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
@@ -55,6 +58,7 @@ public class TainanRequestListActivity extends ListActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_tainan_query_list);
         mSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", getResources().getConfiguration().locale);
 
         mLoadingMore = false;
@@ -74,6 +78,14 @@ public class TainanRequestListActivity extends ListActivity {
         getListView().setDivider(null);
         mLoadingMoreItem = (LinearLayout) ((LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE)).inflate(R.layout.list_item_loading_more, null);
         getListView().addFooterView(mLoadingMoreItem);
+
+        AddFloatingActionButton addRequestButton = (AddFloatingActionButton) findViewById(R.id.normal_plus);
+        addRequestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(TainanRequestListActivity.this, ReportActivity.class));
+            }
+        });
     }
 
     //TODO to update
@@ -90,13 +102,14 @@ public class TainanRequestListActivity extends ListActivity {
                 , new FutureCallback<List<QueryResponse>>() {
             @Override
             public void onSuccess(final List<QueryResponse> result) {
-                LogUtils.d(TAG, "callback onSuccess - data count : ", result.size());
+                LogUtils.d(TAG, "callback onSuccess");
                 mLoadingMore = false;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         removeLoadingMoreListItem();
                         if (result != null && result.size() > 0) {
+                            LogUtils.d(TAG, "data count : ", result.size());
                             if (mQueryRequestArrayAdapter == null) {
                                 mQueryRequestArrayAdapter = new QueryRequestArrayAdapter(TainanRequestListActivity.this, result);
                                 setListAdapter(mQueryRequestArrayAdapter);
@@ -241,10 +254,20 @@ public class TainanRequestListActivity extends ListActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.list, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                break;
+
+            case R.id.menu_show_map:
+                startActivity(new Intent(TainanRequestListActivity.this, MainMapActivity.class));
                 break;
         }
         return true;

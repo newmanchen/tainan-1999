@@ -68,6 +68,7 @@ public class MainMapActivity extends FragmentActivity implements ListView.OnItem
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
         map.getUiSettings().setCompassEnabled(true);
         map.getUiSettings().setMyLocationButtonEnabled(true);
+        map.getUiSettings().setZoomControlsEnabled(false);
         map.setBuildingsEnabled(true);
 
         map.setOnInfoWindowClickListener(this);
@@ -172,7 +173,6 @@ public class MainMapActivity extends FragmentActivity implements ListView.OnItem
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         switch(position){   //R.arrays.drawer_text
             case 0:
-//                startActivity(new Intent(this,RequestListActivity.class));
                 startActivity(new Intent(this, TainanRequestListActivity.class));
                 break;
             case 1:

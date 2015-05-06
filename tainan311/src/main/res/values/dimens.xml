@@ -13,4 +13,6 @@
 
     <dimen name="about_icon_width">58dip</dimen>
     <dimen name="about_icon_height">58dip</dimen>
+
+    <dimen name="padding_add_floating_icon">16dip</dimen>
 </resources>

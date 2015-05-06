@@ -1,56 +1,47 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="8dp"
-                tools:context="tn.opendata.tainan311.ReportActivity$PlaceholderFragment">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp"
+    tools:context="tn.opendata.tainan311.ReportActivity$PlaceholderFragment">
 
     <TextView android:id="@+id/msg"
-              style="@style/WizardTitle"
-              android:text="@string/msg_drag_pin"
-
-            />
-
+        style="@style/WizardTitle"
+        android:text="@string/msg_drag_pin" />
 
     <RelativeLayout android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/shape_card"
-                    android:padding="2dp"
-                    android:layout_below="@id/msg">
+        android:layout_height="match_parent"
+        android:background="@drawable/shape_card"
+        android:padding="2dp"
+        android:layout_below="@id/msg">
         <fragment
-                android:id="@+id/map"
-                android:name="com.google.android.gms.maps.MapFragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clickable="true"
-                />
-
-
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.MapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true" />
         <View
-                android:id="@+id/fakeView"
-                android:layout_width="1dp"
-                android:layout_height="1dp"
-                android:layout_centerInParent="true"
-                android:background="#00000000"/>
+            android:id="@+id/fakeView"
+            android:layout_width="1dp"
+            android:layout_height="1dp"
+            android:layout_centerInParent="true"
+            android:background="#00000000"/>
 
         <ImageView android:layout_width="64dp"
-                   android:layout_height="64dp"
-                   android:layout_centerHorizontal="true"
-                   android:layout_above="@id/fakeView"
-                   android:src="@drawable/arrow_down"
-                />
+            android:layout_height="64dp"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@id/fakeView"
+            android:src="@drawable/arrow_down" />
+
         <ImageView android:id="@+id/btn_map_type"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:padding="4dp"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="80dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/bg_map_tile"
-                android:src="@android:drawable/ic_menu_mapmode"
- />
-
-
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="4dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="80dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/bg_map_tile"
+            android:src="@android:drawable/ic_menu_mapmode" />
     </RelativeLayout>
 </RelativeLayout>

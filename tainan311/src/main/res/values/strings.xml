@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">台南311</string>
+    <string name="app_name">台南1999</string>
     <string name="action_settings">Settings</string>
-    <string name="tainan_311">Tainan 311</string>
+    <string name="tainan_311">Tainan 1999</string>
     <string name="title_activity_new_request">NewRequestActivity</string>
     <string name="title_activity_request_list">RequestListActivity</string>
     <string name="title_activity_detail">DetailActivity</string>
