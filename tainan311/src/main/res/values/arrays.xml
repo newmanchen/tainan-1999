@@ -3,7 +3,6 @@
     <string-array name="drawer_text">
         <item>@string/request_list_title</item>
         <item>回報問題</item>
-        <item>@string/text_about_us</item>
         <item>@string/text_setting</item>
     </string-array>
 

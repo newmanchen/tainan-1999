@@ -1,5 +1,6 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -16,24 +17,60 @@
         android:layout_height="wrap_content"
         android:padding="8dp" >
 
-        <Button android:id="@+id/previous"
-            style="@style/WizardButton"
+        <com.balysv.materialripple.MaterialRippleLayout
+            android:id="@+id/ripple_previous"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_marginRight="20dp"
-            android:text="@string/previous"
-            android:onClick="onClick" />
+            app:mrl_rippleOverlay="true"
+            app:mrl_rippleColor="@android:color/black"
+            app:mrl_rippleAlpha="0.2"
+            app:mrl_rippleDelayClick="false"
+            app:mrl_rippleHover="true">
 
-        <!--android:textColor="#ff19ff00" -->
-        <Button android:id="@+id/next"
-            style="@style/WizardButton"
-            android:text="@string/next"
-            android:onClick="onClick" />
+            <Button android:id="@+id/previous"
+                style="@style/WizardButton"
+                android:text="@string/previous"
+                android:onClick="onClick" />
+        </com.balysv.materialripple.MaterialRippleLayout>
 
-        <Button android:id="@+id/done"
-            style="@style/WizardButton"
-            android:text="@string/done"
+        <com.balysv.materialripple.MaterialRippleLayout
+            android:id="@+id/ripple_next"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:mrl_rippleOverlay="true"
+            app:mrl_rippleColor="@android:color/black"
+            app:mrl_rippleAlpha="0.2"
+            app:mrl_rippleDelayClick="false"
+            app:mrl_rippleHover="true">
+
+            <!--android:textColor="#ff19ff00" -->
+            <Button android:id="@+id/next"
+                style="@style/WizardButton"
+                android:text="@string/next"
+                android:onClick="onClick" />
+        </com.balysv.materialripple.MaterialRippleLayout>
+
+        <com.balysv.materialripple.MaterialRippleLayout
+            android:id="@+id/ripple_done"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:visibility="gone"
-            android:textStyle="bold"
-            android:textColor="#ffcd0000"
-            android:onClick="onClick" />
+            app:mrl_rippleOverlay="true"
+            app:mrl_rippleColor="@android:color/black"
+            app:mrl_rippleAlpha="0.2"
+            app:mrl_rippleDelayClick="false"
+            app:mrl_rippleHover="true">
+
+            <Button android:id="@+id/done"
+                style="@style/WizardButton"
+                android:text="@string/done"
+                android:textStyle="bold"
+                android:textColor="#ffcd0000"
+                android:onClick="onClick" />
+        </com.balysv.materialripple.MaterialRippleLayout>
     </LinearLayout>
 </LinearLayout>

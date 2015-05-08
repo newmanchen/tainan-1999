@@ -6,7 +6,9 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,7 +28,10 @@ import com.google.common.util.concurrent.Futures;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -38,6 +43,7 @@ import tn.opendata.tainan311.tainan1999.TainanReport1999;
 import tn.opendata.tainan311.tainan1999.rpc.QueryRequest;
 import tn.opendata.tainan311.tainan1999.util.TainanConstant;
 import tn.opendata.tainan311.tainan1999.vo.QueryResponse;
+import tn.opendata.tainan311.utils.EasyUtil;
 import tn.opendata.tainan311.utils.LogUtils;
 
 /**
@@ -55,6 +61,7 @@ public class TainanRequestListActivity extends ListActivity {
     private SimpleDateFormat mSimpleDateFormat;
     // Value
     private boolean mLoadingMore;
+    private String mDataPath;
     // Constant
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +69,7 @@ public class TainanRequestListActivity extends ListActivity {
         setContentView(R.layout.activity_tainan_query_list);
         ButterKnife.inject(this);
         mSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", getResources().getConfiguration().locale);
+        mDataPath = getFilesDir().toString()+"/pic/";
 
         mLoadingMore = false;
         initImageLoader();
@@ -73,7 +81,7 @@ public class TainanRequestListActivity extends ListActivity {
     private void initActionBar() {
         ActionBar ab = getActionBar();
         ab.setTitle(R.string.request_list_title);
-        ab.setDisplayHomeAsUpEnabled(true);
+//        ab.setDisplayHomeAsUpEnabled(true);
     }
 
     private void initViews() {
@@ -105,7 +113,7 @@ public class TainanRequestListActivity extends ListActivity {
         LogUtils.d(TAG, "builder.build() is ", builder.build());
 
         mLoadingMore = true;
-        Futures.addCallback(TainanReport1999.executeQuery(builder.build())
+        Futures.addCallback(TainanReport1999.executeQuery(this, builder.build())
                 , new FutureCallback<List<QueryResponse>>() {
             @Override
             public void onSuccess(final List<QueryResponse> result) {
@@ -175,36 +183,31 @@ public class TainanRequestListActivity extends ListActivity {
             }
             QueryResponse r = getItem(position);
             final ViewHolder holder = (ViewHolder) convertView.getTag();
-            //TODO due to the api design is not well and put this task as to-do
             // image
-//            if (!TextUtils.isEmpty(r.getMedia_url())) {
-//                String url = r.getMedia_url();
-//                String smallImageUrl = url.replace(".full.", ".fp."); // 90*60
-//                mImageLoader.loadImage(smallImageUrl, mOptions, new ImageLoadingListener() {
-//                    @Override
-//                    public void onLoadingStarted(String imageUri, View view) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-//                        holder.cover.setVisibility(View.VISIBLE);
-//                        holder.cover.setImageBitmap(loadedImage);
-//                    }
-//
-//                    @Override
-//                    public void onLoadingCancelled(String imageUri, View view) {
-//
-//                    }
-//                });
-//            } else {
-//                holder.cover.setVisibility(View.GONE);
-//            }
+            File file = new File(mDataPath+r.getService_request_id()+".jpg");
+            if (file.exists()) {
+                mImageLoader.loadImage(Uri.fromFile(file).toString(), mOptions, new ImageLoadingListener() {
+                    @Override
+                    public void onLoadingStarted(String imageUri, View view) {
+                    }
+
+                    @Override
+                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                    }
+
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                        holder.cover.setVisibility(View.VISIBLE);
+                        holder.cover.setImageBitmap(loadedImage);
+                    }
+
+                    @Override
+                    public void onLoadingCancelled(String imageUri, View view) {
+                    }
+                });
+            } else {
+                holder.cover.setVisibility(View.GONE);
+            }
             // service name
             holder.service_name.setText(r.getService_name());
             // subproject
@@ -273,6 +276,15 @@ public class TainanRequestListActivity extends ListActivity {
 
             case R.id.menu_show_map:
                 startActivity(new Intent(TainanRequestListActivity.this, MainMapActivity.class));
+                break;
+
+//            case R.id.menu_my_activity:
+//                // startActivity(new Intent(this, MyActivity.class));
+//                EasyUtil.NOT_IMPLELENT(this);
+//                break;
+
+            case R.id.menu_license:
+                startActivity(new Intent(this, GoogleSoftwareLicenseInfo.class));
                 break;
 
             case R.id.menu_setting:

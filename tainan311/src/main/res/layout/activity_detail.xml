@@ -26,26 +26,30 @@
                 android:visibility="gone"/>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:padding="3dp"
-                android:text="@string/text_issue_detail"
-                android:background="@color/request_detail_separator" />
+                style="@style/TextView_DetailSubTitle"
+                android:text="@string/text_service_request_id" />
 
             <TextView
-                android:id="@+id/detail"
+                android:id="@+id/service_request_id"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="3dp"
-                android:text="@string/text_service_name"
-                android:background="@android:color/holo_orange_light" />
+                style="@style/TextView_DetailSubTitle"
+                android:text="@string/text_area" />
+
+            <TextView
+                android:id="@+id/area"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                style="@style/TextView_DetailSubTitle"
+                android:text="@string/text_service_name" />
 
             <TextView
                 android:id="@+id/service_name"
@@ -55,11 +59,30 @@
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="3dp"
-                android:text="@string/text_request_date"
-                android:background="@android:color/holo_orange_light" />
+                style="@style/TextView_DetailSubTitle"
+                android:text="@string/text_subproject" />
+
+            <TextView
+                android:id="@+id/subproject"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                style="@style/TextView_DetailSubTitle"
+                android:text="@string/text_description" />
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                style="@style/TextView_DetailSubTitle"
+                android:text="@string/text_request_date" />
 
             <TextView
                 android:id="@+id/request_date"
@@ -68,26 +91,57 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <TextView
+            <LinearLayout
+                android:id="@+id/ll_update_datetime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="3dp"
-                android:text="@string/text_area"
-                android:background="@android:color/holo_orange_light" />
+                android:orientation="vertical"
+                android:visibility="gone" >
+                <TextView
+                    style="@style/TextView_DetailSubTitle"
+                    android:text="@string/text_updated_datetime" />
+
+                <TextView
+                    android:id="@+id/updated_datetime"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_expected_datetime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone" >
+                <TextView
+                    style="@style/TextView_DetailSubTitle"
+                    android:text="@string/text_expected_datetime" />
+
+                <TextView
+                    android:id="@+id/expected_datetime"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/request_area"
+                style="@style/TextView_DetailSubTitle"
+                android:text="@string/text_agency" />
+
+            <TextView
+                android:id="@+id/agency"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="3dp"
-                android:text="@string/text_location"
-                android:background="@android:color/holo_orange_light" />
+                style="@style/TextView_DetailSubTitle"
+                android:text="@string/text_location" />
 
             <fragment
                 android:id="@+id/map"

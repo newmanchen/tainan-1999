@@ -10,7 +10,7 @@ import tn.opendata.tainan311.utils.LogUtils;
 /**
  * Created by newman on 5/6/15.
  */
-public class BaseRequest<T> {
+public class BaseRequest {
     public static final String TAG_ROOT = "root";
     protected static final String ns = null;
 

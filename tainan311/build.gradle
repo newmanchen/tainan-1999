@@ -49,14 +49,15 @@ android {
 
 dependencies {
     compile 'com.android.support:support-v4:19.+'
-    compile 'com.android.support:support-v13:19.+'
+    compile 'com.android.support:support-v13:20.+'
     compile 'com.google.guava:guava:17.0'
     compile 'com.google.code.gson:gson:2.2.4'
-    compile 'com.google.android.gms:play-services:4.4.52'
+    compile 'com.google.android.gms:play-services-maps:7.3.0'
     compile 'org.apache.httpcomponents:httpcore:4.3.2'
     compile 'org.apache.httpcomponents:httpmime:4.3.4'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.2'
     compile 'com.getbase:floatingactionbutton:1.9.0'
     compile 'com.jakewharton:butterknife:6.1.0'
+    compile 'com.balysv:material-ripple:1.0.2'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }

@@ -71,7 +71,7 @@ public class MainMapActivity extends FragmentActivity implements ListView.OnItem
         map.moveCamera(center);
 
         animateToMyLocation();
-        showProblems();
+        // showProblems(); // do not call this now due to issues are not on fixmystreet
     }
 
     //from xml
@@ -161,9 +161,6 @@ public class MainMapActivity extends FragmentActivity implements ListView.OnItem
                 startActivity(new Intent(this,ReportActivity.class));
                 break;
             case 2:
-                startActivity(new Intent(this, AboutActivity.class));
-                break;
-            case 3:
                 startActivity(new Intent(this, SettingActivity.class));
                 break;
         }

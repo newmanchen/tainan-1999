@@ -40,10 +40,9 @@
     </style>
 
     <style name="WizardButton">
-        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">@drawable/bg_btn_wizard</item>
-        <item name="android:layout_weight">0.5</item>
+        <!--<item name="android:background">@drawable/bg_btn_wizard</item>-->
     </style>
 
     <style name="ReportItem">
@@ -55,6 +54,13 @@
         <item name="android:layout_marginBottom">8dp</item>
         <item name="android:textSize">18sp</item>
         <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="TextView_DetailSubTitle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">3dp</item>
+        <item name="android:background">@color/request_detail_separator</item>
     </style>
 
 </resources>

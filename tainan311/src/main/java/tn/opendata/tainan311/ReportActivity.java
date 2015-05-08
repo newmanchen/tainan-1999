@@ -4,33 +4,28 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;
-import android.widget.Toast;
-import com.google.android.gms.maps.MapFragment;
-import com.google.common.collect.ImmutableList;
+
+import com.balysv.materialripple.MaterialRippleLayout;
+
+import java.lang.reflect.Field;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import tn.opendata.tainan311.utils.FixedSpeedScroller;
 
-import java.lang.reflect.Field;
-import java.util.List;
-import java.util.Locale;
-
-import static tn.opendata.tainan311.utils.EasyUtil.NOT_IMPLELENT;
-import static tn.opendata.tainan311.utils.EasyUtil.findView;
-
 public class ReportActivity extends Activity implements WizardFragment.FlowController {
+    @InjectView(R.id.ripple_previous) MaterialRippleLayout ripplePrevious;
     @InjectView(R.id.previous) Button previousButton;
+    @InjectView(R.id.ripple_next) MaterialRippleLayout rippleNext;
     @InjectView(R.id.next) Button nextButton;
+    @InjectView(R.id.ripple_done) MaterialRippleLayout rippleDone;
     @InjectView(R.id.done) Button doneButton;
     @InjectView(R.id.pager) ViewPager mViewPager;
 
@@ -42,6 +37,7 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
         ButterKnife.inject(this);
+//        rippleOnViews();
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -70,6 +66,16 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
         }
 
         resetButtonState();
+    }
+
+    private void rippleOnViews() {
+        rippleView(previousButton);
+        rippleView(nextButton);
+        rippleView(doneButton);
+    }
+
+    private void rippleView(View view) {
+        MaterialRippleLayout.on(view).rippleDuration(500).rippleAlpha(0.5f).rippleOverlay(true).rippleColor(Color.GRAY).create();
     }
 
     public void onClick(View v){
@@ -132,8 +138,11 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
             previousButton.setText(R.string.previous);
         }
 
+        rippleDone.setVisibility(last ? View.VISIBLE : View.GONE);
         doneButton.setVisibility(last ? View.VISIBLE : View.GONE);
+        rippleNext.setVisibility(last ? View.GONE : View.VISIBLE);
         nextButton.setVisibility(last ? View.GONE : View.VISIBLE);
+        ripplePrevious.setVisibility(first ? View.GONE : View.VISIBLE);
         previousButton.setVisibility(first ? View.GONE : View.VISIBLE);
 
 //        doneButton.setEnabled(false);

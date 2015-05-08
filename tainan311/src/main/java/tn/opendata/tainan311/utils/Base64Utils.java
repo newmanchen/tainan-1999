@@ -1,12 +1,15 @@
 package tn.opendata.tainan311.utils;
 
 import android.util.Base64;
+import android.util.Log;
 
 import org.apache.http.util.ByteArrayBuffer;
 
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
@@ -30,16 +33,27 @@ public class Base64Utils {
             // need import org.apache.commons.codec.binary.Base64
             // dataBase64 = new String(Base64.encodeBase64(byteArrayBuffer.toByteArray()));
             dataBase64 = new String(Base64.encodeToString(byteArrayBuffer.toByteArray(), Base64.DEFAULT));
-
         } finally {
-            try {
-                if (null != fileInput) {
-                    fileInput.close();
-                }
-            } catch (Exception e) {
-                LogUtils.w(TAG, e.getMessage(), e);
-            }
+            EasyUtil.close(fileInput);
         }
         return dataBase64;
+    }
+
+    public static void decodeBase64(String base64string, String path) {
+        LogUtils.d(TAG, "decode, path is ", path);
+        LogUtils.d(TAG, "decode, base64string is ", base64string, "  to  ", path);
+
+
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(path);
+            fos.write(Base64.decode(base64string, Base64.DEFAULT));
+        } catch (FileNotFoundException e) {
+            LogUtils.w(TAG, e.getMessage(), e);
+        } catch (IOException e) {
+            LogUtils.w(TAG, e.getMessage(), e);
+        } finally  {
+            EasyUtil.close(fos);
+        }
     }
 }

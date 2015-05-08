@@ -1,5 +1,8 @@
 package tn.opendata.tainan311.tainan1999.rpc;
 
+import android.content.Context;
+import android.os.Environment;
+import android.util.Log;
 import android.util.Xml;
 
 import com.google.common.collect.Lists;
@@ -8,6 +11,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -15,6 +19,7 @@ import java.util.List;
 import tn.opendata.tainan311.tainan1999.util.TainanConstant;
 import tn.opendata.tainan311.tainan1999.util.TainanRequestXmlUtils;
 import tn.opendata.tainan311.tainan1999.vo.QueryResponse;
+import tn.opendata.tainan311.utils.Base64Utils;
 import tn.opendata.tainan311.utils.EasyUtil;
 import tn.opendata.tainan311.utils.LogUtils;
 
@@ -45,13 +50,13 @@ public class QueryRequest extends BaseRequest {
     private static final String service_notice = "service_notice"; // 服務案件說明
     private static final String updated_datetime = "updated_datetime"; // 結案日期
     private static final String expected_datetime = "expected_datetime"; // 預計完成日期
-    private static final String pictures = "pictures"; // 多筆處理前照片
-    private static final String picture = "picture"; // 每筆處理前照片
+    private static final String pictures = "Pictures"; // 多筆處理前照片
+    private static final String picture = "Picture"; // 每筆處理前照片
     private static final String description_pic = "description"; // 照片描述
     private static final String fileName = "fileName"; // 檔案名稱
     private static final String file = "file"; // 檔案資料
 
-    private static List readResponse(XmlPullParser parser) throws XmlPullParserException, IOException {
+    private static List readResponse(Context context, XmlPullParser parser) throws XmlPullParserException, IOException {
         List responses = Lists.newArrayList();
 
         parser.require(XmlPullParser.START_TAG, ns, TAG_ROOT);
@@ -75,7 +80,7 @@ public class QueryRequest extends BaseRequest {
                 LogUtils.d(TAG, "stackTrace : ", stackTrace);
             } else if (name.equals(records)) {
             } else if (name.equals(record)) {
-                responses.add(readRecord(parser));
+                responses.add(readRecord(parser, context));
             } else {
                 skip(parser);
             }
@@ -90,7 +95,7 @@ public class QueryRequest extends BaseRequest {
      * @throws XmlPullParserException
      * @throws IOException
      */
-    private static QueryResponse readRecord(XmlPullParser parser) throws XmlPullParserException, IOException {
+    private static QueryResponse readRecord(XmlPullParser parser, Context context) throws XmlPullParserException, IOException {
         QueryResponse qrr = new QueryResponse();
         List<QueryResponse.Picture> pics = Lists.newArrayList();
         parser.require(XmlPullParser.START_TAG, ns, record);
@@ -131,8 +136,9 @@ public class QueryRequest extends BaseRequest {
                 qrr.setExpected_datetime(readData(parser, expected_datetime));
             } else if (name.equals(pictures)) {
             } else if (name.equals(picture)) {
-                pics.add(readPicture(parser));
+                pics.add(readPicture(parser, qrr.getService_request_id(), context));
             } else {
+                LogUtils.d(TAG, "skip this tag : ", name);
                 skip(parser);
             }
         }
@@ -140,7 +146,7 @@ public class QueryRequest extends BaseRequest {
         return qrr;
     }
 
-    private static QueryResponse.Picture readPicture(XmlPullParser parser) throws IOException, XmlPullParserException {
+    private static QueryResponse.Picture readPicture(XmlPullParser parser, String requestId, Context context) throws IOException, XmlPullParserException {
         QueryResponse.Picture pic = new QueryResponse.Picture();
         parser.require(XmlPullParser.START_TAG, ns, picture);
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -151,9 +157,16 @@ public class QueryRequest extends BaseRequest {
             if (name.equals(description_pic)) {
                 pic.setDescription_pic(readData(parser, description_pic));
             } else if (name.equals(fileName)) {
-                pic.setFileName(fileName);
+                pic.setFileName(readData(parser, fileName));
             } else if (name.equals(file)) {
-                //TODO get the file to blob
+                String dataPath = context.getFilesDir().toString() + "/pic/";
+                File folder = new File(dataPath);
+                if (!folder.exists()) {
+                    folder.mkdirs();
+                }
+                dataPath += requestId + ".jpg";
+                Base64Utils.decodeBase64(readData(parser, file), dataPath);
+                //TODO FIXME there are most 3 pics from server
             } else {
                 skip(parser);
             }
@@ -168,13 +181,13 @@ public class QueryRequest extends BaseRequest {
      * @throws XmlPullParserException
      * @throws IOException
      */
-    public static List<QueryResponse> onResponse(InputStream in) throws XmlPullParserException, IOException{
+    public static List<QueryResponse> onResponse(Context context, InputStream in) throws XmlPullParserException, IOException{
         try {
             XmlPullParser parser = Xml.newPullParser();
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
             parser.setInput(in, null);
             parser.nextTag();
-            return readResponse(parser);
+            return readResponse(context, parser);
         } finally {
             EasyUtil.close(in);
         }

@@ -14,74 +14,107 @@
             style="@style/WizardTitle"
             android:text="@string/detail_title"/>
 
-        <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout
             android:id="@+id/tips_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:columnCount="2"
-            android:rowCount="2"
-            android:orientation="horizontal"
-            android:background="@drawable/shape_card">
+            android:background="@drawable/shape_card"
+            android:orientation="vertical" >
 
-            <TextView style="@style/ReportItem"
-                android:text="@string/text_area"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView style="@style/ReportItem"
+                    android:text="@string/text_area" />
 
-            <Spinner style="@style/ReportItem"
-                android:id="@+id/area"/>
+                <Spinner style="@style/ReportItem"
+                    android:id="@+id/area"/>
+            </LinearLayout>
 
-            <TextView style="@style/ReportItem"
-                android:text="@string/text_service_name"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView style="@style/ReportItem"
+                    android:text="@string/text_service_name"/>
 
-            <Spinner style="@style/ReportItem"
-                android:id="@+id/service_name"/>
+                <Spinner style="@style/ReportItem"
+                    android:id="@+id/service_name"/>
+            </LinearLayout>
 
-            <TextView style="@style/ReportItem"
-                android:text="@string/text_subproject"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView style="@style/ReportItem"
+                    android:text="@string/text_subproject"/>
 
-            <Spinner style="@style/ReportItem"
-                android:id="@+id/subproject"/>
+                <Spinner style="@style/ReportItem"
+                    android:id="@+id/subproject"/>
+            </LinearLayout>
 
-            <TextView style="@style/ReportItem"
-                android:text="@string/description"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView style="@style/ReportItem"
+                    android:text="@string/description"/>
 
-            <EditText style="@style/ReportItem"
-                android:singleLine="false"
-                android:hint="@string/hint_desc"
-                android:layout_gravity="fill_horizontal"
-                android:id="@+id/description" android:inputType="textMultiLine"/>
+                <EditText style="@style/ReportItem"
+                    android:layout_width="match_parent"
+                    android:layout_gravity="right"
+                    android:singleLine="false"
+                    android:hint="@string/hint_desc"
+                    android:id="@+id/description" android:inputType="textMultiLine"/>
+            </LinearLayout>
 
-            <TextView style="@style/ReportItem"
-                android:text="@string/address" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView style="@style/ReportItem"
+                    android:text="@string/address" />
 
-            <EditText style="@style/ReportItem"
-                android:id="@+id/address"
-                android:layout_gravity="fill_horizontal"
-                android:inputType="textEmailSubject"/>
+                <EditText style="@style/ReportItem"
+                    android:id="@+id/address"
+                    android:layout_gravity="fill_horizontal"
+                    android:inputType="textEmailSubject"/>
+            </LinearLayout>
 
-            <TextView style="@style/ReportItem"
-                android:text="@string/name"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView style="@style/ReportItem"
+                    android:text="@string/name"/>
 
-            <EditText style="@style/ReportItem"
-                android:hint="@string/hint_name"
-                android:layout_gravity="fill_horizontal"
-                android:id="@+id/name" android:inputType="textPersonName"/>
+                <EditText style="@style/ReportItem"
+                    android:layout_width="match_parent"
+                    android:hint="@string/hint_name"
+                    android:id="@+id/name"
+                    android:inputType="textPersonName"/>
+            </LinearLayout>
 
-            <TextView style="@style/ReportItem"
-                android:text="@string/phone"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView style="@style/ReportItem"
+                    android:text="@string/phone"/>
 
-            <EditText style="@style/ReportItem"
-                android:layout_gravity="fill_horizontal"
-                android:id="@+id/phone" android:inputType="numberDecimal"/>
+                <EditText style="@style/ReportItem"
+                    android:layout_width="match_parent"
+                    android:id="@+id/phone"
+                    android:inputType="numberDecimal"/>
+            </LinearLayout>
 
-            <TextView style="@style/ReportItem"
-                android:text="@string/email"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView style="@style/ReportItem"
+                    android:text="@string/email"/>
 
-            <EditText
-                style="@style/ReportItem"
-                android:inputType="textEmailAddress"
-                android:layout_gravity="fill"
-                android:id="@+id/email" />
-        </GridLayout>
+                <EditText
+                    style="@style/ReportItem"
+                    android:id="@+id/email"
+                    android:layout_width="match_parent"
+                    android:inputType="textEmailAddress" />
+            </LinearLayout>
+        </LinearLayout>
 
         <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:id="@+id/map_snapshot"

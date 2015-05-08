@@ -46,4 +46,7 @@ public class TainanConstant {
     public static final String STATUS_NOT_TAKEN = "未處理";
     public static final String STATUS_IN_PROCESS = "處理中";
     public static final String STATUS_FINISH = "已完工";
+
+    // agency
+    public static final String[] AGENCY = new String[] { "臺南市政府" } ;
 }

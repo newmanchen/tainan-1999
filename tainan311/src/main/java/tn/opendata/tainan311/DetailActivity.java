@@ -3,11 +3,14 @@ package tn.opendata.tainan311;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -18,6 +21,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+
+import java.io.File;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -28,10 +35,17 @@ import tn.opendata.tainan311.utils.LogUtils;
 
 public class DetailActivity extends Activity {
     @InjectView(R.id.image) ImageView imageView;
-    @InjectView(R.id.detail) TextView detail;
-    @InjectView(R.id.service_name) TextView serviceName;
+    @InjectView(R.id.service_request_id) TextView service_request_id;
+    @InjectView(R.id.area) TextView area;
+    @InjectView(R.id.service_name) TextView service_name;
+    @InjectView(R.id.subproject) TextView subproject;
+    @InjectView(R.id.description) TextView description;
     @InjectView(R.id.request_date) TextView requestDate;
-    @InjectView(R.id.request_area) TextView area;
+    @InjectView(R.id.ll_update_datetime) LinearLayout ll_update;
+    @InjectView(R.id.updated_datetime) TextView updateDate;
+    @InjectView(R.id.ll_expected_datetime) LinearLayout ll_expected;
+    @InjectView(R.id.expected_datetime) TextView expectedData;
+    @InjectView(R.id.agency) TextView agency;
 
     private static final String TAG = DetailActivity.class.getSimpleName();
     public static final String EXTRA_KEY_REQUEST = "extra_key_request";
@@ -39,6 +53,7 @@ public class DetailActivity extends Activity {
 
     protected ImageLoader mImageLoader = ImageLoader.getInstance();
     private DisplayImageOptions mOptions;
+    private String mDataPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +65,7 @@ public class DetailActivity extends Activity {
         if (mRequest == null) {
             return;
         } else {
+            mDataPath = getFilesDir().toString()+"/pic/";
             initImageLoader();
             updateActionBar();
             initViews();
@@ -67,11 +83,36 @@ public class DetailActivity extends Activity {
 
     private void updateActionBar() {
         ActionBar ab = getActionBar();
-        ab.setTitle(mRequest.getSubproject());
+        ab.setTitle(mRequest.getService_name());
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
     private void initViews() {
+        // image
+        File file = new File(mDataPath+mRequest.getService_request_id()+".jpg");
+        if (file.exists()) {
+            mImageLoader.loadImage(Uri.fromFile(file).toString(), mOptions, new ImageLoadingListener() {
+                @Override
+                public void onLoadingStarted(String imageUri, View view) {
+                }
+
+                @Override
+                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                }
+
+                @Override
+                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                    imageView.setVisibility(View.VISIBLE);
+                    imageView.setImageBitmap(loadedImage);
+                }
+
+                @Override
+                public void onLoadingCancelled(String imageUri, View view) {
+                }
+            });
+        } else {
+            imageView.setVisibility(View.GONE);
+        }
 //        if (!TextUtils.isEmpty(mRequest.getMedia_url())) {
 //            final ImageView imageView = EasyUtil.findView(this, R.id.image);
 //            mImageLoader.loadImage(mRequest.getMedia_url(), mOptions
@@ -95,10 +136,23 @@ public class DetailActivity extends Activity {
 //                }
 //            });
 //        }
-        detail.setText(mRequest.getDescription_request());
-        serviceName.setText(mRequest.getService_name());
-        requestDate.setText(mRequest.getRequested_datetime());
         area.setText(mRequest.getArea());
+        service_request_id.setText(mRequest.getService_request_id());
+        service_name.setText(mRequest.getService_name());
+        subproject.setText(mRequest.getSubproject());
+        description.setText(mRequest.getDescription_request());
+        requestDate.setText(mRequest.getRequested_datetime());
+//        LogUtils.d(TAG, "mRequest.getUpdated_datetime() is ", mRequest.getUpdated_datetime());
+//        LogUtils.d(TAG, "mRequest.getExpected_datetime() is ", mRequest.getExpected_datetime());
+        if (!TextUtils.isEmpty(mRequest.getUpdated_datetime()) && !mRequest.getUpdated_datetime().equalsIgnoreCase("null")) {
+            ll_update.setVisibility(View.VISIBLE);
+            updateDate.setText(mRequest.getUpdated_datetime());
+        }
+        if (!TextUtils.isEmpty(mRequest.getExpected_datetime()) && !mRequest.getExpected_datetime().equalsIgnoreCase("null")) {
+            ll_expected.setVisibility(View.VISIBLE);
+            expectedData.setText(mRequest.getExpected_datetime());
+        }
+        agency.setText(TainanConstant.AGENCY[Integer.valueOf(mRequest.getAgency())]);
         GoogleMap map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
         final LatLng issueLocation;
         if (TextUtils.isEmpty(mRequest.getLatitude()) || mRequest.getLatitude().equals("0")
@@ -107,7 +161,6 @@ public class DetailActivity extends Activity {
         } else {
             issueLocation  = new LatLng(Double.valueOf(mRequest.getLatitude()), Double.valueOf(mRequest.getLongitude()));
         }
-        LogUtils.d(TAG, "issueLocation = ", issueLocation);
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(issueLocation, 17));
         map.addMarker(new MarkerOptions().title(mRequest.getSubproject()).position(issueLocation));
     }

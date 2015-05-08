@@ -1,5 +1,6 @@
 package tn.opendata.tainan311.tainan1999;
 
+import android.content.Context;
 import android.os.Environment;
 
 import com.google.common.io.Closer;
@@ -47,16 +48,16 @@ public class TainanReport1999 {
 
     private static final ListeningExecutorService executor = MoreExecutors.listeningDecorator(Executors.newCachedThreadPool());
 
-    public static ListenableFuture<List<QueryResponse>> executeQuery(final String entity) {
+    public static ListenableFuture<List<QueryResponse>> executeQuery(final Context context, final String entity) {
         return executor.submit(new Callable<List<QueryResponse>> () {
             @Override
             public List<QueryResponse> call() throws Exception {
-                return queryRequestResponse(new URL(QUERY_REQUEST_URL), entity);
+                return queryRequestResponse(new URL(QUERY_REQUEST_URL), entity, context);
             }
         });
     }
 
-    private static List<QueryResponse> queryRequestResponse(URL url, String entityXML) {
+    private static List<QueryResponse> queryRequestResponse(URL url, String entityXML, Context context) {
         Closer closer = Closer.create();
         try {
             HttpClient client = new DefaultHttpClient();
@@ -69,7 +70,7 @@ public class TainanReport1999 {
                 throw new RuntimeException("Failed : HTTP error code : " + status);
             }
 //            saveToFile(response.getEntity().getContent());
-            return QueryRequest.onResponse(closer.register(response.getEntity().getContent()));
+            return QueryRequest.onResponse(context, closer.register(response.getEntity().getContent()));
         } catch (Throwable e) {
             LogUtils.w(TAG, e.getMessage(), e);
             try {
