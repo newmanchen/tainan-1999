@@ -7,9 +7,9 @@ import android.os.Parcelable;
  * Created by newman on 5/4/15.
  */
 public class AddResponse implements Parcelable {
-    private String token = "token"; // token
-    private String service_request_id = "service_request_id"; // 案件編號
-    private String service_notice = "service_notice"; // 服務案件說明
+    private String token; // token
+    private String service_request_id; // 案件編號
+    private String service_notice; // 服務案件說明
     public AddResponse() {}
 
     public String getToken() {

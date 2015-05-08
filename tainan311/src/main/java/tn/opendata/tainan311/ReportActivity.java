@@ -114,7 +114,7 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
 
     private void createNewRequest() {
         Intent intent = new Intent(ReportActivity.this, NewRequestIntentService.class);
-        intent.putExtra("data", data);
+        intent.putExtra(NewRequestIntentService.EXTRA_DATA, data);
         startService(intent);
     }
 

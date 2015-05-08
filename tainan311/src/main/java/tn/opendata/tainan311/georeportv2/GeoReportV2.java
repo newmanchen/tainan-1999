@@ -659,7 +659,6 @@ public class GeoReportV2 {
 
         public PostRequestBuilder description(String description) {
             data.put("detail", description);
-//            data.put("description", description);
             return this;
         }
 

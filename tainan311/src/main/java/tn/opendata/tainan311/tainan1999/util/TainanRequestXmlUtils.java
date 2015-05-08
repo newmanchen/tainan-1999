@@ -52,7 +52,7 @@ public class TainanRequestXmlUtils {
                     }
                     sb.append(surround(name, true));
                 }
-                sb.append(surround(AddRequest.TAG_PICTURE, false));
+                sb.append(surround(AddRequest.TAG_PICTURE, true));
             }
             sb.append(surround(AddRequest.TAG_PICTURES, true));
         }

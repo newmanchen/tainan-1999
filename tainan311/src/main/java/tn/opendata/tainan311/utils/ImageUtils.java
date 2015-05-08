@@ -8,25 +8,24 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.text.TextUtils;
-import android.util.Pair;
-import com.google.common.base.Function;
+
 import com.google.common.base.Optional;
-import com.google.common.base.Supplier;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Set;
 
 /**
  * Created by vincent on 2014/6/10.
  */
 public final class ImageUtils {
-
+    private static final String TAG = ImageUtils.class.getSimpleName();
     public static Optional<String> saveBitmap(Bitmap bitmap) {
         Optional<File> file = createImageFile();
         if ( file.isPresent() ) {
@@ -51,23 +50,42 @@ public final class ImageUtils {
         return Optional.absent();
     }
 
+    private static final String CONTENT_URI_GOOGLE_ALBUM = "content://com.google.android.apps.photos.content/0/";
     public static Optional<Bitmap> getBitmapFromIntentData(Context context, Intent data) {
         Uri selectedImageUri = data.getData();
         if ( selectedImageUri == null || context == null ) {
             return Optional.absent();
         }
-        final String[] column = {MediaStore.Images.Media.DATA};
+        final String[] column = {MediaStore.Images.Media.DATA , MediaStore.Images.Media.DISPLAY_NAME};
         Cursor cursor = null;
         try {
-            cursor = context.getContentResolver().query(data.getData(), column, null, null, null);
+            cursor = context.getContentResolver().query(selectedImageUri, column, null, null, null);
             if ( cursor != null && cursor.moveToNext() ) {
-                final int columnIndex = cursor.getColumnIndex(column[0]);
-                final String path = cursor.getString(columnIndex);
                 BitmapFactory.Options opt = new BitmapFactory.Options();
                 opt.inSampleSize = 2;
                 opt.inPreferredConfig = Bitmap.Config.RGB_565;
-                return Optional.of(BitmapFactory.decodeFile(path, opt));
+
+                if (selectedImageUri.toString().startsWith(CONTENT_URI_GOOGLE_ALBUM)) {
+                    final int columnIndex = cursor.getColumnIndex(column[1]);
+                    InputStream is;
+                    if (selectedImageUri.toString().startsWith(CONTENT_URI_GOOGLE_ALBUM)) {
+                        is = context.getContentResolver().openInputStream(selectedImageUri);
+                    } else {
+                        is = new URL(selectedImageUri.toString()).openStream();
+                    }
+                    return Optional.of(BitmapFactory.decodeStream(is));
+                } else {
+                    final int columnIndex = cursor.getColumnIndex(column[0]);
+                    final String path = cursor.getString(columnIndex);
+                    return Optional.of(BitmapFactory.decodeFile(path, opt));
+                }
             }
+        } catch (FileNotFoundException e) {
+            LogUtils.w(TAG, e.getMessage(), e);
+        } catch (MalformedURLException e) {
+            LogUtils.w(TAG, e.getMessage(), e);
+        } catch (IOException e) {
+            LogUtils.w(TAG, e.getMessage(), e);
         } finally {
             EasyUtil.close(cursor);
         }
@@ -102,7 +120,6 @@ public final class ImageUtils {
                     srcBmp.getHeight(),
                     srcBmp.getHeight()
             );
-
         }else{
 
             dstBmp = Bitmap.createBitmap(

@@ -23,7 +23,7 @@
                 android:layout_marginRight="5dp">
 
                 <TextView
-                    android:id="@+id/title"
+                    android:id="@+id/service_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
@@ -36,8 +36,18 @@
                     android:ellipsize="end"/>
 
                 <TextView
-                    android:id="@+id/service_name"
-                    android:layout_below="@id/title"
+                    android:id="@+id/subproject"
+                    android:layout_below="@id/service_name"
+                    android:layout_marginBottom="3dp"
+                    android:layout_alignParentLeft="true"
+                    android:textSize="14sp"
+                    android:singleLine="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/area"
+                    android:layout_below="@id/subproject"
                     android:layout_marginBottom="3dp"
                     android:layout_alignParentLeft="true"
                     android:textSize="14sp"
@@ -47,7 +57,7 @@
 
                 <TextView
                     android:id="@+id/status"
-                    android:layout_below="@id/service_name"
+                    android:layout_below="@id/area"
                     android:layout_marginBottom="3dp"
                     android:layout_alignParentLeft="true"
                     android:textSize="12sp"
@@ -61,7 +71,7 @@
 
                 <TextView
                     android:id="@+id/datetime"
-                    android:layout_below="@id/service_name"
+                    android:layout_below="@id/area"
                     android:layout_toRightOf="@id/status"
                     android:layout_marginLeft="5dp"
                     android:layout_marginBottom="3dp"
@@ -71,6 +81,7 @@
                     android:singleLine="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
+
             </RelativeLayout>
         </LinearLayout>
 

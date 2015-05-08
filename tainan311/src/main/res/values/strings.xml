@@ -25,8 +25,6 @@
     <string name="description">描述</string>
     <string name="name">姓名</string>
     <string name="email">email</string>
-    <string name="password">密碼</string>
-    <string name="category">類別</string>
 
     <string name="tips_title">怎麼回報問題</string>
     <string name="tips_ignore">下次不要再顯示此頁</string>
@@ -77,4 +75,6 @@
     <string name="text_subproject">事項</string>
     <string name="phone">電話</string>
     <string name="address">地點</string>
+    <string name="text_issue_reporter_phone">預設回報者電話</string>
+    <string name="text_issue_input_reporter_phone">請輸入回報者電話</string>
 </resources>

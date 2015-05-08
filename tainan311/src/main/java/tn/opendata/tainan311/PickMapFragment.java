@@ -2,16 +2,14 @@ package tn.opendata.tainan311;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.graphics.Bitmap;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -19,18 +17,15 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.common.base.Optional;
 import com.google.common.util.concurrent.ListenableFuture;
-import tn.opendata.tainan311.georeportv2.GeoReportV2;
-import tn.opendata.tainan311.georeportv2.vo.Request;
-import tn.opendata.tainan311.utils.ImageUtils;
-import tn.opendata.tainan311.utils.MainThreadExecutor;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+
+import tn.opendata.tainan311.georeportv2.GeoReportV2;
+import tn.opendata.tainan311.georeportv2.vo.Request;
+import tn.opendata.tainan311.utils.MainThreadExecutor;
 
 /**
  * Created by sam on 2014/6/11.
@@ -77,40 +72,40 @@ public class PickMapFragment extends WizardFragment implements View.OnClickListe
                         .zoom(map.getMaxZoomLevel() - 3)
 //                        .tilt(30)
                         .build();
-                map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 2000, null);
+                map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 1000, null);
                 map.setOnMyLocationChangeListener(null);
             }
         });
 
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DAY_OF_YEAR, -5);
-        GeoReportV2.QueryRequestBuilder builder = GeoReportV2.QueryRequestBuilder.create().open().build();
-        final ListenableFuture<List<Request>> future = builder.execute();
-
-        future.addListener(new Runnable() {
-            @Override
-            public void run() {
-                Log.d("Sam","aaa");
-                try {
-                    for(Request r: future.get()){
-
-                        //only display point with Location...
-                        if(!TextUtils.isEmpty(r.getLat()) && !TextUtils.isEmpty(r.getLon())){
-                            MarkerOptions markerOpt = new MarkerOptions();
-                            markerOpt.position(new LatLng(Double.parseDouble(r.getLat()),Double.parseDouble(r.getLon())));
-                            markerOpt.title(r.getService_code());
-                            markerOpt.snippet(r.getDescription());
-                            markerOpt.draggable(false);
-                            map.addMarker(markerOpt);
-                        }
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, MainThreadExecutor.build());
+        // remove query from fixmystreet.com
+//        Calendar cal = Calendar.getInstance();
+//        cal.add(Calendar.DAY_OF_YEAR, -5);
+//        GeoReportV2.QueryRequestBuilder builder = GeoReportV2.QueryRequestBuilder.create().open().build();
+//        final ListenableFuture<List<Request>> future = builder.execute();
+//
+//        future.addListener(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    for(Request r: future.get()){
+//
+//                        //only display point with Location...
+//                        if(!TextUtils.isEmpty(r.getLat()) && !TextUtils.isEmpty(r.getLon())){
+//                            MarkerOptions markerOpt = new MarkerOptions();
+//                            markerOpt.position(new LatLng(Double.parseDouble(r.getLat()),Double.parseDouble(r.getLon())));
+//                            markerOpt.title(r.getService_code());
+//                            markerOpt.snippet(r.getDescription());
+//                            markerOpt.draggable(false);
+//                            map.addMarker(markerOpt);
+//                        }
+//                    }
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                } catch (ExecutionException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }, MainThreadExecutor.build());
 
         map.setMyLocationEnabled(true);
         setReady(true);
@@ -123,7 +118,6 @@ public class PickMapFragment extends WizardFragment implements View.OnClickListe
         rootView.findViewById(R.id.btn_map_type).setOnClickListener(this);
         return rootView;
     }
-
 
     @Override
     public void onDestroyView(){
@@ -138,7 +132,7 @@ public class PickMapFragment extends WizardFragment implements View.OnClickListe
                 ft.remove(fragment);
                 ft.commit();
             }
-        },"removemap",300) ;
+        }, "removemap",300) ;
     }
 
     @Override
@@ -173,7 +167,7 @@ public class PickMapFragment extends WizardFragment implements View.OnClickListe
             acc.putString("map_photo", file.getAbsolutePath());
         }
         */
-        acc.putParcelable("location", map.getCameraPosition().target);
+        acc.putParcelable(NewRequestIntentService.EXTRA_LOCATION, map.getCameraPosition().target);
 
         return acc;
     }

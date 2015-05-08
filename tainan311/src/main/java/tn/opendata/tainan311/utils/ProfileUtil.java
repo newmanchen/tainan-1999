@@ -1,5 +1,7 @@
 package tn.opendata.tainan311.utils;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -7,21 +9,34 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
+import android.util.Patterns;
 
+
+import java.util.regex.Pattern;
 
 import static android.provider.ContactsContract.CommonDataKinds.*;
 import static android.provider.ContactsContract.*;
 
-
-
 public class ProfileUtil {
+    public static String getEmailAccount(Context context) {
+        Pattern emailPattern = Patterns.EMAIL_ADDRESS; // API level 8+
+        AccountManager am = AccountManager.get(context);
+        if ( am != null ) {
+            Account[] accounts = am.getAccountsByType("com.google");
+            for (Account account : accounts) {
+                if (emailPattern.matcher(account.name).matches()) {
+                    return account.name;
+                }
+            }
+        }
+        return "";
+    }
 
     /*get name from shared_pref or contacts provider*/
     public static String getUserName(Context context){
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
         return pref.getString("user_name",getUserProfile(context).name);
     }
-
 
     public static UserProfile getUserProfile(Context context) {
         final ContentResolver content = context.getContentResolver();
@@ -77,8 +92,6 @@ public class ProfileUtil {
             }
 
         }
-
-
         return new UserProfile(email, name);
     }
 
@@ -100,8 +113,6 @@ public class ProfileUtil {
             this.email = email;
             this.name = name;
         }
-
-
     }
 
     /**

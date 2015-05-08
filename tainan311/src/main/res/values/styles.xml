@@ -1,5 +1,4 @@
 <resources>
-
     <!-- the theme applied to the application or activity -->
     <style name="AppTheme"
            parent="@android:style/Theme.Holo.Light">
@@ -43,10 +42,8 @@
     <style name="WizardButton">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
-
         <item name="android:background">@drawable/bg_btn_wizard</item>
         <item name="android:layout_weight">0.5</item>
-
     </style>
 
     <style name="ReportItem">
@@ -59,6 +56,5 @@
         <item name="android:textSize">18sp</item>
         <item name="android:singleLine">true</item>
     </style>
-
 
 </resources>

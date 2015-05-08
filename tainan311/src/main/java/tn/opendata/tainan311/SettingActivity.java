@@ -22,8 +22,9 @@ public class SettingActivity extends PreferenceActivity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    private static final String PREFS_KEY_DEFAULT_NAME = "reporter_name_preference";
-    private static final String PREFS_KEY_DEFAULT_EMAIL = "reporter_email_preference";
+    public static final String PREFS_KEY_DEFAULT_NAME = "reporter_name_preference";
+    public static final String PREFS_KEY_DEFAULT_PHONE = "reporter_phone_preference";
+    public static final String PREFS_KEY_DEFAULT_EMAIL = "reporter_email_preference";
 
     public static class SettingFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
         @Override
@@ -35,6 +36,9 @@ public class SettingActivity extends PreferenceActivity {
             EditTextPreference pName = (EditTextPreference) findPreference(PREFS_KEY_DEFAULT_NAME);
             setSummary(pName);
             pName.setOnPreferenceChangeListener(this);
+            EditTextPreference pPhone = (EditTextPreference) findPreference(PREFS_KEY_DEFAULT_PHONE);
+            setSummary(pPhone);
+            pPhone.setOnPreferenceChangeListener(this);
             EditTextPreference pEmail = (EditTextPreference) findPreference(PREFS_KEY_DEFAULT_EMAIL);
             setSummary(pEmail);
             pEmail.setOnPreferenceChangeListener(this);
@@ -43,7 +47,8 @@ public class SettingActivity extends PreferenceActivity {
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             if (PREFS_KEY_DEFAULT_NAME.equals(preference.getKey())
-             || PREFS_KEY_DEFAULT_EMAIL.equals(preference.getKey())) {
+                    || PREFS_KEY_DEFAULT_EMAIL.equals(preference.getKey())
+                    || PREFS_KEY_DEFAULT_PHONE.equals(preference.getKey())) {
                 setSummary(preference, newValue);
             }
             return true;

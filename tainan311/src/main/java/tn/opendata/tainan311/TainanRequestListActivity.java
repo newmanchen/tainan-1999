@@ -105,7 +105,7 @@ public class TainanRequestListActivity extends ListActivity {
         LogUtils.d(TAG, "builder.build() is ", builder.build());
 
         mLoadingMore = true;
-        Futures.addCallback(TainanReport1999.executor(builder.build())
+        Futures.addCallback(TainanReport1999.executeQuery(builder.build())
                 , new FutureCallback<List<QueryResponse>>() {
             @Override
             public void onSuccess(final List<QueryResponse> result) {
@@ -205,12 +205,13 @@ public class TainanRequestListActivity extends ListActivity {
 //            } else {
 //                holder.cover.setVisibility(View.GONE);
 //            }
-            // title
-            holder.title.setText(r.getSubproject());
-            // type
+            // service name
             holder.service_name.setText(r.getService_name());
-            // requested date and time
-            holder.datetime.setText(r.getRequested_datetime());
+            // subproject
+            holder.subproject.setText(r.getSubproject());
+            // area
+            holder.area.setText(r.getArea());
+            // status
             if (TainanConstant.STATUS_FINISH.equals(r.getStatus())) {
                 holder.status.setText(R.string.status_finished);
                 holder.status.setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
@@ -226,6 +227,8 @@ public class TainanRequestListActivity extends ListActivity {
             } else {
                 holder.status.setVisibility(View.GONE);
             }
+            // requested date and time
+            holder.datetime.setText(r.getRequested_datetime());
             return convertView;
         }
 
@@ -235,10 +238,11 @@ public class TainanRequestListActivity extends ListActivity {
             }
 
             @InjectView(R.id.img) ImageView cover;
-            @InjectView(R.id.title) TextView title;
+            @InjectView(R.id.subproject) TextView subproject;
             @InjectView(R.id.service_name) TextView service_name;
             @InjectView(R.id.datetime) TextView datetime;
             @InjectView(R.id.status) TextView status;
+            @InjectView(R.id.area) TextView area;
         }
 
         @Override
@@ -269,6 +273,10 @@ public class TainanRequestListActivity extends ListActivity {
 
             case R.id.menu_show_map:
                 startActivity(new Intent(TainanRequestListActivity.this, MainMapActivity.class));
+                break;
+
+            case R.id.menu_setting:
+                startActivity(new Intent(this, SettingActivity.class));
                 break;
         }
         return true;

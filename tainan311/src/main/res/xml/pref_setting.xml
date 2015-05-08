@@ -22,6 +22,12 @@
             android:dialogTitle="@string/text_issue_input_reporter_name" />
 
         <EditTextPreference
+            android:key="reporter_phone_preference"
+            android:title="@string/text_issue_reporter_phone"
+            android:summary="@string/text_no_default"
+            android:dialogTitle="@string/text_issue_input_reporter_phone" />
+
+        <EditTextPreference
             android:key="reporter_email_preference"
             android:title="@string/text_issue_reporter_email"
             android:summary="@string/text_no_default"

@@ -73,18 +73,18 @@ public class PickPhotoFragment extends WizardFragment {
         if ( resultCode == Activity.RESULT_OK ) {
             if ( requestCode == REQUEST_CODE_IMAGE_PICKER ) {
                 Uri uri = data.getData();
-
                 Optional<Bitmap> bitmap = ImageUtils.getBitmapFromIntentData(getActivity(), data);
                 if (bitmap.isPresent()) {
                     Bitmap bmp = bitmap.get();
-                    mPhotoView.setImageBitmap(bmp); //ImageUtils.cropCenterBitmap()
+                    mPhotoView.setImageBitmap(bmp); // scaled
                     mPhoto = getImagePath(bmp);
                 }
             } else if ( requestCode == REQUEST_CODE_IMAGE_CAPTURE ) {
                 Bundle bundle = data.getExtras();
                 Bitmap imageBitmap = null;
                 if ( bundle != null && (imageBitmap = (Bitmap)bundle.get("data")) != null ) {
-                    mPhotoView.setImageBitmap(ImageUtils.cropCenterBitmap(imageBitmap));
+//                    mPhotoView.setImageBitmap(Bitmap.createScaledBitmap(ImageUtils.cropCenterBitmap(imageBitmap), 120, 120, false));
+                    mPhotoView.setImageBitmap(Bitmap.createScaledBitmap(imageBitmap, 1280, 960, false));
                     mPhoto = getImagePath(imageBitmap);
                 }
             }

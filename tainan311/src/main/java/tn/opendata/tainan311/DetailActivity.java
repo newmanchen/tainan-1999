@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -22,7 +23,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import tn.opendata.tainan311.tainan1999.util.TainanConstant;
 import tn.opendata.tainan311.tainan1999.vo.QueryResponse;
-import tn.opendata.tainan311.utils.EasyUtil;
+import tn.opendata.tainan311.utils.LocationUtils;
 import tn.opendata.tainan311.utils.LogUtils;
 
 public class DetailActivity extends Activity {
@@ -99,7 +100,14 @@ public class DetailActivity extends Activity {
         requestDate.setText(mRequest.getRequested_datetime());
         area.setText(mRequest.getArea());
         GoogleMap map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-        LatLng issueLocation = new LatLng(Double.valueOf(mRequest.getLatitude()), Double.valueOf(mRequest.getLongitude()));
+        final LatLng issueLocation;
+        if (TextUtils.isEmpty(mRequest.getLatitude()) || mRequest.getLatitude().equals("0")
+                || TextUtils.isEmpty(mRequest.getLongitude()) || mRequest.getLongitude().equals("0")) {
+            issueLocation = LocationUtils.getLocationFromAddress(this, mRequest.getAddress_string());
+        } else {
+            issueLocation  = new LatLng(Double.valueOf(mRequest.getLatitude()), Double.valueOf(mRequest.getLongitude()));
+        }
+        LogUtils.d(TAG, "issueLocation = ", issueLocation);
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(issueLocation, 17));
         map.addMarker(new MarkerOptions().title(mRequest.getSubproject()).position(issueLocation));
     }

@@ -98,7 +98,7 @@ public class AddRequest extends BaseRequest {
     private static final String TAG_PHONE = "phone"; // 電話
     private static final String TAG_SERVICE_NAME = "service_name";  // 案件類型
     private static final String TAG_SUBPROJECT = "subproject"; // 案件事項
-    private static final String TAG_DESCRIPTION_ = "description"; // 案件內容
+    private static final String TAG_DESCRIPTION_REQUEST = "description"; // 案件內容
     public static final String TAG_PICTURES = "pictures"; // 上傳照片
     public static final String TAG_PICTURE = "picture"; // 照片
     private static final String TAG_DESCRIPTION_PIC = "description"; // 照片描述
@@ -200,7 +200,7 @@ public class AddRequest extends BaseRequest {
          * @return
          */
         public Builder setDescription(String descriptionRequest) {
-            list.add(new BasicNameValuePair(TAG_DESCRIPTION_, descriptionRequest));
+            list.add(new BasicNameValuePair(TAG_DESCRIPTION_REQUEST, descriptionRequest));
             return this;
         }
 
@@ -256,6 +256,7 @@ public class AddRequest extends BaseRequest {
             picNVP.add(new BasicNameValuePair(TAG_DESCRIPTION_PIC, pic.getDescription_pic()));
             picNVP.add(new BasicNameValuePair(TAG_FILE, pic.getFile()));
             picNVP.add(new BasicNameValuePair(TAG_FILENAME, pic.getFileName()));
+            pics.add(picNVP);
             return this;
         }
 

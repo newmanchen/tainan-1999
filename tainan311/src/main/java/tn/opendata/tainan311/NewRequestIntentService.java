@@ -1,31 +1,46 @@
 package tn.opendata.tainan311;
 
 import android.app.IntentService;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.NotificationCompat;
-import android.util.Log;
+import android.text.TextUtils;
 import android.widget.Toast;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.ListenableFuture;
-import org.apache.http.cookie.Cookie;
-import tn.opendata.tainan311.georeportv2.FMSResponse;
-import tn.opendata.tainan311.georeportv2.GeoReportV2;
 
+import org.apache.http.cookie.Cookie;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+
+import tn.opendata.tainan311.tainan1999.TainanReport1999;
+import tn.opendata.tainan311.tainan1999.rpc.AddRequest;
+import tn.opendata.tainan311.tainan1999.vo.AddResponse;
+import tn.opendata.tainan311.utils.Base64Utils;
+import tn.opendata.tainan311.utils.LogUtils;
 
 /**
  * Created by vincent on 2014/6/12.
  */
 //TODO to send add request to tainan1999
 public class NewRequestIntentService extends IntentService {
-    private static final int NOTIFICATION_ID = 100;
+    private static final String TAG = NewRequestIntentService.class.getSimpleName();
+
+    public static final String EXTRA_DATA = "data";
+    public static final String EXTRA_AREA = "area";
+    public static final String EXTRA_SERVICE_NAME = "service_name";
+    public static final String EXTRA_SUBPROJECT = "subproject";
+    public static final String EXTRA_DESCRIPTION = "description";
+    public static final String EXTRA_ADDRESS = "address";
+    public static final String EXTRA_NAME = "name";
+    public static final String EXTRA_PHONE = "phone";
+    public static final String EXTRA_EMAIL = "email";
+    public static final String EXTRA_LOCATION = "location";
+    public static final String EXTRA_PHOTO = "photo";
 
     private Bundle data = null;
     private Handler mHandler;
@@ -38,43 +53,63 @@ public class NewRequestIntentService extends IntentService {
     public void onCreate() {
         super.onCreate();
 
-        mHandler = new Handler();
+        mHandler = new Handler(getMainLooper());
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        data = intent.getBundleExtra("data");
+        data = intent.getBundleExtra(EXTRA_DATA);
         if (data == null ) {
             return;
         }
-        // postRequest(data, null); //FIXME do nothing at this moment
+        postRequest(data, null);
     }
 
     private void postRequest(Bundle data, List<Cookie> cookies) {
         showNotification(getString(R.string.add_request));
         if (data != null) {
-            final boolean needRegister = data.getBoolean("register");
-            LatLng location = data.getParcelable("location");
-            GeoReportV2.PostRequestBuilder builder = GeoReportV2.PostRequestBuilder.create(data.getString("category"),
-                    location.latitude, location.longitude,
-                    data.getString("title"),
-                    data.getString("detail"),
-                    data.getString("name"),
-                    data.getString("email")
-            );
-            builder.password(needRegister, data.getString("password")).photo(data.getString("photo")).addCookie(cookies);
-
-            ListenableFuture<FMSResponse> future = builder.build().execute();
-            Futures.addCallback(future, new FutureCallback<FMSResponse>() {
-                @Override
-                public void onSuccess(FMSResponse result) {
-                    String message;
-                    if ( result.isSuccess() ) {
-                        message = (needRegister) ? getString(R.string.confirm_mail):getString(R.string.success);
-                    } else {
-                        message = result.getError();
+            AddRequest.Builder builder = AddRequest.Builder.create();
+            builder.setArea(data.getString(EXTRA_AREA));
+            builder.setServiceName(data.getString(EXTRA_SERVICE_NAME));
+            builder.setSubProject(data.getString(EXTRA_SUBPROJECT));
+            builder.setDescription(data.getString(EXTRA_DESCRIPTION));
+            builder.setAddressString(data.getString(EXTRA_ADDRESS));
+            builder.setName(data.getString(EXTRA_NAME));
+            builder.setPhone(data.getString(EXTRA_PHONE));
+            builder.setEmail(data.getString(EXTRA_EMAIL));
+            if (data.containsKey(NewRequestIntentService.EXTRA_PHOTO)) {
+                // put this to non ui thread
+                String path = data.getString(NewRequestIntentService.EXTRA_PHOTO);
+                if (!TextUtils.isEmpty(path)) {
+                    try {
+                        AddRequest.Picture pic = new AddRequest.Picture();
+                        File picFile = new File(path);
+                        LogUtils.d(TAG, "pic file size is ", picFile.length());
+                        pic.setFileName(picFile.getName());
+                        pic.setFile(Base64Utils.getBase64FileContent(picFile));
+                        builder.setPicture(pic);
+                    } catch (IOException e) {
+                        LogUtils.w(TAG, e.getMessage(), e);
                     }
-                    showNotification(message);
+                } else {
+                    LogUtils.d(TAG, "path is empty");
+                }
+            }
+            LatLng location = data.getParcelable(EXTRA_LOCATION);
+            builder.setLatitude(String.valueOf(location.latitude));
+            builder.setLongitude(String.valueOf(location.longitude));
+            Futures.addCallback(TainanReport1999.executeAdd(builder.build())
+                    , new FutureCallback<AddResponse>() {
+                @Override
+                public void onSuccess(AddResponse result) {
+                    LogUtils.d(TAG, "onSuccess");
+                    if (result != null) {
+                        LogUtils.d(TAG, "add response :: token = ", result.getToken());
+                        LogUtils.d(TAG, "add response :: service_notice = ", result.getService_notice());
+                        LogUtils.d(TAG, "add response :: service_request_id = ", result.getService_request_id());
+
+                        //TODO save service_request_id to preference for MyReport
+                    }
                 }
 
                 @Override
