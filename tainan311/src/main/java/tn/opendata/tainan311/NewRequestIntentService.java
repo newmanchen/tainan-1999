@@ -45,6 +45,7 @@ public class NewRequestIntentService extends IntentService {
     private Bundle data = null;
     private Handler mHandler;
 
+    private String GOOGLE_MAP_LINK = "https://www.google.com.tw/maps/@%s,%s,17z";
     public NewRequestIntentService() {
         super("NewRequest");
     }
@@ -72,7 +73,16 @@ public class NewRequestIntentService extends IntentService {
             builder.setArea(data.getString(EXTRA_AREA));
             builder.setServiceName(data.getString(EXTRA_SERVICE_NAME));
             builder.setSubProject(data.getString(EXTRA_SUBPROJECT));
-            builder.setDescription(data.getString(EXTRA_DESCRIPTION));
+            LatLng location = data.getParcelable(EXTRA_LOCATION);
+            String lat = String.valueOf(location.latitude);
+            builder.setLatitude(lat);
+            String lng = String.valueOf(location.longitude);
+            builder.setLongitude(lng);
+            StringBuilder sb = new StringBuilder(data.getString(EXTRA_DESCRIPTION));
+            sb.append("             Google Map : ").append(String.format(GOOGLE_MAP_LINK, lat, lng));
+            sb.append("             sent from ").append(getString(R.string.app_name));
+            LogUtils.d(TAG, "description :: ", sb.toString());
+            builder.setDescription(sb.toString());
             builder.setAddressString(data.getString(EXTRA_ADDRESS));
             builder.setName(data.getString(EXTRA_NAME));
             builder.setPhone(data.getString(EXTRA_PHONE));
@@ -95,9 +105,6 @@ public class NewRequestIntentService extends IntentService {
                     LogUtils.d(TAG, "path is empty");
                 }
             }
-            LatLng location = data.getParcelable(EXTRA_LOCATION);
-            builder.setLatitude(String.valueOf(location.latitude));
-            builder.setLongitude(String.valueOf(location.longitude));
             Futures.addCallback(TainanReport1999.executeAdd(builder.build())
                     , new FutureCallback<AddResponse>() {
                 @Override
