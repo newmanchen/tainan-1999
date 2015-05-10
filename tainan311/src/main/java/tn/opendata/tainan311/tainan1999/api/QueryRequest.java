@@ -65,4 +65,50 @@ public class QueryRequest {
     public String getStatus() {
         return status;
     }
+
+    public static  class Builder {
+        private String city_id = null;
+        private String end_date = null;
+        private String service_name = null;
+        private String service_request_id = null;
+        private String start_date = null;
+        private String status = null;
+
+        public static Builder create(){
+            return new Builder();
+        }
+        public Builder setCityId(String city_id) {
+            this.city_id = city_id;
+            return this;
+        }
+
+        public Builder setEndDate(String end_date) {
+            this.end_date = end_date;
+            return this;
+        }
+
+        public Builder setServiceName(String service_name) {
+            this.service_name = service_name;
+            return this;
+        }
+
+        public Builder setServiceRequestId(String service_request_id) {
+            this.service_request_id = service_request_id;
+            return this;
+        }
+
+        public Builder setStartDate(String start_date) {
+            this.start_date = start_date;
+            return this;
+        }
+
+        public Builder setStatus(String status) {
+            this.status = status;
+            return this;
+        }
+
+        public QueryRequest build() {
+            return new QueryRequest(city_id, end_date, service_name, service_request_id, start_date, status);
+        }
+    }
 }

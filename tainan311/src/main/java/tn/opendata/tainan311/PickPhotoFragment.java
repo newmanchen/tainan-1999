@@ -51,7 +51,7 @@ public class PickPhotoFragment extends WizardFragment {
         return fragment;
     }
 
-    private PickPhotoFragment() {
+    public PickPhotoFragment() {
     }
 
     @Override

@@ -47,7 +47,7 @@ public class PickMapFragment extends WizardFragment implements View.OnClickListe
         return fragment;
     }
 
-    private PickMapFragment() {
+    public PickMapFragment() {
     }
 
     @Override
