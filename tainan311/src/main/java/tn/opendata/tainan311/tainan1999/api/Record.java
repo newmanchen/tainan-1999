@@ -18,12 +18,14 @@ public class Record implements Parcelable{
     private String status; //案件狀態
     @Element private String keyword; //案件描述
     @Element private String area; //行政區
-    @Element private String service_name; //案件類型
+    @Element(required=false)
+    private String service_name; //案件類型
     @Element private String agency; //業管單位
     @Element(required=false)
     private String subproject; //案件事項
     @Element private String description; //案件內容
-    @Element private String address_string; //地點
+    @Element(required=false)
+    private String address_string; //地點
     @Element(required=false)
     private double lat; //緯度
     @Element(required=false,name="long")
