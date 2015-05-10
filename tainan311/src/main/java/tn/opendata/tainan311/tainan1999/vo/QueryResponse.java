@@ -10,6 +10,7 @@ import java.util.List;
 /**
  * Created by newman on 5/4/15.
  */
+@Deprecated
 public class QueryResponse implements Parcelable {
     private String service_request_id; // 案件編號
     private String requested_datetime; // 反映日期

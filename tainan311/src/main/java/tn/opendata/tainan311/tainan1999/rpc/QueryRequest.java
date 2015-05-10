@@ -26,6 +26,7 @@ import tn.opendata.tainan311.utils.LogUtils;
 /**
  * Created by newman on 5/4/15.
  */
+@Deprecated
 public class QueryRequest extends BaseRequest {
     private static final String TAG = QueryRequest.class.getSimpleName();
     //-------------------------------------Response------------------------------------------------------
@@ -195,7 +196,7 @@ public class QueryRequest extends BaseRequest {
 
     //-------------------------------------Request------------------------------------------------------
     public static final String TAG_ROOT = "root";
-    private static final String TAG_CITY_ID = "city_id"; // 城市識別碼
+    private static final String TAG_CITY_ID = "    private static final String TAG_CITY_ID = \"city_id\"; // 城市識別碼\n_id"; // 城市識別碼
     private static final String TAG_SERVICE_REQUEST_ID = "service_request_id"; // 案件編號, 多筆以逗號(,)分隔
     private static final String TAG_SERVICE_NAME = "service_name";  // 案件類型, 多筆以逗號(,)分隔
     private static final String TAG_START_DATE = "start_date";   // 反映開始時間

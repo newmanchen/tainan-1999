@@ -28,8 +28,8 @@ import java.io.File;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import tn.opendata.tainan311.tainan1999.api.Record;
 import tn.opendata.tainan311.tainan1999.util.TainanConstant;
-import tn.opendata.tainan311.tainan1999.vo.QueryResponse;
 import tn.opendata.tainan311.utils.LocationUtils;
 import tn.opendata.tainan311.utils.LogUtils;
 
@@ -49,7 +49,7 @@ public class DetailActivity extends Activity {
 
     private static final String TAG = DetailActivity.class.getSimpleName();
     public static final String EXTRA_KEY_REQUEST = "extra_key_request";
-    private QueryResponse mRequest;
+    private Record mRequest;
 
     protected ImageLoader mImageLoader = ImageLoader.getInstance();
     private DisplayImageOptions mOptions;
@@ -140,7 +140,7 @@ public class DetailActivity extends Activity {
         service_request_id.setText(mRequest.getService_request_id());
         service_name.setText(mRequest.getService_name());
         subproject.setText(mRequest.getSubproject());
-        description.setText(mRequest.getDescription_request());
+        description.setText(mRequest.getDescription());
         requestDate.setText(mRequest.getRequested_datetime());
 //        LogUtils.d(TAG, "mRequest.getUpdated_datetime() is ", mRequest.getUpdated_datetime());
 //        LogUtils.d(TAG, "mRequest.getExpected_datetime() is ", mRequest.getExpected_datetime());
@@ -155,11 +155,10 @@ public class DetailActivity extends Activity {
         agency.setText(TainanConstant.AGENCY[Integer.valueOf(mRequest.getAgency())]);
         GoogleMap map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
         final LatLng issueLocation;
-        if (TextUtils.isEmpty(mRequest.getLatitude()) || mRequest.getLatitude().equals("0")
-                || TextUtils.isEmpty(mRequest.getLongitude()) || mRequest.getLongitude().equals("0")) {
+        if (mRequest.getLat() == 0 || mRequest.getLng() == 0) {
             issueLocation = LocationUtils.getLocationFromAddress(this, mRequest.getAddress_string());
         } else {
-            issueLocation  = new LatLng(Double.valueOf(mRequest.getLatitude()), Double.valueOf(mRequest.getLongitude()));
+            issueLocation  = new LatLng(mRequest.getLat() , mRequest.getLng() );
         }
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(issueLocation, 17));
         map.addMarker(new MarkerOptions().title(mRequest.getSubproject()).position(issueLocation));

@@ -39,10 +39,19 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import retrofit.RestAdapter;
+import retrofit.converter.SimpleXMLConverter;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import tn.opendata.tainan311.tainan1999.TainanReport1999;
+import tn.opendata.tainan311.tainan1999.api.QueryRequestBuilder;
+import tn.opendata.tainan311.tainan1999.api.QueryResponse;
+import tn.opendata.tainan311.tainan1999.api.Record;
+import tn.opendata.tainan311.tainan1999.api.Tainan1999Service;
 import tn.opendata.tainan311.tainan1999.rpc.QueryRequest;
 import tn.opendata.tainan311.tainan1999.util.TainanConstant;
-import tn.opendata.tainan311.tainan1999.vo.QueryResponse;
+
 import tn.opendata.tainan311.utils.EasyUtil;
 import tn.opendata.tainan311.utils.LogUtils;
 
@@ -63,6 +72,7 @@ public class TainanRequestListActivity extends ListActivity {
     private boolean mLoadingMore;
     private String mDataPath;
     // Constant
+    private RestAdapter restAdapter;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +80,12 @@ public class TainanRequestListActivity extends ListActivity {
         ButterKnife.inject(this);
         mSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", getResources().getConfiguration().locale);
         mDataPath = getFilesDir().toString()+"/pic/";
+
+        restAdapter = new RestAdapter.Builder()
+                .setEndpoint("http://open1999.tainan.gov.tw:82")
+                .setConverter(new SimpleXMLConverter())
+                .build();
+
 
         mLoadingMore = false;
         initImageLoader();
@@ -100,8 +116,9 @@ public class TainanRequestListActivity extends ListActivity {
         LogUtils.d(TAG, "loadQueryRequest firstTimeQuery:", firstTimeQuery);
         addLoadingMoreListItem();
 
-        QueryRequest.Builder builder = QueryRequest.Builder.create();
-        builder.setEndTime(mSimpleDateFormat.format(cal.getTime()));
+        QueryRequestBuilder builder = new QueryRequestBuilder();
+        builder.setCityId("tainan.gov.tw");
+        builder.setEndDate(mSimpleDateFormat.format(cal.getTime()));
         if (firstTimeQuery) {
             cal.set(Calendar.HOUR, 0);
             cal.set(Calendar.MINUTE, 0);
@@ -109,41 +126,51 @@ public class TainanRequestListActivity extends ListActivity {
         } else {
             cal.add(Calendar.DAY_OF_YEAR, -1);
         }
-        builder.setStartTime(mSimpleDateFormat.format(cal.getTime()));
-        LogUtils.d(TAG, "builder.build() is ", builder.build());
+        builder.setStartDate(mSimpleDateFormat.format(cal.getTime()));
+
+       // LogUtils.d(TAG, "builder.build() is ", builder());
 
         mLoadingMore = true;
-        Futures.addCallback(TainanReport1999.executeQuery(this, builder.build())
-                , new FutureCallback<List<QueryResponse>>() {
-            @Override
-            public void onSuccess(final List<QueryResponse> result) {
-                LogUtils.d(TAG, "callback onSuccess");
-                mLoadingMore = false;
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        removeLoadingMoreListItem();
-                        if (result != null && result.size() > 0) {
-                            LogUtils.d(TAG, "data count : ", result.size());
-                            if (mQueryRequestArrayAdapter == null) {
-                                mQueryRequestArrayAdapter = new QueryRequestArrayAdapter(TainanRequestListActivity.this, result);
-                                setListAdapter(mQueryRequestArrayAdapter);
-                                getListView().setOnItemClickListener(mQueryRequestArrayAdapter);
-                                getListView().setOnScrollListener(mOnScrollListener);
-                            } else {
-                                mQueryRequestArrayAdapter.addAll(result);
-                                mQueryRequestArrayAdapter.updateRequestList(result);
-                            }
-                        }
-                    }
-                });
-            }
 
-            @Override
-            public void onFailure(Throwable t) {
-                // TODO
-            }
-        });
+        Tainan1999Service service = restAdapter.create(Tainan1999Service.class);
+         service.queryReports(builder.build())
+                .observeOn(AndroidSchedulers.mainThread())
+                 .subscribe(new Action1<QueryResponse>() {
+                     @Override
+                     public void call(QueryResponse queryResponse) {
+                         LogUtils.d(TAG, "callback onSuccess");
+                         mLoadingMore = false;
+                         removeLoadingMoreListItem();
+                         if (queryResponse.getReturncode() == 0){ //success
+                             List<Record> records = queryResponse.getRecords();
+                             if (mQueryRequestArrayAdapter == null) {
+                                 mQueryRequestArrayAdapter = new QueryRequestArrayAdapter(TainanRequestListActivity.this, records);
+                                 setListAdapter(mQueryRequestArrayAdapter);
+                                 getListView().setOnItemClickListener(mQueryRequestArrayAdapter);
+                                 getListView().setOnScrollListener(mOnScrollListener);
+                             } else {
+                                 mQueryRequestArrayAdapter.addAll(records);
+                                 mQueryRequestArrayAdapter.updateRequestList(records);
+                             }
+
+                             //FIXME: remove it...
+                             if (records != null && records.size() > 0) {
+                                 LogUtils.d(TAG, "data count : ", records.size());
+                             }
+
+                         }else{
+                             LogUtils.e(TAG, "error");
+                             //TODO: error handle??
+                         }
+
+
+
+
+
+                     }
+
+
+                 });
     }
 
     private void initImageLoader() {
@@ -163,11 +190,11 @@ public class TainanRequestListActivity extends ListActivity {
         mLoadingMoreItem.setVisibility(View.GONE);
     }
 
-    public class QueryRequestArrayAdapter extends ArrayAdapter<QueryResponse> implements AdapterView.OnItemClickListener {
+    public class QueryRequestArrayAdapter extends ArrayAdapter<Record> implements AdapterView.OnItemClickListener {
         private final LayoutInflater mInflater;
         private final int mResource;
-        private final List<QueryResponse> mRequestList = Lists.newArrayList();
-        private QueryRequestArrayAdapter(Context context, List<QueryResponse> objects) {
+        private final List<Record> mRequestList = Lists.newArrayList();
+        private QueryRequestArrayAdapter(Context context, List<Record> objects) {
             super(context, R.layout.list_item_request, objects);
             mInflater = (LayoutInflater) context.getSystemService(Service.LAYOUT_INFLATER_SERVICE);
             mResource = R.layout.list_item_request;
@@ -181,7 +208,7 @@ public class TainanRequestListActivity extends ListActivity {
                 ViewHolder holder = new ViewHolder(convertView);
                 convertView.setTag(holder);
             }
-            QueryResponse r = getItem(position);
+            Record r = getItem(position);
             final ViewHolder holder = (ViewHolder) convertView.getTag();
             // image
             File file = new File(mDataPath+r.getService_request_id()+".jpg");
@@ -255,7 +282,7 @@ public class TainanRequestListActivity extends ListActivity {
             startActivity(i);
         }
 
-        public void updateRequestList(List<QueryResponse> list) {
+        public void updateRequestList(List<Record> list) {
             mRequestList.addAll(list);
             mQueryRequestArrayAdapter.notifyDataSetChanged();
         }
