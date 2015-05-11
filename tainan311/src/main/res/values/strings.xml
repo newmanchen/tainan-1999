@@ -29,13 +29,15 @@
     <string name="tips_title">怎麼回報問題</string>
     <string name="tips_ignore">下次不要再顯示此頁</string>
     <string name="tips_step1">把問題位置標記在地圖上</string>
-    <string name="tips_step2">拍照</string>
-    <string name="tips_step3">描述問題</string>
-    <string name="tips_step4">完成回報</string>
+    <string name="tips_step2">拍照或從相簿挑選照片</string>
+    <string name="tips_step3">選擇行政區, 類型, 事項</string>
+    <string name="tips_step4">描述問題</string>
+    <string name="tips_step5">完成回報</string>
     <string name="tips_step1_no">1</string>
     <string name="tips_step2_no">2</string>
     <string name="tips_step3_no">3</string>
     <string name="tips_step4_no">4</string>
+    <string name="tips_step5_no">5</string>
     <string name="title_activity_show_map">ShowMapActivity</string>
     <string name="title_activity_main_map">MainMapActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -49,7 +51,7 @@
     <string name="text_about_us">關於我們</string>
 
     <string name="text_description">案件內容</string>
-    <string name="text_agency">業管單位</string>
+    <string name="text_agency">承辦機關</string>
     <string name="text_service_request_id">案件編號</string>
     <string name="text_service_name">類型</string>
     <string name="text_request_date">反映日期</string>
@@ -83,4 +85,7 @@
     <string name="text_issue_input_reporter_phone">請輸入回報者電話</string>
     <string name="text_legal_notice">Legal Notices</string>
     <string name="text_my_activity">我的回報</string>
+    <string name="text_confirm">確認送出</string>
+    <string name="text_button_confirm">確認</string>
+    <string name="text_confirm_message">點下確認按鈕會馬上送出您所填的資料到台南市民熱線網頁，包含您的姓名、電話、現在所在位置和E-mail</string>
 </resources>

@@ -1,8 +1,13 @@
 package tn.opendata.tainan311;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -19,6 +24,7 @@ import java.lang.reflect.Field;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import tn.opendata.tainan311.utils.FixedSpeedScroller;
+import tn.opendata.tainan311.utils.LogUtils;
 
 public class ReportActivity extends Activity implements WizardFragment.FlowController {
     @InjectView(R.id.ripple_previous) MaterialRippleLayout ripplePrevious;
@@ -29,6 +35,7 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
     @InjectView(R.id.done) Button doneButton;
     @InjectView(R.id.pager) ViewPager mViewPager;
 
+    private static final String TAG = ReportActivity.class.getSimpleName();
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private final Bundle data = new Bundle(); //TODO: handle config change
 
@@ -37,7 +44,6 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
         ButterKnife.inject(this);
-//        rippleOnViews();
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -62,45 +68,33 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
             field.set(mViewPager, scroller);
             scroller.setmDuration(600);
         } catch (Exception e) {
-           e.printStackTrace();
+            LogUtils.w(TAG, e.getMessage(), e);
         }
 
         resetButtonState();
     }
 
-    private void rippleOnViews() {
-        rippleView(previousButton);
-        rippleView(nextButton);
-        rippleView(doneButton);
-    }
-
-    private void rippleView(View view) {
-        MaterialRippleLayout.on(view).rippleDuration(500).rippleAlpha(0.5f).rippleOverlay(true).rippleColor(Color.GRAY).create();
-    }
-
     public void onClick(View v){
-        if(v.getId() == R.id.next){
+        if(v.getId() == R.id.next) {
             String tag = makeFragmentName(R.id.pager,mViewPager.getCurrentItem());
             WizardFragment f = (WizardFragment)getFragmentManager().findFragmentByTag(tag);
             data.putAll(f.onNextClick((Bundle)data.clone()));
 
             int nextIndex = mViewPager.getCurrentItem()+1;
             mViewPager.setCurrentItem(nextIndex, true);
-
-        }else if(v.getId() == R.id.previous){
+        } else if(v.getId() == R.id.previous) {
             mViewPager.setCurrentItem(mViewPager.getCurrentItem()-1,true);
-        }else{
+        } else {
             String tag = makeFragmentName(R.id.pager,mViewPager.getCurrentItem());
             WizardFragment f = (WizardFragment)getFragmentManager().findFragmentByTag(tag);
 
             try {
-                Bundle result = f.onNextClick((Bundle) data.clone());
                 data.putAll(f.onNextClick((Bundle) data.clone()));
-                createNewRequest();
-                finish();
-            }catch(IllegalStateException e){
-                e.printStackTrace();
-                //just ignore and skip click..
+                showConfirmDialog();
+//                createNewRequest();
+//                finish();
+            } catch(IllegalStateException e) {
+               LogUtils.w(TAG, e.getMessage(), e);
             }
         }
         resetButtonState();
@@ -116,6 +110,14 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
         }else{
             previousButton.performClick();
         }
+    }
+
+    private void showConfirmDialog() {
+        ConfirmDialog cd = new ConfirmDialog();
+        Bundle b = new Bundle();
+        b.putParcelable(EXTRA_BUNDLE, data);
+        cd.setArguments(b);
+        cd.show(getFragmentManager(), TAG_DIALOG_CONFIRM);
     }
 
     private void createNewRequest() {
@@ -144,9 +146,6 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
         nextButton.setVisibility(last ? View.GONE : View.VISIBLE);
         ripplePrevious.setVisibility(first ? View.GONE : View.VISIBLE);
         previousButton.setVisibility(first ? View.GONE : View.VISIBLE);
-
-//        doneButton.setEnabled(false);
-//        nextButton.setEnabled(false);
     }
 
     @Override
@@ -227,6 +226,43 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
                 // This page is way off-screen to the right.
                 view.setAlpha(0);
             }
+        }
+    }
+
+    private static final String TAG_DIALOG_CONFIRM = "TAG_DIALOG_CONFIRM";
+    private static final String EXTRA_BUNDLE = "extra_bundle";
+    public static class ConfirmDialog extends DialogFragment {
+        Context context;
+        Bundle sentData;
+
+        public ConfirmDialog() {
+        }
+
+        @Override
+        public Dialog onCreateDialog(Bundle bundle) {
+            Bundle bb = getArguments();
+            final Context context = getActivity();
+            sentData = (Bundle) bb.get(EXTRA_BUNDLE);
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle(R.string.text_confirm)
+            .setMessage(R.string.text_confirm_message)
+            .setPositiveButton(R.string.text_button_confirm, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Activity act = getActivity();
+                    if (act != null) {
+                        Intent intent = new Intent(context, NewRequestIntentService.class);
+                        intent.putExtra(NewRequestIntentService.EXTRA_DATA, sentData);
+                        act.startService(intent);
+                    }
+                }
+            })
+            .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                }
+            });
+            return builder.create();
         }
     }
 }

@@ -106,6 +106,7 @@ public class TainanRequestListActivity extends ListActivity {
             cal.set(Calendar.HOUR, 0);
             cal.set(Calendar.MINUTE, 0);
             cal.set(Calendar.SECOND, 1);
+            cal.add(Calendar.DAY_OF_YEAR, -1);
         } else {
             cal.add(Calendar.DAY_OF_YEAR, -1);
         }

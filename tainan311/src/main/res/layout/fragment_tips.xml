@@ -1,24 +1,26 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:scrollbarStyle="outsideOverlay"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <LinearLayout android:orientation="vertical" android:layout_width="fill_parent"
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:padding="8dp">
-        <TextView android:id="@+id/tips_title"
+        <TextView
+            android:id="@+id/tips_title"
             style="@style/WizardTitle"
-            android:text="@string/tips_title"/>
+            android:text="@string/tips_title" />
 
-        <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <GridLayout
             android:id="@+id/tips_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:columnCount="2"
             android:rowCount="2"
-
             android:orientation="horizontal"
             android:background="@drawable/shape_card">
-
 
             <TextView android:id="@+id/tips1_no"
                 style="@style/TipIndex"
@@ -44,8 +46,13 @@
             <TextView android:id="@+id/tips4"
                 style="@style/TipText"
                 android:text="@string/tips_step4"/>
+            <TextView android:id="@+id/tips5_no"
+                style="@style/TipIndex"
+                android:text="@string/tips_step5_no"/>
+            <TextView android:id="@+id/tips5"
+                style="@style/TipText"
+                android:text="@string/tips_step5"/>
         </GridLayout>
-
 
         <CheckBox android:id="@+id/checkbox_ignore_tips"
             android:layout_width="wrap_content"
@@ -55,8 +62,4 @@
             android:layout_marginTop="5dp"
             android:text="@string/tips_ignore"/>
     </LinearLayout>
-
-
 </ScrollView>
-
-

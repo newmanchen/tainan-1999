@@ -102,9 +102,10 @@ public class NewRequestIntentService extends IntentService {
                         LogUtils.w(TAG, e.getMessage(), e);
                     }
                 } else {
-                    LogUtils.d(TAG, "path is empty");
+                    LogUtils.d(TAG, "photo path is empty");
                 }
             }
+//            LogUtils.d(TAG, "builder is :: ", builder.build());
             Futures.addCallback(TainanReport1999.executeAdd(builder.build())
                     , new FutureCallback<AddResponse>() {
                 @Override

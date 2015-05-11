@@ -270,7 +270,7 @@ public class ReportDetailFragment extends WizardFragment {
 
         // check here to make sure that all the mush have fields are ready
         if (throwsException) {
-            throw new IllegalStateException();
+            throw new IllegalStateException(new String("Some fields are empty"));
         }
 
         // email is optional field
