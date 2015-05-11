@@ -91,41 +91,45 @@ public class MyActivity extends ListActivity {
     private void loadQueryRequest() {
         showProgressOnActionBar(true);
         Set<String> requestIds = PreferenceUtils.getMyRequestIds(this);
-        String rids = TextUtils.join(",", requestIds);
-        QueryRequest.Builder builder = QueryRequest.Builder.create();
-        LogUtils.d(TAG, "rids are ", rids);
-        builder.setServiceRequestId(rids);
-        LogUtils.d(TAG, "builder.build() is ", builder.build());
+        if (requestIds != null && !requestIds.isEmpty()) {
+            String rids = TextUtils.join(",", requestIds);
+            QueryRequest.Builder builder = QueryRequest.Builder.create();
+            LogUtils.d(TAG, "rids are ", rids);
+            builder.setServiceRequestId(rids);
+            LogUtils.d(TAG, "builder.build() is ", builder.build());
 
-        Futures.addCallback(TainanReport1999.executeQuery(this, builder.build())
-                , new FutureCallback<List<QueryResponse>>() {
-            @Override
-            public void onSuccess(final List<QueryResponse> result) {
-                LogUtils.d(TAG, "callback onSuccess");
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (result != null && result.size() > 0) {
-                            LogUtils.d(TAG, "data count : ", result.size());
-                            if (mQueryRequestArrayAdapter == null) {
-                                mQueryRequestArrayAdapter = new QueryRequestArrayAdapter(MyActivity.this, result);
-                                setListAdapter(mQueryRequestArrayAdapter);
-                                getListView().setOnItemClickListener(mQueryRequestArrayAdapter);
-                            } else {
-                                mQueryRequestArrayAdapter.addAll(result);
-                                mQueryRequestArrayAdapter.updateRequestList(result);
+            Futures.addCallback(TainanReport1999.executeQuery(this, builder.build())
+                    , new FutureCallback<List<QueryResponse>>() {
+                @Override
+                public void onSuccess(final List<QueryResponse> result) {
+                    LogUtils.d(TAG, "callback onSuccess");
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (result != null && result.size() > 0) {
+                                LogUtils.d(TAG, "data count : ", result.size());
+                                if (mQueryRequestArrayAdapter == null) {
+                                    mQueryRequestArrayAdapter = new QueryRequestArrayAdapter(MyActivity.this, result);
+                                    setListAdapter(mQueryRequestArrayAdapter);
+                                    getListView().setOnItemClickListener(mQueryRequestArrayAdapter);
+                                } else {
+                                    mQueryRequestArrayAdapter.addAll(result);
+                                    mQueryRequestArrayAdapter.updateRequestList(result);
+                                }
                             }
+                            showProgressOnActionBar(false);
                         }
-                        showProgressOnActionBar(false);
-                    }
-                });
-            }
+                    });
+                }
 
-            @Override
-            public void onFailure(Throwable t) {
-                // TODO
-            }
-        });
+                @Override
+                public void onFailure(Throwable t) {
+                    // TODO
+                }
+            });
+        } else {
+            LogUtils.d(TAG, "requestIds is null or empty");
+        }
     }
 
     public class QueryRequestArrayAdapter extends ArrayAdapter<QueryResponse> implements AdapterView.OnItemClickListener {
