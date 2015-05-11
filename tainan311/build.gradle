@@ -36,12 +36,22 @@ android {
 
     signingConfigs {
         debug {
+            storeFile file('/home/newman/tainan-1999.keystore')
+            keyAlias 'tainan-1999'
+            keyPassword '1999-tainanOpenData'
+            storePassword '1999-tainanOpenData'
         }
 //        release {
 //            storeFile file('../../../.android/debug.keystore')
 //            storePassword "android"
 //            keyAlias "android"
 //        }
+        release {
+            keyAlias 'tainan-1999'
+            keyPassword '1999-tainanOpenData'
+            storeFile file('/home/newman/tainan-1999.keystore')
+            storePassword '1999-tainanOpenData'
+        }
     }
 
 

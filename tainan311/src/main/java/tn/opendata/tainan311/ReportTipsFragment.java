@@ -30,7 +30,7 @@ public class ReportTipsFragment extends WizardFragment {
         return fragment;
     }
 
-    private ReportTipsFragment() {
+    public ReportTipsFragment() {
     }
 
     @Override

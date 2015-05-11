@@ -45,7 +45,7 @@ public class NewRequestIntentService extends IntentService {
     private Bundle data = null;
     private Handler mHandler;
 
-    private String GOOGLE_MAP_LINK = "https://www.google.com.tw/maps/@%s,%s,17z";
+    private String GOOGLE_MAP_LINK = "https://www.google.com.tw/maps/@%s,%s,18z";
     public NewRequestIntentService() {
         super("NewRequest");
     }
