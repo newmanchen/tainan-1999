@@ -13,7 +13,9 @@
 
 ps1. 如果想用 google map , 請自己設定 signinConfig 和 申請 API key
 
-ps2. 現階段有遇到 API 設計不良的問題，流量會比較大 [Issue #9](https://github.com/kiang/1999.tainan.gov.tw/issues/9)
+ps2. 現階段有遇到 API 設計不良的問題，流量會比較大 [Issue #9](https://github.com/kiang/1999.tainan.gov.tw/issues/9)，不過由於這是市府團隊的設計，也只能等待市府的改善
+
+ps3. 這是非官方的 app，只是熱心的小眾為了讓大家方便的回報問題而無償所做的
 
 ###想法###
 ---------------
@@ -48,13 +50,10 @@ ps2. 現階段有遇到 API 設計不良的問題，流量會比較大 [Issue #9
 
 ###貢獻者###
 ---------------
-[Newman Chen](https://github.com/newmanchen)
-
-[Sam Lee](https://github.com/misgod)
-
-[Vincent Nien]
-
-[Sam Chiu](https://github.com/iamsamchiu)
++ [Newman Chen](https://github.com/newmanchen)
++ [Sam Lee](https://github.com/misgod)
++ Vincent Nien
++ [Sam Chiu](https://github.com/iamsamchiu)
 
 
 ###授權###
