@@ -7,6 +7,7 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Root
@@ -17,7 +18,8 @@ public class Record implements Parcelable{
     @Element(required=false)
     private String status; //案件狀態
     @Element private String keyword; //案件描述
-    @Element private String area; //行政區
+    @Element(required=false)
+    private String area; //行政區
     @Element(required=false)
     private String service_name; //案件類型
     @Element private String agency; //業管單位
@@ -74,7 +76,7 @@ public class Record implements Parcelable{
     }
 
     public List<Picture> getPictures() {
-        return pictures;
+        return pictures !=null ? pictures :new ArrayList<Picture>();
     }
 
     public String getRequested_datetime() {

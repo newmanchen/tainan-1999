@@ -4,6 +4,7 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,13 +38,16 @@ import java.util.List;
 
 @Root(name = "root")
 public class QueryResponse {
-    @Element private int returncode; //; //0表示成功，其它表示不成功
+    @Element
+    private int returncode; //; //0表示成功，其它表示不成功
     @Element(required=false)
     private String description; //錯誤說明【操作失敗才會顯示】
     @Element(required=false)
     private String stacktrace; //錯誤Log【操作失敗才會顯示】
-    @Element private int count; //結果筆數
-    @ElementList private List<Record> records;
+    @Element
+    private int count; //結果筆數
+    @ElementList(required=false)
+    private List<Record> records;
 
     public int getCount() {
         return count;
@@ -54,7 +58,7 @@ public class QueryResponse {
     }
 
     public List<Record> getRecords() {
-        return records;
+        return (records != null) ? records : new ArrayList<Record>();
     }
 
     public int getReturncode() {
