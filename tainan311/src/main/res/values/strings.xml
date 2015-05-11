@@ -88,4 +88,5 @@
     <string name="text_confirm">確認送出</string>
     <string name="text_button_confirm">確認</string>
     <string name="text_confirm_message">點下確認按鈕會馬上送出您所填的資料到台南市民熱線網頁，包含您的姓名、電話、現在所在位置和E-mail</string>
+    <string name="text_no_my_activity">沒有任何回報案件</string>
 </resources>

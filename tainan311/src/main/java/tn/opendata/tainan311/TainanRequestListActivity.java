@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,8 +31,10 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import java.io.File;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -43,7 +44,6 @@ import tn.opendata.tainan311.tainan1999.TainanReport1999;
 import tn.opendata.tainan311.tainan1999.rpc.QueryRequest;
 import tn.opendata.tainan311.tainan1999.util.TainanConstant;
 import tn.opendata.tainan311.tainan1999.vo.QueryResponse;
-import tn.opendata.tainan311.utils.EasyUtil;
 import tn.opendata.tainan311.utils.LogUtils;
 
 /**
@@ -106,7 +106,6 @@ public class TainanRequestListActivity extends ListActivity {
             cal.set(Calendar.HOUR, 0);
             cal.set(Calendar.MINUTE, 0);
             cal.set(Calendar.SECOND, 1);
-            cal.add(Calendar.DAY_OF_YEAR, -1);
         } else {
             cal.add(Calendar.DAY_OF_YEAR, -1);
         }
@@ -279,10 +278,9 @@ public class TainanRequestListActivity extends ListActivity {
                 startActivity(new Intent(TainanRequestListActivity.this, MainMapActivity.class));
                 break;
 
-//            case R.id.menu_my_activity:
-//                // startActivity(new Intent(this, MyActivity.class));
-//                EasyUtil.NOT_IMPLELENT(this);
-//                break;
+            case R.id.menu_my_activity:
+                startActivity(new Intent(this, MyActivity.class));
+                break;
 
             case R.id.menu_license:
                 startActivity(new Intent(this, GoogleSoftwareLicenseInfo.class));
@@ -305,8 +303,16 @@ public class TainanRequestListActivity extends ListActivity {
             int lastInScreen = firstVisibleItem + visibleItemCount;
             //is the bottom item visible & not loading more already ? Load more !
             if((lastInScreen == totalItemCount) && !(mLoadingMore)){
-                //TODO send a another request
-                loadQueryRequest(false);
+                QueryResponse r = mQueryRequestArrayAdapter.getItem(mQueryRequestArrayAdapter.getCount()-1);
+                String time = r.getRequested_datetime();
+                try {
+                    Date d = mSimpleDateFormat.parse(time);
+                    cal.setTimeInMillis(d.getTime());
+                    LogUtils.d(TAG, "time is ", time, "  cal is ", cal.toString());
+                    loadQueryRequest(false);
+                } catch (ParseException e) {
+                    LogUtils.w(TAG, e.getMessage(), e);
+                }
             }
         }
     };

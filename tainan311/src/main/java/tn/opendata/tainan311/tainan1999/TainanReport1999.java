@@ -12,10 +12,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.HTTP;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -23,7 +20,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
@@ -165,22 +161,21 @@ public class TainanReport1999 {
         path = path + "Log.xml";
 
         FileOutputStream stream = null;
+        BufferedInputStream br = null;
         try {
             stream = new FileOutputStream(path);
-            BufferedInputStream br = new BufferedInputStream(is);
+            br = new BufferedInputStream(is);
 
-            try {
-                byte[] sByte = new byte[8192];
-                int c;
-                while ((c = br.read(sByte)) > 0) {
-                    stream.write(sByte, 0, c);
-                }
-            } finally {
-                EasyUtil.close(stream);
-                EasyUtil.close(br);
+            byte[] sByte = new byte[8192];
+            int c;
+            while ((c = br.read(sByte)) > 0) {
+                stream.write(sByte, 0, c);
             }
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            EasyUtil.close(stream);
+            EasyUtil.close(br);
         }
     }
 }

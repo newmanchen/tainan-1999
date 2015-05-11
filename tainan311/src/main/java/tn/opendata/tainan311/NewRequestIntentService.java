@@ -1,7 +1,9 @@
 package tn.opendata.tainan311;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -15,13 +17,17 @@ import org.apache.http.cookie.Cookie;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import tn.opendata.tainan311.tainan1999.TainanReport1999;
 import tn.opendata.tainan311.tainan1999.rpc.AddRequest;
 import tn.opendata.tainan311.tainan1999.vo.AddResponse;
 import tn.opendata.tainan311.utils.Base64Utils;
+import tn.opendata.tainan311.utils.Constant;
 import tn.opendata.tainan311.utils.LogUtils;
+import tn.opendata.tainan311.utils.PreferenceUtils;
 
 /**
  * Created by vincent on 2014/6/12.
@@ -117,6 +123,12 @@ public class NewRequestIntentService extends IntentService {
                         LogUtils.d(TAG, "add response :: service_request_id = ", result.getService_request_id());
 
                         //TODO save service_request_id to preference for MyReport
+                        HashSet<String> requestIds = new HashSet<String>(PreferenceUtils.getMyRequestIds(NewRequestIntentService.this));
+                        if (requestIds == null) {
+                            requestIds = new HashSet<String>();
+                        }
+                        requestIds.add(result.getService_request_id());
+                        PreferenceUtils.setMyRequestIds(NewRequestIntentService.this, requestIds);
                     }
                 }
 

@@ -1,8 +1,6 @@
 package tn.opendata.tainan311.tainan1999.rpc;
 
 import android.content.Context;
-import android.os.Environment;
-import android.util.Log;
 import android.util.Xml;
 
 import com.google.common.collect.Lists;
@@ -58,7 +56,6 @@ public class QueryRequest extends BaseRequest {
 
     private static List readResponse(Context context, XmlPullParser parser) throws XmlPullParserException, IOException {
         List responses = Lists.newArrayList();
-
         parser.require(XmlPullParser.START_TAG, ns, TAG_ROOT);
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
@@ -79,17 +76,42 @@ public class QueryRequest extends BaseRequest {
                 String stackTrace = readData(parser, stacktrace);
                 LogUtils.d(TAG, "stackTrace : ", stackTrace);
             } else if (name.equals(records)) {
-            } else if (name.equals(record)) {
-                responses.add(readRecord(parser, context));
+                responses = readRecords(parser, context);
             } else {
                 skip(parser);
             }
         }
+        LogUtils.d(TAG, "responses size=", responses.size());
         return responses;
     }
 
     /**
      * read records in "records" tag
+     * @param parser
+     * @param context
+     * @return
+     * @throws XmlPullParserException
+     * @throws IOException
+     */
+    private static List<QueryResponse> readRecords(XmlPullParser parser, Context context) throws XmlPullParserException, IOException {
+        List<QueryResponse> qrrList = Lists.newArrayList();
+        parser.require(XmlPullParser.START_TAG, ns, records);
+        while (parser.next() != XmlPullParser.END_TAG) {
+            if (parser.getEventType() != XmlPullParser.START_TAG) {
+                continue;
+            }
+            String name = parser.getName();
+            if (name.equals(record)) {
+                qrrList.add(readRecord(parser, context));
+            } else {
+                skip(parser);
+            }
+        }
+        return qrrList;
+    }
+
+    /**
+     * read records in "record" tag
      * @param parser
      * @return return a record as a QueryResponse
      * @throws XmlPullParserException
@@ -97,7 +119,6 @@ public class QueryRequest extends BaseRequest {
      */
     private static QueryResponse readRecord(XmlPullParser parser, Context context) throws XmlPullParserException, IOException {
         QueryResponse qrr = new QueryResponse();
-        List<QueryResponse.Picture> pics = Lists.newArrayList();
         parser.require(XmlPullParser.START_TAG, ns, record);
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
@@ -135,15 +156,30 @@ public class QueryRequest extends BaseRequest {
             } else if (name.equals(expected_datetime)) {
                 qrr.setExpected_datetime(readData(parser, expected_datetime));
             } else if (name.equals(pictures)) {
-            } else if (name.equals(picture)) {
-                pics.add(readPicture(parser, qrr.getService_request_id(), context));
+                qrr.setPictures(readPictures(parser, qrr.getService_request_id(), context));
             } else {
-                LogUtils.d(TAG, "skip this tag : ", name);
+                LogUtils.d(TAG, "readRecord::skip this tag : ", name);
                 skip(parser);
             }
         }
-        qrr.setPictures(pics);
         return qrr;
+    }
+
+    private static List<QueryResponse.Picture> readPictures(XmlPullParser parser, String requestId, Context context) throws IOException, XmlPullParserException {
+        List<QueryResponse.Picture> pics = Lists.newArrayList();
+        parser.require(XmlPullParser.START_TAG, ns, pictures);
+        while (parser.next() != XmlPullParser.END_TAG) {
+            if (parser.getEventType() != XmlPullParser.START_TAG) {
+                continue;
+            }
+            String name = parser.getName();
+            if (name.equals(picture)) {
+                pics.add(readPicture(parser, requestId, context));
+            } else {
+                skip(parser);
+            }
+        }
+        return pics;
     }
 
     private static QueryResponse.Picture readPicture(XmlPullParser parser, String requestId, Context context) throws IOException, XmlPullParserException {
@@ -168,6 +204,7 @@ public class QueryRequest extends BaseRequest {
                 Base64Utils.decodeBase64(readData(parser, file), dataPath);
                 //TODO FIXME there are most 3 pics from server
             } else {
+                LogUtils.d(TAG, "readPicture::skip this tag : ", name);
                 skip(parser);
             }
         }

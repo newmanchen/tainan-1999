@@ -9,7 +9,6 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -25,6 +24,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import tn.opendata.tainan311.utils.FixedSpeedScroller;
 import tn.opendata.tainan311.utils.LogUtils;
+import tn.opendata.tainan311.utils.PreferenceUtils;
 
 public class ReportActivity extends Activity implements WizardFragment.FlowController {
     @InjectView(R.id.ripple_previous) MaterialRippleLayout ripplePrevious;
@@ -52,7 +52,7 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
         // Set up the ViewPager with the sections adapter.
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        if (ReportTipsFragment.getIgnorePref(this)){
+        if (PreferenceUtils.getIgnorePref(this)){
             //skip tips fragment.
             mViewPager.setCurrentItem(1);
         }
@@ -103,7 +103,7 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
     @Override
     public void onBackPressed() {
         boolean first = mViewPager.getCurrentItem() == 0;
-        boolean ifIgnoreTips = (ReportTipsFragment.getIgnorePref(this) == true && mViewPager.getCurrentItem() == 1);
+        boolean ifIgnoreTips = (PreferenceUtils.getIgnorePref(this) == true && mViewPager.getCurrentItem() == 1);
 
         if(first || ifIgnoreTips){
           super.onBackPressed();
