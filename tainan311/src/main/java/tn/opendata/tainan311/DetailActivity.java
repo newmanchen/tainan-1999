@@ -2,8 +2,6 @@ package tn.opendata.tainan311;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -12,48 +10,53 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-
-import java.io.File;
-
-import butterknife.ButterKnife;
-import butterknife.InjectView;
+import com.squareup.picasso.Picasso;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import tn.opendata.tainan311.tainan1999.api.Record;
 import tn.opendata.tainan311.tainan1999.util.TainanConstant;
 import tn.opendata.tainan311.utils.LocationUtils;
 import tn.opendata.tainan311.utils.LogUtils;
 
-public class DetailActivity extends Activity {
-    @InjectView(R.id.image) ImageView imageView;
-    @InjectView(R.id.service_request_id) TextView service_request_id;
-    @InjectView(R.id.area) TextView area;
-    @InjectView(R.id.service_name) TextView service_name;
-    @InjectView(R.id.subproject) TextView subproject;
-    @InjectView(R.id.description) TextView description;
-    @InjectView(R.id.request_date) TextView requestDate;
-    @InjectView(R.id.ll_update_datetime) LinearLayout ll_update;
-    @InjectView(R.id.updated_datetime) TextView updateDate;
-    @InjectView(R.id.ll_expected_datetime) LinearLayout ll_expected;
-    @InjectView(R.id.expected_datetime) TextView expectedData;
-    @InjectView(R.id.agency) TextView agency;
+import java.io.File;
 
-    private static final String TAG = DetailActivity.class.getSimpleName();
+public class DetailActivity extends Activity {
     public static final String EXTRA_KEY_REQUEST = "extra_key_request";
+    private static final String TAG = DetailActivity.class.getSimpleName();
+    @InjectView(R.id.image)
+    ImageView imageView;
+    @InjectView(R.id.service_request_id)
+    TextView service_request_id;
+    @InjectView(R.id.area)
+    TextView area;
+    @InjectView(R.id.service_name)
+    TextView service_name;
+    @InjectView(R.id.subproject)
+    TextView subproject;
+    @InjectView(R.id.description)
+    TextView description;
+    @InjectView(R.id.request_date)
+    TextView requestDate;
+    @InjectView(R.id.ll_update_datetime)
+    LinearLayout ll_update;
+    @InjectView(R.id.updated_datetime)
+    TextView updateDate;
+    @InjectView(R.id.ll_expected_datetime)
+    LinearLayout ll_expected;
+    @InjectView(R.id.expected_datetime)
+    TextView expectedData;
+    @InjectView(R.id.agency)
+    TextView agency;
     private Record mRequest;
 
-    protected ImageLoader mImageLoader = ImageLoader.getInstance();
-    private DisplayImageOptions mOptions;
-    private String mDataPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,21 +68,11 @@ public class DetailActivity extends Activity {
         if (mRequest == null) {
             return;
         } else {
-            mDataPath = getFilesDir().toString()+"/pic/";
-            initImageLoader();
             updateActionBar();
             initViews();
         }
     }
 
-    private void initImageLoader() {
-        mImageLoader.init(ImageLoaderConfiguration.createDefault(this));
-        mOptions = new DisplayImageOptions.Builder()
-                .cacheInMemory(true)
-                .cacheOnDisk(true)
-                .bitmapConfig(Bitmap.Config.RGB_565)
-                .build();
-    }
 
     private void updateActionBar() {
         ActionBar ab = getActionBar();
@@ -88,31 +81,26 @@ public class DetailActivity extends Activity {
     }
 
     private void initViews() {
-        // image
-        File file = new File(mDataPath+mRequest.getService_request_id()+".jpg");
-        if (file.exists()) {
-            mImageLoader.loadImage(Uri.fromFile(file).toString(), mOptions, new ImageLoadingListener() {
-                @Override
-                public void onLoadingStarted(String imageUri, View view) {
-                }
+        if (mRequest.getPictures().isEmpty() == false) {
+            imageView.setVisibility(View.VISIBLE);
+            Observable.from(mRequest.getPictures())
+                      .observeOn(Schedulers.io())
+                      .filter(pic -> pic.getFilePath() != null)
+                      .doOnNext(pic -> pic.doPrepareImage(this))
+                      .first() //We only need 1 pic
+                      .observeOn(AndroidSchedulers.mainThread())
+                      .subscribe(pic -> {
+                                Picasso.with(this)
+                                       .load(new File(pic.getFilePath()))
+                                       .fit()
+                                       .centerCrop()
+                                       .into(imageView);
+                            }, err -> LogUtils.e(TAG, err.getMessage())
 
-                @Override
-                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                }
-
-                @Override
-                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                    imageView.setVisibility(View.VISIBLE);
-                    imageView.setImageBitmap(loadedImage);
-                }
-
-                @Override
-                public void onLoadingCancelled(String imageUri, View view) {
-                }
-            });
-        } else {
-            imageView.setVisibility(View.GONE);
+                    );
         }
+
+
 //        if (!TextUtils.isEmpty(mRequest.getMedia_url())) {
 //            final ImageView imageView = EasyUtil.findView(this, R.id.image);
 //            mImageLoader.loadImage(mRequest.getMedia_url(), mOptions
@@ -158,7 +146,7 @@ public class DetailActivity extends Activity {
         if (mRequest.getLat() == 0 || mRequest.getLng() == 0) {
             issueLocation = LocationUtils.getLocationFromAddress(this, mRequest.getAddress_string());
         } else {
-            issueLocation  = new LatLng(mRequest.getLat() , mRequest.getLng() );
+            issueLocation = new LatLng(mRequest.getLat(), mRequest.getLng());
         }
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(issueLocation, 17));
         map.addMarker(new MarkerOptions().title(mRequest.getSubproject()).position(issueLocation));

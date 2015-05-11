@@ -1,9 +1,15 @@
 package tn.opendata.tainan311.tainan1999.api;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
+import tn.opendata.tainan311.utils.Base64Utils;
+import tn.opendata.tainan311.utils.LogUtils;
+
+import java.io.File;
 
 @Root(name="Picture")
 public class Picture implements Parcelable{
@@ -13,10 +19,15 @@ public class Picture implements Parcelable{
     @Element private String fileName; //檔案名稱
     @Element private String file;//檔案資料 (byte格式。)
 
+    private String filePath;
 
     public Picture(){}
     public String getFileName() {
         return fileName;
+    }
+
+    public String getFilePath(){
+        return filePath;
     }
 
     public String getDescription() {
@@ -27,6 +38,20 @@ public class Picture implements Parcelable{
         return file;
     }
 
+    public void doPrepareImage(Context context){
+        if(TextUtils.isEmpty(file)){
+            return;
+        }
+        String dataPath = context.getFilesDir().toString() + "/pic/";
+        File folder = new File(dataPath);
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+        dataPath += System.currentTimeMillis() + ".jpg";
+        Base64Utils.decodeBase64(file, dataPath);
+        filePath = dataPath;
+        file = null; //reduce memory usage
+     }
 
     public static final Parcelable.Creator<Picture> CREATOR = new Parcelable.Creator<Picture>() {
         public Picture createFromParcel(Parcel in) {
@@ -40,6 +65,7 @@ public class Picture implements Parcelable{
     private Picture(Parcel in) {
         description = in.readString();
         fileName = in.readString();
+        filePath = in.readString();
     }
 
     @Override
@@ -51,5 +77,7 @@ public class Picture implements Parcelable{
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(description);
         parcel.writeString(fileName);
+        parcel.writeString(filePath);
     }
+
 }
