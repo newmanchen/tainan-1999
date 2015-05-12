@@ -21,6 +21,7 @@ import com.squareup.picasso.Picasso;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import tn.opendata.tainan311.tainan1999.api.Picture;
 import tn.opendata.tainan311.tainan1999.api.Record;
 import tn.opendata.tainan311.tainan1999.util.TainanConstant;
 import tn.opendata.tainan311.utils.LocationUtils;
@@ -28,11 +29,17 @@ import tn.opendata.tainan311.utils.LogUtils;
 
 import java.io.File;
 
+import static tn.opendata.tainan311.utils.EasyUtil.isNotEmpty;
+
 public class DetailActivity extends Activity {
     public static final String EXTRA_KEY_REQUEST = "extra_key_request";
     private static final String TAG = DetailActivity.class.getSimpleName();
-    @InjectView(R.id.image)
-    ImageView imageView;
+    @InjectView(R.id.image1)
+    ImageView imageView1;
+    @InjectView(R.id.image2)
+    ImageView imageView2;
+    @InjectView(R.id.image3)
+    ImageView imageView3;
     @InjectView(R.id.service_request_id)
     TextView service_request_id;
     @InjectView(R.id.area)
@@ -81,24 +88,23 @@ public class DetailActivity extends Activity {
     }
 
     private void initViews() {
-        if (mRequest.getPictures().isEmpty() == false) {
-            imageView.setVisibility(View.VISIBLE);
-            Observable.from(mRequest.getPictures())
-                      .observeOn(Schedulers.io())
-                      .filter(pic -> pic.getFilePath() != null)
-                      .doOnNext(pic -> pic.doPrepareImage(this))
-                      .first() //We only need 1 pic
-                      .observeOn(AndroidSchedulers.mainThread())
-                      .subscribe(pic -> {
-                                Picasso.with(this)
-                                       .load(new File(pic.getFilePath()))
-                                       .fit()
-                                       .centerCrop()
-                                       .into(imageView);
-                            }, err -> LogUtils.e(TAG, err.getMessage())
+        ImageView[] images = new ImageView[]{imageView1,imageView2,imageView3};
+        int upbound = Math.min(mRequest.getPictures().size(),images.length);
+        for(int i=0;i< upbound;i++){
 
-                    );
+            Picture pic = mRequest.getPictures().get(i);
+
+            if(isNotEmpty(pic.getFilePath())){
+                Picasso.with(this)
+                       .load(new File(pic.getFilePath()))
+                       .fit()
+                       .centerCrop()
+                       .into(images[i]);
+                images[i].setVisibility(View.VISIBLE);
+            }
+
         }
+
 
 
 //        if (!TextUtils.isEmpty(mRequest.getMedia_url())) {

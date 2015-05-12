@@ -40,6 +40,10 @@ public class EasyUtil {
         return TextUtils.isEmpty(text) ? defaultText : text;
     }
 
+    public static boolean isNotEmpty(String str){
+        return !TextUtils.isEmpty(str);
+    }
+
     public static void NOT_IMPLELENT(Context c){
         Toast.makeText(c,"需要有人實作...",Toast.LENGTH_SHORT).show();
     }
