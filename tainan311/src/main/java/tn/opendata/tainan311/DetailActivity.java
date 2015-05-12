@@ -73,7 +73,7 @@ public class DetailActivity extends Activity {
 
         mRequest = getIntent().getParcelableExtra(EXTRA_KEY_REQUEST);
         if (mRequest == null) {
-            return;
+            throw new IllegalStateException("Request should not be null!!!");
         } else {
             updateActionBar();
             initViews();
@@ -104,42 +104,19 @@ public class DetailActivity extends Activity {
             }
 
         }
-//        if (!TextUtils.isEmpty(mRequest.getMedia_url())) {
-//            final ImageView imageView = EasyUtil.findView(this, R.id.image);
-//            mImageLoader.loadImage(mRequest.getMedia_url(), mOptions
-//                    , new ImageLoadingListener() {
-//                @Override
-//                public void onLoadingStarted(String imageUri, View view) {
-//                }
-//
-//                @Override
-//                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-//                }
-//
-//                @Override
-//                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-//                    imageView.setVisibility(View.VISIBLE);
-//                    imageView.setImageBitmap(loadedImage);
-//                }
-//
-//                @Override
-//                public void onLoadingCancelled(String imageUri, View view) {
-//                }
-//            });
-//        }
+
         area.setText(mRequest.getArea());
         service_request_id.setText(mRequest.getService_request_id());
         service_name.setText(mRequest.getService_name());
         subproject.setText(mRequest.getSubproject());
         description.setText(mRequest.getDescription());
         requestDate.setText(mRequest.getRequested_datetime());
-//        LogUtils.d(TAG, "mRequest.getUpdated_datetime() is ", mRequest.getUpdated_datetime());
-//        LogUtils.d(TAG, "mRequest.getExpected_datetime() is ", mRequest.getExpected_datetime());
-        if (!TextUtils.isEmpty(mRequest.getUpdated_datetime()) && !mRequest.getUpdated_datetime().equalsIgnoreCase("null")) {
+
+        if (isNotEmpty(mRequest.getUpdated_datetime()) && !mRequest.getUpdated_datetime().equalsIgnoreCase("null")) {
             ll_update.setVisibility(View.VISIBLE);
             updateDate.setText(mRequest.getUpdated_datetime());
         }
-        if (!TextUtils.isEmpty(mRequest.getExpected_datetime()) && !mRequest.getExpected_datetime().equalsIgnoreCase("null")) {
+        if (isNotEmpty(mRequest.getExpected_datetime()) && !mRequest.getExpected_datetime().equalsIgnoreCase("null")) {
             ll_expected.setVisibility(View.VISIBLE);
             expectedData.setText(mRequest.getExpected_datetime());
         }

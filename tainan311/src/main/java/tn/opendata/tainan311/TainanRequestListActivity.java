@@ -6,7 +6,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.*;
 import android.widget.*;
 import butterknife.ButterKnife;
@@ -21,6 +20,7 @@ import retrofit.converter.SimpleXMLConverter;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import tn.opendata.tainan311.tainan1999.api.Picture;
 import tn.opendata.tainan311.tainan1999.api.QueryRequest;
 import tn.opendata.tainan311.tainan1999.api.Record;
 import tn.opendata.tainan311.tainan1999.api.Tainan1999Service;
@@ -28,13 +28,14 @@ import tn.opendata.tainan311.tainan1999.util.TainanConstant;
 import tn.opendata.tainan311.utils.LogUtils;
 
 import java.io.File;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import static tn.opendata.tainan311.tainan1999.api.QueryRequest.Builder;
+import static tn.opendata.tainan311.utils.EasyUtil.isNotEmpty;
 
 
 /**
@@ -83,7 +84,7 @@ public class TainanRequestListActivity extends ListActivity {
         restAdapter = new RestAdapter.Builder()
                 .setEndpoint("http://open1999.tainan.gov.tw:82")
                 .setConverter(new SimpleXMLConverter())
-                .setLogLevel(RestAdapter.LogLevel.FULL)
+                        //.setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
 
 
@@ -104,6 +105,12 @@ public class TainanRequestListActivity extends ListActivity {
         mLoadingMoreItem = (LinearLayout) ((LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE))
                 .inflate(R.layout.list_item_loading_more, null);
         getListView().addFooterView(mLoadingMoreItem);
+
+        mQueryRequestArrayAdapter = new QueryRequestArrayAdapter(TainanRequestListActivity.this, new ArrayList<Record>());
+        setListAdapter(mQueryRequestArrayAdapter);
+        getListView().setOnItemClickListener(mQueryRequestArrayAdapter);
+        getListView().setOnScrollListener(mOnScrollListener);
+
     }
 
     @OnClick(R.id.normal_plus)
@@ -142,30 +149,15 @@ public class TainanRequestListActivity extends ListActivity {
                    removeLoadingMoreListItem();
                    if (queryResponse.getReturncode() == 0) { //success
                        List<Record> records = queryResponse.getRecords();
-                       if (mQueryRequestArrayAdapter == null) {
-                           mQueryRequestArrayAdapter = new QueryRequestArrayAdapter(TainanRequestListActivity.this, records);
-                           setListAdapter(mQueryRequestArrayAdapter);
-                           getListView().setOnItemClickListener(mQueryRequestArrayAdapter);
-                           getListView().setOnScrollListener(mOnScrollListener);
-                       } else {
-                           mQueryRequestArrayAdapter.addAll(records);
-                           mQueryRequestArrayAdapter.updateRequestList(records);
-                       }
-
-
-                       //FIXME: remove it...
-                       if (records != null && records.size() > 0) {
-                           LogUtils.d(TAG, "data count : ", records.size());
-                       }
-
+                       mQueryRequestArrayAdapter.addAll(records);
                    } else {
                        LogUtils.e(TAG, "error");
                        //TODO: error handle??
                    }
 
-
                }, err -> {
                    LogUtils.e(TAG, err.getMessage());
+                   removeLoadingMoreListItem();
                });
     }
 
@@ -235,29 +227,30 @@ public class TainanRequestListActivity extends ListActivity {
             holder.cover.setVisibility(View.INVISIBLE);
             Observable.from(r.getPictures())
                       .observeOn(Schedulers.io())
-                      .filter(pic -> !TextUtils.isEmpty(pic.getFile()) || pic.getFilePath() != null)
+                      .filter(pic -> isNotEmpty(pic.getFile()) || isNotEmpty(pic.getFilePath()))
                       .doOnNext(pic -> pic.doPrepareImage(getContext()))
-                      .first() //We only need 1 pic
+                      .toList()
                       .observeOn(AndroidSchedulers.mainThread())
-                      .subscribe(pic -> {
-                                Picasso.with(getContext())
-                                       .load(new File(pic.getFilePath()))
-                                       .fit()
-                                       .centerCrop()
-                                       .into(holder.cover, new Callback() {
-                                           @Override
-                                           public void onSuccess() {
-                                               holder.cover.setVisibility(View.VISIBLE);
-                                           }
+                      .subscribe(pics -> {
+                                  Picture pic = pics.get(0);
+                                  Picasso.with(getContext())
+                                         .load(new File(pic.getFilePath()))
+                                         .fit()
+                                         .centerCrop()
+                                         .into(holder.cover, new Callback() {
+                                             @Override
+                                             public void onSuccess() {
+                                                 holder.cover.setVisibility(View.VISIBLE);
+                                             }
 
-                                           @Override
-                                           public void onError() {
-                                               LogUtils.w(TAG, "onError");
-                                           }
-                                       });
-                            }, err -> LogUtils.e(TAG, err.getMessage())
+                                             @Override
+                                             public void onError() {
+                                                 LogUtils.w(TAG, "onError");
+                                             }
+                                         });
+                              }, err -> LogUtils.e(TAG, err.getMessage())
 
-                    );
+                      );
 
             // service name
             holder.service_name.setText(r.getService_name());
@@ -292,12 +285,6 @@ public class TainanRequestListActivity extends ListActivity {
             i.putExtra(DetailActivity.EXTRA_KEY_REQUEST, getItem(position));
             startActivity(i);
         }
-
-        public void updateRequestList(List<Record> list) {
-            mRequestList.addAll(list);
-            mQueryRequestArrayAdapter.notifyDataSetChanged();
-        }
-
     }
 
 
