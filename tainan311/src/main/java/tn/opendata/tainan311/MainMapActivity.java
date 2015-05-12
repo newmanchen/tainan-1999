@@ -38,14 +38,14 @@ import tn.opendata.tainan311.utils.MainThreadExecutor;
 import static tn.opendata.tainan311.utils.EasyUtil.findView;
 
 
-public class MainMapActivity extends FragmentActivity implements ListView.OnItemClickListener,DrawerLayout.DrawerListener, GoogleMap.OnInfoWindowClickListener {
+public class MainMapActivity extends FragmentActivity implements ListView.OnItemClickListener, DrawerLayout.DrawerListener, GoogleMap.OnInfoWindowClickListener {
     @InjectView(R.id.drawer_icon) ImageView drawerButton;
     @InjectView(R.id.progress) ProgressBar progress;
     @InjectView(R.id.drawer_layout) DrawerLayout drawerLayout;
     @InjectView(R.id.navigation_drawer) View drawerView;
     @InjectView(R.id.navigation_list) ListView mDrawerList;
     private GoogleMap map;
-    private Map<Marker,Request> requestMap = Maps.newConcurrentMap();
+    private Map<Marker, Request> requestMap = Maps.newConcurrentMap();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,12 +75,12 @@ public class MainMapActivity extends FragmentActivity implements ListView.OnItem
     }
 
     //from xml
-    public void onDrawerClick(View view){
+    public void onDrawerClick(View view) {
         drawerLayout.openDrawer(Gravity.LEFT);
     }
 
     //from xml
-    public void onReportClick(View view){
+    public void onReportClick(View view) {
         startActivity(new Intent(this, ReportActivity.class));
     }
 
@@ -96,7 +96,7 @@ public class MainMapActivity extends FragmentActivity implements ListView.OnItem
         requestMap.clear();
     }
 
-    private void showProblems(){
+    private void showProblems() {
         progress.setVisibility(View.VISIBLE);
         //TODO: limit to 90 days
         //TODO use tainan199 request instead the GeoReportV2
@@ -105,18 +105,20 @@ public class MainMapActivity extends FragmentActivity implements ListView.OnItem
         future.addListener(new Runnable() {
             @Override
             public void run() {
-                Map<Marker,Request> localMap = Maps.newConcurrentMap();
+                Map<Marker, Request> localMap = Maps.newConcurrentMap();
                 try {
                     for (Request r : future.get()) {
                         //only display point with Location...
                         if (!TextUtils.isEmpty(r.getLat()) && !TextUtils.isEmpty(r.getLon())) {
                             MarkerOptions markerOpt = new MarkerOptions();
-                            markerOpt.position(new LatLng(Double.parseDouble(r.getLat()), Double.parseDouble(r.getLon())));
+                            markerOpt.position(new LatLng(Double.parseDouble(r.getLat()), Double
+                                    .parseDouble(r.getLon())));
                             markerOpt.title(r.getService_code());
                             markerOpt.snippet(r.getDescription());
                             markerOpt.draggable(false);
 
-                            float color = "closed".equals(r.getStatus()) ? BitmapDescriptorFactory.HUE_GREEN : BitmapDescriptorFactory.HUE_RED;
+                            float color = "closed".equals(r
+                                    .getStatus()) ? BitmapDescriptorFactory.HUE_GREEN : BitmapDescriptorFactory.HUE_RED;
 
                             markerOpt.icon(BitmapDescriptorFactory.defaultMarker(color));
                             Marker m = map.addMarker(markerOpt);
@@ -126,14 +128,14 @@ public class MainMapActivity extends FragmentActivity implements ListView.OnItem
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                }finally{
+                } finally {
                     progress.setVisibility(View.GONE);
                 }
             }
         }, MainThreadExecutor.build());
     }
 
-    private void animateToMyLocation(){
+    private void animateToMyLocation() {
         map.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
             @Override
             public void onMyLocationChange(Location location) {
@@ -153,12 +155,12 @@ public class MainMapActivity extends FragmentActivity implements ListView.OnItem
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        switch(position){   //R.arrays.drawer_text
+        switch (position) {   //R.arrays.drawer_text
             case 0:
                 startActivity(new Intent(this, TainanRequestListActivity.class));
                 break;
             case 1:
-                startActivity(new Intent(this,ReportActivity.class));
+                startActivity(new Intent(this, ReportActivity.class));
                 break;
             case 2:
                 startActivity(new Intent(this, SettingActivity.class));
@@ -179,7 +181,7 @@ public class MainMapActivity extends FragmentActivity implements ListView.OnItem
 
     @Override
     public void onDrawerOpened(View drawerView) {
-          drawerButton.setVisibility(View.GONE);
+        drawerButton.setVisibility(View.GONE);
     }
 
     @Override

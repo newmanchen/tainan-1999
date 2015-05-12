@@ -277,16 +277,13 @@ public class ReportDetailFragment extends WizardFragment {
         final String email = this.textview_email.getText().toString();
         acc.putString(NewRequestIntentService.EXTRA_EMAIL, email);
 
-        mNonUiHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                SharedPreferences prefs = context.getSharedPreferences(Constant.PREF_NAME, 0);
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putString(SettingActivity.PREFS_KEY_DEFAULT_NAME, name);
-                editor.putString(SettingActivity.PREFS_KEY_DEFAULT_PHONE, phone);
-                editor.putString(SettingActivity.PREFS_KEY_DEFAULT_EMAIL, email);
-                editor.apply();
-            }
+        mNonUiHandler.post(() -> {
+            SharedPreferences prefs = context.getSharedPreferences(Constant.PREF_NAME, 0);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString(SettingActivity.PREFS_KEY_DEFAULT_NAME, name);
+            editor.putString(SettingActivity.PREFS_KEY_DEFAULT_PHONE, phone);
+            editor.putString(SettingActivity.PREFS_KEY_DEFAULT_EMAIL, email);
+            editor.apply();
         });
         return acc;
     }

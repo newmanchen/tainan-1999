@@ -1,6 +1,5 @@
 package tn.opendata.tainan311.tainan1999;
 
-import android.content.Context;
 import android.os.Environment;
 
 import com.google.common.io.Closer;
@@ -20,14 +19,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 
 import tn.opendata.tainan311.tainan1999.rpc.AddRequest;
-import tn.opendata.tainan311.tainan1999.rpc.QueryRequest;
 import tn.opendata.tainan311.tainan1999.vo.AddResponse;
-import tn.opendata.tainan311.tainan1999.vo.QueryResponse;
 import tn.opendata.tainan311.utils.EasyUtil;
 import tn.opendata.tainan311.utils.LogUtils;
 
@@ -42,46 +38,12 @@ public class TainanReport1999 {
     private static final String ADD_REQUEST_URL = "http://open1999.tainan.gov.tw:82/ServiceRequestAdd.aspx";
     private static final String TESTING_POST_URL = "http://posttestserver.com/post.php?dir=newman";
 
-    private static final ListeningExecutorService executor = MoreExecutors.listeningDecorator(Executors.newCachedThreadPool());
+    private static final ListeningExecutorService executor = MoreExecutors
+            .listeningDecorator(Executors.newCachedThreadPool());
 
-    public static ListenableFuture<List<QueryResponse>> executeQuery(final Context context, final String entity) {
-        return executor.submit(new Callable<List<QueryResponse>> () {
-            @Override
-            public List<QueryResponse> call() throws Exception {
-                return queryRequestResponse(new URL(QUERY_REQUEST_URL), entity, context);
-            }
-        });
-    }
-
-    private static List<QueryResponse> queryRequestResponse(URL url, String entityXML, Context context) {
-        Closer closer = Closer.create();
-        try {
-            HttpClient client = new DefaultHttpClient();
-            HttpPost post = new HttpPost(url.toURI());
-            post.setEntity(new StringEntity(entityXML));
-            HttpResponse response = client.execute(post);
-            int status = response.getStatusLine().getStatusCode();
-            if (status != 200 && status != 201) {
-                //TODO enhancement : error handling
-                throw new RuntimeException("Failed : HTTP error code : " + status);
-            }
-//            saveToFile(response.getEntity().getContent());
-            return QueryRequest.onResponse(context, closer.register(response.getEntity().getContent()));
-        } catch (Throwable e) {
-            LogUtils.w(TAG, e.getMessage(), e);
-            try {
-                closer.rethrow(e);
-            } catch (IOException e1) {
-                LogUtils.w(TAG, e1.getMessage(), e1);
-            }
-            return null;
-        } finally {
-            close(closer);
-        }
-    }
 
     public static ListenableFuture<AddResponse> executeAdd(final String entity) {
-        return executor.submit(new Callable<AddResponse> () {
+        return executor.submit(new Callable<AddResponse>() {
             @Override
             public AddResponse call() throws Exception {
                 return addRequestResponse(new URL(ADD_REQUEST_URL), entity);
@@ -116,7 +78,7 @@ public class TainanReport1999 {
     }
 
     public static ListenableFuture<AddResponse> executeAddToTest(final String entity) {
-        return executor.submit(new Callable<AddResponse> () {
+        return executor.submit(new Callable<AddResponse>() {
             @Override
             public AddResponse call() throws Exception {
                 return addRequestResponseFromTest(new URL(TESTING_POST_URL), entity);

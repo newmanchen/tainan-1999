@@ -41,10 +41,10 @@ public abstract class WizardFragment extends Fragment{
 
     public abstract Bundle onNextClick(Bundle acc);
 
-    public static  interface FlowController{
-        public void setNextEnabled(boolean enabled);
+    public interface FlowController{
+        void setNextEnabled(boolean enabled);
 
-        public Bundle getData();
+        Bundle getData();
     }
 
     protected  static FlowController DummyController = new FlowController(){
