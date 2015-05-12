@@ -29,7 +29,7 @@ ps3. 這是非官方的 app，只是熱心的小眾為了讓大家方便的回�
 
 ###主要功能###
 ---------------
-+ 回報問題 ( 如路燈故障、動物救援、道路維修、髒亂及污染等共九大類35項 )
++ 回報問題 ( 如路燈故障、動物救援、道路維修、髒亂及污染等共[九大類35項](subproject.md) )
 + 我的回報案件
 + 查詢進度
 
@@ -52,7 +52,7 @@ ps3. 這是非官方的 app，只是熱心的小眾為了讓大家方便的回�
 ---------------
 + [Newman Chen](https://github.com/newmanchen)
 + [Sam Lee](https://github.com/misgod)
-+ Vincent Nien
++ [Vincent Nien](https://github.com/vincentnien)
 + [Sam Chiu](https://github.com/iamsamchiu)
 
 
