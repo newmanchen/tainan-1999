@@ -124,7 +124,12 @@ public class MyActivity extends ListActivity {
 
                 @Override
                 public void onFailure(Throwable t) {
-                    // TODO
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            showProgressOnActionBar(false);
+                        }
+                    });
                 }
             });
         } else {
