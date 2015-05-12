@@ -18,9 +18,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Picasso;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+
 import tn.opendata.tainan311.tainan1999.api.Picture;
 import tn.opendata.tainan311.tainan1999.api.Record;
 import tn.opendata.tainan311.tainan1999.util.TainanConstant;
@@ -30,6 +28,8 @@ import tn.opendata.tainan311.utils.LogUtils;
 import java.io.File;
 
 import static tn.opendata.tainan311.utils.EasyUtil.isNotEmpty;
+
+
 
 public class DetailActivity extends Activity {
     public static final String EXTRA_KEY_REQUEST = "extra_key_request";
@@ -104,9 +104,6 @@ public class DetailActivity extends Activity {
             }
 
         }
-
-
-
 //        if (!TextUtils.isEmpty(mRequest.getMedia_url())) {
 //            final ImageView imageView = EasyUtil.findView(this, R.id.image);
 //            mImageLoader.loadImage(mRequest.getMedia_url(), mOptions
