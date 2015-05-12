@@ -26,9 +26,9 @@ public class QueryRequest {
     private String service_request_id; // 案件編號, 多筆以逗號(,)分隔
     @Element(required=false)
     private String service_name;  // 案件類型, 多筆以逗號(,)分隔
-    @Element
+    @Element(required=false)
     private String start_date;   // 反映開始時間
-    @Element
+    @Element(required=false)
     private String end_date;  // 反映結束時間
     @Element(required=false)
     private String status;  // 案件狀態

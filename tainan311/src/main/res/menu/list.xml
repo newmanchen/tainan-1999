@@ -9,10 +9,10 @@
         android:visible="true"
         android:icon="@android:drawable/ic_menu_mapmode" />
 
-    <!--<item android:id="@+id/menu_my_activity"
+    <item android:id="@+id/menu_my_activity"
         android:title="@string/text_my_activity"
         android:orderInCategory="100"
-        android:visible="true" />-->
+        android:visible="true" />
 
     <item android:id="@+id/menu_setting"
         android:title="@string/text_setting"

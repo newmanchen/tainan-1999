@@ -25,8 +25,8 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        versionCode 4
+        versionName "1.1.1"
     }
     buildTypes {
         release {
@@ -37,13 +37,7 @@ android {
 
 
     signingConfigs {
-        debug {
-        }
-//        release {
-//            storeFile file('../../../.android/debug.keystore')
-//            storePassword "android"
-//            keyAlias "android"
-//        }
+        
     }
 
     compileOptions {

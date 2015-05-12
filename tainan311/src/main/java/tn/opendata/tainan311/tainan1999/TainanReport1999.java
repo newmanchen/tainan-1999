@@ -123,22 +123,21 @@ public class TainanReport1999 {
         path = path + "Log.xml";
 
         FileOutputStream stream = null;
+        BufferedInputStream br = null;
         try {
             stream = new FileOutputStream(path);
-            BufferedInputStream br = new BufferedInputStream(is);
+            br = new BufferedInputStream(is);
 
-            try {
-                byte[] sByte = new byte[8192];
-                int c;
-                while ((c = br.read(sByte)) > 0) {
-                    stream.write(sByte, 0, c);
-                }
-            } finally {
-                EasyUtil.close(stream);
-                EasyUtil.close(br);
+            byte[] sByte = new byte[8192];
+            int c;
+            while ((c = br.read(sByte)) > 0) {
+                stream.write(sByte, 0, c);
             }
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            EasyUtil.close(stream);
+            EasyUtil.close(br);
         }
     }
 }

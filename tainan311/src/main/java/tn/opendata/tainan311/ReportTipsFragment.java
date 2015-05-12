@@ -1,7 +1,5 @@
 package tn.opendata.tainan311;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +8,7 @@ import android.widget.CheckBox;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import tn.opendata.tainan311.utils.Constant;
+import tn.opendata.tainan311.utils.PreferenceUtils;
 
 /**
  * Created by sam on 2014/6/11.
@@ -42,7 +40,7 @@ public class ReportTipsFragment extends WizardFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
-        boolean isIgnore = ReportTipsFragment.getIgnorePref(getActivity());
+        boolean isIgnore = PreferenceUtils.getIgnorePref(getActivity());
         View rootView = inflater.inflate(R.layout.fragment_tips, container, false);
         ButterKnife.inject(this, rootView);
         mCheck_ignore_tips.setChecked(isIgnore);
@@ -58,17 +56,6 @@ public class ReportTipsFragment extends WizardFragment {
     public void onStop() {
         super.onStop();
         if(mCheck_ignore_tips !=null)
-            setIgnoreTipPref(getActivity(),mCheck_ignore_tips.isChecked());
-    }
-
-    public static boolean getIgnorePref(Context context){
-        SharedPreferences prefs = context.getSharedPreferences(Constant.PREF_NAME, 0);
-        return !prefs.getBoolean(Constant.KEY_SHOW_TIPS, true); // default show tip
-    }
-
-    private void setIgnoreTipPref(Context context,boolean ignore){
-        SharedPreferences.Editor prefs = context.getSharedPreferences(Constant.PREF_NAME, 0).edit();
-        prefs.putBoolean(Constant.KEY_SHOW_TIPS, !ignore);
-        prefs.commit();
+            PreferenceUtils.setIgnoreTipPref(getActivity(), mCheck_ignore_tips.isChecked());
     }
 }

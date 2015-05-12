@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.Collection;
 
 public class EasyUtil {
     public static  <T extends View> T findView(View v,int id){
@@ -42,6 +43,10 @@ public class EasyUtil {
 
     public static boolean isNotEmpty(String str){
         return !TextUtils.isEmpty(str);
+    }
+
+    public static boolean isNotEmpty(Collection<?> coll){
+        return coll != null && !coll.isEmpty();
     }
 
     public static void NOT_IMPLELENT(Context c){

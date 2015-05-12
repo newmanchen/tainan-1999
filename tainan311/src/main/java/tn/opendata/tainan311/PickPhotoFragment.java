@@ -22,6 +22,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import tn.opendata.tainan311.georeportv2.GeoReportV2;
+import tn.opendata.tainan311.tainan1999.util.TainanConstant;
 import tn.opendata.tainan311.utils.ImageUtils;
 
 import java.io.File;
@@ -129,7 +130,7 @@ public class PickPhotoFragment extends WizardFragment {
 
     @Override
     public Bundle onNextClick(Bundle acc) {
-        acc.putString("photo", mPhoto);
+        acc.putString(NewRequestIntentService.EXTRA_PHOTO, mPhoto);
         return acc;
     }
 }

@@ -43,7 +43,6 @@ public class Base64Utils {
         LogUtils.d(TAG, "decode, path is ", path);
         LogUtils.d(TAG, "decode, base64string is ", base64string, "  to  ", path);
 
-
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(path);

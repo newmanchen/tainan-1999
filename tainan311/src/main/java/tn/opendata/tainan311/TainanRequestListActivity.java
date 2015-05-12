@@ -28,12 +28,14 @@ import tn.opendata.tainan311.tainan1999.util.TainanConstant;
 import tn.opendata.tainan311.utils.LogUtils;
 
 import java.io.File;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import static tn.opendata.tainan311.tainan1999.api.QueryRequest.Builder;
+
 
 /**
  * Created by newman on 5/5/15.
@@ -192,10 +194,9 @@ public class TainanRequestListActivity extends ListActivity {
                 startActivity(new Intent(TainanRequestListActivity.this, MainMapActivity.class));
                 break;
 
-//            case R.id.menu_my_activity:
-//                // startActivity(new Intent(this, MyActivity.class));
-//                EasyUtil.NOT_IMPLELENT(this);
-//                break;
+            case R.id.menu_my_activity:
+                startActivity(new Intent(this, MyActivity.class));
+                break;
 
             case R.id.menu_license:
                 startActivity(new Intent(this, GoogleSoftwareLicenseInfo.class));
@@ -297,23 +298,27 @@ public class TainanRequestListActivity extends ListActivity {
             mQueryRequestArrayAdapter.notifyDataSetChanged();
         }
 
-        public class ViewHolder {
-            @InjectView(R.id.img)
-            ImageView cover;
-            @InjectView(R.id.subproject)
-            TextView subproject;
-            @InjectView(R.id.service_name)
-            TextView service_name;
-            @InjectView(R.id.datetime)
-            TextView datetime;
-            @InjectView(R.id.status)
-            TextView status;
-            @InjectView(R.id.area)
-            TextView area;
+    }
 
-            public ViewHolder(View view) {
-                ButterKnife.inject(this, view);
-            }
+
+    public class ViewHolder {
+        @InjectView(R.id.img)
+        ImageView cover;
+        @InjectView(R.id.subproject)
+        TextView subproject;
+        @InjectView(R.id.service_name)
+        TextView service_name;
+        @InjectView(R.id.datetime)
+        TextView datetime;
+        @InjectView(R.id.status)
+        TextView status;
+        @InjectView(R.id.area)
+        TextView area;
+
+
+        public ViewHolder(View view) {
+            ButterKnife.inject(this, view);
+
         }
     }
 }

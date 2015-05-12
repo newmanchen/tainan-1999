@@ -42,11 +42,8 @@
                 android:text="@string/text_service_request_id" />
 
             <TextView
-                android:id="@+id/service_request_id"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                style="@style/TextView_DetailSubContent"
+                android:id="@+id/service_request_id" />
 
             <TextView
                 style="@style/TextView_DetailSubTitle"
@@ -54,10 +51,7 @@
 
             <TextView
                 android:id="@+id/area"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                style="@style/TextView_DetailSubContent" />
 
             <TextView
                 style="@style/TextView_DetailSubTitle"
@@ -65,10 +59,7 @@
 
             <TextView
                 android:id="@+id/service_name"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                style="@style/TextView_DetailSubContent" />
 
             <TextView
                 style="@style/TextView_DetailSubTitle"
@@ -76,10 +67,7 @@
 
             <TextView
                 android:id="@+id/subproject"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                style="@style/TextView_DetailSubContent" />
 
             <TextView
                 style="@style/TextView_DetailSubTitle"
@@ -87,10 +75,7 @@
 
             <TextView
                 android:id="@+id/description"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                style="@style/TextView_DetailSubContent" />
 
             <TextView
                 style="@style/TextView_DetailSubTitle"
@@ -98,10 +83,7 @@
 
             <TextView
                 android:id="@+id/request_date"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                style="@style/TextView_DetailSubContent" />
 
             <LinearLayout
                 android:id="@+id/ll_update_datetime"
@@ -115,10 +97,7 @@
 
                 <TextView
                     android:id="@+id/updated_datetime"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    style="@style/TextView_DetailSubContent" />
             </LinearLayout>
 
             <LinearLayout
@@ -133,10 +112,7 @@
 
                 <TextView
                     android:id="@+id/expected_datetime"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    style="@style/TextView_DetailSubContent" />
 
             </LinearLayout>
 
@@ -146,10 +122,7 @@
 
             <TextView
                 android:id="@+id/agency"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                style="@style/TextView_DetailSubContent" />
 
             <TextView
                 style="@style/TextView_DetailSubTitle"
