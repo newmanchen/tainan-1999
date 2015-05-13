@@ -2,6 +2,7 @@ package tn.opendata.tainan311.tainan1999;
 
 import android.content.Context;
 import android.os.Environment;
+import android.text.TextUtils;
 
 import com.google.common.io.Closer;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -13,6 +14,8 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.HTTP;
+import org.w3c.dom.Text;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -20,6 +23,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
@@ -94,7 +98,8 @@ public class TainanReport1999 {
         try {
             HttpClient client = new DefaultHttpClient();
             HttpPost post = new HttpPost(url.toURI());
-            post.setEntity(new StringEntity(entityXML));
+            post.setHeader("Content-type", "application/xml");
+            post.setEntity(new StringEntity(entityXML, HTTP.UTF_8));
             HttpResponse response = client.execute(post);
             int status = response.getStatusLine().getStatusCode();
             if (status != 200 && status != 201) {
@@ -129,8 +134,10 @@ public class TainanReport1999 {
         try {
             HttpClient client = new DefaultHttpClient();
             HttpPost post = new HttpPost(url.toURI());
-            post.setEntity(new StringEntity(entityXML));
             post.setHeader("Content-type", "application/xml");
+            StringEntity entity = new StringEntity(entityXML, HTTP.UTF_8);
+            post.setEntity(entity);
+            saveToFile(entity.getContent(), "builder.xml");
             HttpResponse response = client.execute(post);
             int status = response.getStatusLine().getStatusCode();
             if (status != 200 && status != 201) {
@@ -154,11 +161,19 @@ public class TainanReport1999 {
     }
 
     private static void saveToFile(InputStream is) {
+        saveToFile(is, null);
+    }
+
+    private static void saveToFile(InputStream is, String fileName) {
         String path = Environment.getExternalStorageDirectory().getAbsolutePath();
         if (!path.endsWith(File.separator)) {
             path += File.separator;
         }
-        path = path + "Log.xml";
+        if (TextUtils.isEmpty(fileName)) {
+            path = path + "Log.xml";
+        } else {
+            path += fileName;
+        }
 
         FileOutputStream stream = null;
         BufferedInputStream br = null;

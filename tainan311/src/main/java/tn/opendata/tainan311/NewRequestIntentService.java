@@ -122,10 +122,10 @@ public class NewRequestIntentService extends IntentService {
                         LogUtils.d(TAG, "add response :: service_notice = ", result.getService_notice());
                         LogUtils.d(TAG, "add response :: service_request_id = ", result.getService_request_id());
 
-                        //TODO save service_request_id to preference for MyReport
-                        HashSet<String> requestIds = new HashSet<String>(PreferenceUtils.getMyRequestIds(NewRequestIntentService.this));
-                        if (requestIds == null) {
-                            requestIds = new HashSet<String>();
+                        Set<String> temp = PreferenceUtils.getMyRequestIds(NewRequestIntentService.this);
+                        HashSet<String> requestIds = new HashSet<String>();
+                        if (temp != null) {
+                            requestIds.addAll(temp);
                         }
                         requestIds.add(result.getService_request_id());
                         PreferenceUtils.setMyRequestIds(NewRequestIntentService.this, requestIds);

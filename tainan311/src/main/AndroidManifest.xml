@@ -55,11 +55,6 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="tn.opendata.tainan311.MyRequestActivity"
-            android:label="@string/title_activity_my_request"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
             android:name="tn.opendata.tainan311.ReportActivity"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar"
             android:label="@string/title_activity_report"

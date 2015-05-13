@@ -232,7 +232,6 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
     private static final String TAG_DIALOG_CONFIRM = "TAG_DIALOG_CONFIRM";
     private static final String EXTRA_BUNDLE = "extra_bundle";
     public static class ConfirmDialog extends DialogFragment {
-        Context context;
         Bundle sentData;
 
         public ConfirmDialog() {
@@ -254,6 +253,7 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
                         Intent intent = new Intent(context, NewRequestIntentService.class);
                         intent.putExtra(NewRequestIntentService.EXTRA_DATA, sentData);
                         act.startService(intent);
+                        act.finish();
                     }
                 }
             })
