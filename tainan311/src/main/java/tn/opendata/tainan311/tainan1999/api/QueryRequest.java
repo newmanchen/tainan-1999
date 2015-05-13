@@ -1,12 +1,7 @@
 package tn.opendata.tainan311.tainan1999.api;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-import com.google.common.collect.Lists;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
-
-import java.util.List;
 
 /**
  * 1.service_request_id、service_name、start_date、end_date及status擇一查詢。

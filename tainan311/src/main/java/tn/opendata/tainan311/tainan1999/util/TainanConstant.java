@@ -4,6 +4,7 @@ package tn.opendata.tainan311.tainan1999.util;
  * Created by newman on 5/6/15.
  */
 public class TainanConstant {
+    public static final String TAINAN1999_URL = "http://open1999.tainan.gov.tw:82";
     // city-id on tainan1999
     public static final String CITY_ID = "tainan.gov.tw";
     // service_name on tainan1999

@@ -6,15 +6,34 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.*;
-import android.widget.*;
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.OnClick;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
 import com.getbase.floatingactionbutton.AddFloatingActionButton;
 import com.google.common.collect.Lists;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+
+import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
 import retrofit.RestAdapter;
 import retrofit.converter.SimpleXMLConverter;
 import rx.Observable;
@@ -27,16 +46,8 @@ import tn.opendata.tainan311.tainan1999.api.Tainan1999Service;
 import tn.opendata.tainan311.tainan1999.util.TainanConstant;
 import tn.opendata.tainan311.utils.LogUtils;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
 import static tn.opendata.tainan311.tainan1999.api.QueryRequest.Builder;
 import static tn.opendata.tainan311.utils.EasyUtil.isNotEmpty;
-
 
 /**
  * Created by newman on 5/5/15.
@@ -49,12 +60,9 @@ public class TainanRequestListActivity extends ListActivity {
     private LinearLayout mLoadingMoreItem;
     // Object
     private QueryRequestArrayAdapter mQueryRequestArrayAdapter;
-
-
     private SimpleDateFormat mSimpleDateFormat;
     // Value
     private boolean mLoadingMore;
-
     // Constant
     private RestAdapter restAdapter;
     private Calendar cal = Calendar.getInstance();
@@ -67,9 +75,16 @@ public class TainanRequestListActivity extends ListActivity {
         public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
             int lastInScreen = firstVisibleItem + visibleItemCount;
             //is the bottom item visible & not loading more already ? Load more !
-            if ((lastInScreen == totalItemCount) && !(mLoadingMore)) {
-                //TODO send a another request
-                loadQueryRequest(false);
+            if((lastInScreen == totalItemCount) && !(mLoadingMore)){
+                Record r = mQueryRequestArrayAdapter.getItem(mQueryRequestArrayAdapter.getCount()-1);
+                String time = r.getRequested_datetime();
+                try {
+                    Date d = mSimpleDateFormat.parse(time);
+                    cal.setTimeInMillis(d.getTime());
+                    loadQueryRequest(false);
+                } catch (ParseException e) {
+                    LogUtils.w(TAG, e.getMessage(), e);
+                }
             }
         }
     };
@@ -80,13 +95,11 @@ public class TainanRequestListActivity extends ListActivity {
         ButterKnife.inject(this);
         mSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", getResources().getConfiguration().locale);
 
-
         restAdapter = new RestAdapter.Builder()
-                .setEndpoint("http://open1999.tainan.gov.tw:82")
+                .setEndpoint(TainanConstant.TAINAN1999_URL)
                 .setConverter(new SimpleXMLConverter())
                         //.setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
-
 
         mLoadingMore = false;
         initActionBar();
@@ -110,7 +123,6 @@ public class TainanRequestListActivity extends ListActivity {
         setListAdapter(mQueryRequestArrayAdapter);
         getListView().setOnItemClickListener(mQueryRequestArrayAdapter);
         getListView().setOnScrollListener(mOnScrollListener);
-
     }
 
     @OnClick(R.id.normal_plus)
@@ -287,7 +299,6 @@ public class TainanRequestListActivity extends ListActivity {
         }
     }
 
-
     public class ViewHolder {
         @InjectView(R.id.img)
         ImageView cover;
@@ -302,10 +313,8 @@ public class TainanRequestListActivity extends ListActivity {
         @InjectView(R.id.area)
         TextView area;
 
-
         public ViewHolder(View view) {
             ButterKnife.inject(this, view);
-
         }
     }
 }

@@ -7,7 +7,6 @@
     <string name="title_activity_new_request">NewRequestActivity</string>
     <string name="title_activity_request_list">RequestListActivity</string>
     <string name="title_activity_detail">DetailActivity</string>
-    <string name="title_activity_my_request">MyRequestActivity</string>
     <string name="title_activity_report">ReportActivity</string>
     <string name="next">下一步</string>
     <string name="previous">上一步</string>

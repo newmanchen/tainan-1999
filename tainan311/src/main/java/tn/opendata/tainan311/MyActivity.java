@@ -55,7 +55,6 @@ public class MyActivity extends ListActivity {
     private static final String TAG = MyActivity.class.getSimpleName();
     // Object
     private QueryRequestArrayAdapter mQueryRequestArrayAdapter;
-
     // Value
     private RestAdapter restAdapter;
 
@@ -63,10 +62,10 @@ public class MyActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        setRawRequestIdsForTest();
+        // setRawRequestIdsForTest(); // for testing
 
         restAdapter = new RestAdapter.Builder()
-                .setEndpoint("http://open1999.tainan.gov.tw:82")
+                .setEndpoint(TainanConstant.TAINAN1999_URL)
                 .setConverter(new SimpleXMLConverter())
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
@@ -75,9 +74,6 @@ public class MyActivity extends ListActivity {
         initActionBar();
         initEmptyView();
         initView();
-
-
-//        setRawRequestIdsForTest();
         loadQueryRequest();
     }
 
@@ -131,19 +127,15 @@ public class MyActivity extends ListActivity {
                                    mQueryRequestArrayAdapter.updateRequestList(records);
                                }
                            }
-
-
                        } else {
                            LogUtils.e(TAG, "error");
                            //TODO: error handle??
                        }
                        showProgressOnActionBar(false);
-
                    }, err -> {
                        showProgressOnActionBar(false);
                        LogUtils.e(TAG, err.getMessage());
                    });
-
         } else {
             LogUtils.d(TAG, "requestIds is null or empty");
         }
@@ -196,8 +188,6 @@ public class MyActivity extends ListActivity {
                             }, err -> LogUtils.e(TAG, err.getMessage())
 
                     );
-
-
             // service name
             holder.service_name.setText(r.getService_name());
             // subproject
@@ -234,10 +224,14 @@ public class MyActivity extends ListActivity {
             ImageView cover;
             @InjectView(R.id.subproject)
             TextView subproject;
-            @InjectView(R.id.service_name) TextView service_name;
-            @InjectView(R.id.datetime) TextView datetime;
-            @InjectView(R.id.status) TextView status;
-            @InjectView(R.id.area) TextView area;
+            @InjectView(R.id.service_name)
+            TextView service_name;
+            @InjectView(R.id.datetime)
+            TextView datetime;
+            @InjectView(R.id.status)
+            TextView status;
+            @InjectView(R.id.area)
+            TextView area;
         }
 
         @Override
