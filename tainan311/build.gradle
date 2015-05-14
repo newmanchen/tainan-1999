@@ -3,18 +3,19 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.1.0'
+        classpath 'me.tatarka:gradle-retrolambda:3.1.0'
     }
 }
-apply plugin: 'android'
+apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
 
 repositories {
         mavenCentral()
 }
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion "19.1.0"
+    compileSdkVersion 22
+    buildToolsVersion "22.0.1"
 
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
@@ -23,9 +24,9 @@ android {
     }
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 19
-        versionCode 5
-        versionName "1.1.2"
+        targetSdkVersion 22
+        versionCode 6
+        versionName "1.2.0"
     }
     buildTypes {
         release {
@@ -34,24 +35,34 @@ android {
         }
     }
 
+
     signingConfigs {
         
     }
 
-
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:19.+'
-    compile 'com.android.support:support-v13:20.+'
-    compile 'com.google.guava:guava:17.0'
-    compile 'com.google.code.gson:gson:2.2.4'
+    compile 'com.android.support:support-v4:22.0.0'
+    compile 'com.android.support:support-v13:22.0.0'
+    compile 'com.google.guava:guava:18.0'
+    compile 'com.google.code.gson:gson:2.3'
+    compile 'com.squareup.retrofit:retrofit:1.9.0'
+    compile ('com.squareup.retrofit:converter-simplexml:1.9.0') {
+        exclude group: 'stax', module: 'stax-api'
+        exclude group: 'stax', module: 'stax'
+        exclude group: 'xpp3', module: 'xpp3'
+    }
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'io.reactivex:rxandroid:0.24.0'
     compile 'com.google.android.gms:play-services-maps:7.3.0'
-    compile 'org.apache.httpcomponents:httpcore:4.3.2'
-    compile 'org.apache.httpcomponents:httpmime:4.3.4'
-    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.2'
     compile 'com.getbase:floatingactionbutton:1.9.0'
     compile 'com.jakewharton:butterknife:6.1.0'
     compile 'com.balysv:material-ripple:1.0.2'
+
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }

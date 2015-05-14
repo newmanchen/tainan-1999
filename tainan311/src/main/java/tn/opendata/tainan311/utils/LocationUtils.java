@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.util.List;
 
 /**
+ * Utility for getting address from lat/long or reverse
+ *
  * Created by newman on 5/8/15.
  */
 public class LocationUtils {
@@ -28,7 +30,6 @@ public class LocationUtils {
             } else if (address.isEmpty()) {
                 return lat;
             }
-            LogUtils.d(TAG, "address = ", address);
             Address location = address.get(0);
             lat = new LatLng(location.getLatitude(), location.getLongitude());
         } catch (IOException e) {
@@ -41,14 +42,14 @@ public class LocationUtils {
     /**
      * should be called by background thread
      *
-     * @param context
-     * @param location
-     * @param address
+     * @param context context
+     * @param location lat and long
+     * @param address address string
      * @return the best address of the LatLng
      */
     public static Address getFromLocationName(Context context, LatLng location, String address) {
         List<Address> resultAddress = Lists.newArrayList();
-        double precesion = 0.05;
+        double precession = 0.05;
 
         if (Geocoder.isPresent()) {
             Geocoder geocoder = new Geocoder(context);
@@ -64,9 +65,9 @@ public class LocationUtils {
                 } else {
                     if (lat != 0 && lng != 0) {// query by lat/long and Address
                         resultAddress = geocoder.getFromLocationName(
-                                address, 5, lat - precesion, lng
-                                        - precesion, lat + precesion, lng
-                                        + precesion);
+                                address, 5, lat - precession, lng
+                                        - precession, lat + precession, lng
+                                        + precession);
                     } else {// request by address
                         resultAddress = geocoder.getFromLocationName(
                                 address, 5);

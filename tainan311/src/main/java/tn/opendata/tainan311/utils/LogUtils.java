@@ -103,7 +103,7 @@ public class LogUtils {
 
 	/**
 	 * Output log to file
-	 * @param context
+	 * @param context conext
 	 * @param fileName file name
 	 * @param msg log message
 	 */

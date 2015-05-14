@@ -15,17 +15,12 @@ import tn.opendata.tainan311.utils.PreferenceUtils;
  */
 public class ReportTipsFragment extends WizardFragment {
     @InjectView(R.id.checkbox_ignore_tips) CheckBox mCheck_ignore_tips;
-    private static final String ARG_SECTION_NUMBER = "section_number";
     /**
      * Returns a new instance of this fragment for the given section
      * number.
      */
     public static ReportTipsFragment newInstance() {
-        ReportTipsFragment fragment = new ReportTipsFragment();
-//        Bundle args = new Bundle();
-//        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-//        fragment.setArguments(args);
-        return fragment;
+        return new ReportTipsFragment();
     }
 
     public ReportTipsFragment() {

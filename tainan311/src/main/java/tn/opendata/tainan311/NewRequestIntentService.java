@@ -1,19 +1,15 @@
 package tn.opendata.tainan311;
 
 import android.app.IntentService;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.common.util.concurrent.FutureCallback;
-import com.google.common.util.concurrent.Futures;
-
-import org.apache.http.cookie.Cookie;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,21 +17,24 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import tn.opendata.tainan311.tainan1999.TainanReport1999;
-import tn.opendata.tainan311.tainan1999.rpc.AddRequest;
-import tn.opendata.tainan311.tainan1999.vo.AddResponse;
+import retrofit.RestAdapter;
+import retrofit.converter.SimpleXMLConverter;
+import rx.android.schedulers.AndroidSchedulers;
+import tn.opendata.tainan311.tainan1999.api.AddPicture;
+import tn.opendata.tainan311.tainan1999.api.AddRequest;
+import tn.opendata.tainan311.tainan1999.api.Tainan1999Service;
+import tn.opendata.tainan311.tainan1999.util.TainanConstant;
 import tn.opendata.tainan311.utils.Base64Utils;
-import tn.opendata.tainan311.utils.Constant;
 import tn.opendata.tainan311.utils.LogUtils;
 import tn.opendata.tainan311.utils.PreferenceUtils;
 
 /**
+ * To add a request to server
+ *
  * Created by vincent on 2014/6/12.
  */
-//TODO to send add request to tainan1999
 public class NewRequestIntentService extends IntentService {
     private static final String TAG = NewRequestIntentService.class.getSimpleName();
-
     public static final String EXTRA_DATA = "data";
     public static final String EXTRA_AREA = "area";
     public static final String EXTRA_SERVICE_NAME = "service_name";
@@ -51,7 +50,8 @@ public class NewRequestIntentService extends IntentService {
     private Bundle data = null;
     private Handler mHandler;
 
-    private String GOOGLE_MAP_LINK = "https://www.google.com.tw/maps/@%s,%s,18z";
+    String GOOGLE_MAP_LINK = "https://www.google.com.tw/maps/@%s,%s,18z";
+
     public NewRequestIntentService() {
         super("NewRequest");
     }
@@ -59,37 +59,33 @@ public class NewRequestIntentService extends IntentService {
     @Override
     public void onCreate() {
         super.onCreate();
-
         mHandler = new Handler(getMainLooper());
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
         data = intent.getBundleExtra(EXTRA_DATA);
-        if (data == null ) {
+        if (data == null) {
             return;
         }
-        postRequest(data, null);
+        postRequest(data);
     }
 
-    private void postRequest(Bundle data, List<Cookie> cookies) {
+    private void postRequest(Bundle data) {
         showNotification(getString(R.string.add_request));
         if (data != null) {
             AddRequest.Builder builder = AddRequest.Builder.create();
+            builder.setCity_id(TainanConstant.CITY_ID);
             builder.setArea(data.getString(EXTRA_AREA));
-            builder.setServiceName(data.getString(EXTRA_SERVICE_NAME));
-            builder.setSubProject(data.getString(EXTRA_SUBPROJECT));
+            builder.setService_name(data.getString(EXTRA_SERVICE_NAME));
+            builder.setSubproject(data.getString(EXTRA_SUBPROJECT));
             LatLng location = data.getParcelable(EXTRA_LOCATION);
             String lat = String.valueOf(location.latitude);
-            builder.setLatitude(lat);
+            builder.setLat(lat);
             String lng = String.valueOf(location.longitude);
-            builder.setLongitude(lng);
-            StringBuilder sb = new StringBuilder(data.getString(EXTRA_DESCRIPTION));
-            sb.append("             Google Map : ").append(String.format(GOOGLE_MAP_LINK, lat, lng));
-            sb.append("             sent from ").append(getString(R.string.app_name));
-            LogUtils.d(TAG, "description :: ", sb.toString());
-            builder.setDescription(sb.toString());
-            builder.setAddressString(data.getString(EXTRA_ADDRESS));
+            builder.setLng(lng);
+            builder.setDescription(getWatermarkDescription(lat, lng));
+            builder.setAddress_string(data.getString(EXTRA_ADDRESS));
             builder.setName(data.getString(EXTRA_NAME));
             builder.setPhone(data.getString(EXTRA_PHONE));
             builder.setEmail(data.getString(EXTRA_EMAIL));
@@ -98,12 +94,17 @@ public class NewRequestIntentService extends IntentService {
                 String path = data.getString(NewRequestIntentService.EXTRA_PHOTO);
                 if (!TextUtils.isEmpty(path)) {
                     try {
-                        AddRequest.Picture pic = new AddRequest.Picture();
+                        AddPicture pic = new AddPicture();
                         File picFile = new File(path);
                         LogUtils.d(TAG, "pic file size is ", picFile.length());
                         pic.setFileName(picFile.getName());
                         pic.setFile(Base64Utils.getBase64FileContent(picFile));
-                        builder.setPicture(pic);
+
+                        //TODO 3 pictures
+                        List<AddPicture> pics = Lists.newArrayList();
+                        pics.add(pic);
+
+                        builder.setPictures(pics);
                     } catch (IOException e) {
                         LogUtils.w(TAG, e.getMessage(), e);
                     }
@@ -111,43 +112,53 @@ public class NewRequestIntentService extends IntentService {
                     LogUtils.d(TAG, "photo path is empty");
                 }
             }
-//            LogUtils.d(TAG, "builder is :: ", builder.build());
-            Futures.addCallback(TainanReport1999.executeAdd(builder.build())
-                    , new FutureCallback<AddResponse>() {
-                @Override
-                public void onSuccess(AddResponse result) {
-                    LogUtils.d(TAG, "onSuccess");
-                    if (result != null) {
-                        LogUtils.d(TAG, "add response :: token = ", result.getToken());
-                        LogUtils.d(TAG, "add response :: service_notice = ", result.getService_notice());
-                        LogUtils.d(TAG, "add response :: service_request_id = ", result.getService_request_id());
 
-                        Set<String> temp = PreferenceUtils.getMyRequestIds(NewRequestIntentService.this);
-                        HashSet<String> requestIds = new HashSet<String>();
-                        if (temp != null) {
-                            requestIds.addAll(temp);
+            RestAdapter rest = new RestAdapter.Builder()
+//                    .setEndpoint(TainanConstant.POST_TEST_SERVER_URL)
+                    .setEndpoint(TainanConstant.TAINAN1999_URL)
+                    .setConverter(new SimpleXMLConverter())
+                    .build();
+
+            Tainan1999Service service = rest.create(Tainan1999Service.class);
+            service.addReports(builder.build())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(addResponse -> {
+                        LogUtils.d(TAG, "onSuccess");
+                        if (addResponse != null) {
+                            if (addResponse.getReturncode() == 0) {
+                                LogUtils.d(TAG, "add response :: token = ", addResponse.getToken());
+                                LogUtils.d(TAG, "add response :: service_notice = ", addResponse.getService_notice());
+                                LogUtils.d(TAG, "add response :: service_request_id = ", addResponse.getService_request_id());
+
+                                Set<String> temp = PreferenceUtils.getMyRequestIds(NewRequestIntentService.this);
+                                HashSet<String> requestIds = Sets.newHashSet();
+                                if (temp != null) {
+                                    requestIds.addAll(temp);
+                                }
+                                requestIds.add(addResponse.getService_request_id());
+                                PreferenceUtils.setMyRequestIds(NewRequestIntentService.this, requestIds);
+                            } else {
+                                // TODO error handling
+                                LogUtils.d(TAG, "add response :: returncode = ", addResponse.getReturncode());
+                                LogUtils.d(TAG, "add response :: description = ", addResponse.getDescription());
+                                LogUtils.d(TAG, "add response :: stacktrace = ", addResponse.getStacktrace());
+                            }
                         }
-                        requestIds.add(result.getService_request_id());
-                        PreferenceUtils.setMyRequestIds(NewRequestIntentService.this, requestIds);
-                    }
-                }
-
-                @Override
-                public void onFailure(Throwable t) {
-                    showNotification(getString(R.string.add_failed) + t.getMessage());
-                }
-            });
+                    }, err -> LogUtils.w(TAG, err.getMessage(), err));
         } else {
             showNotification(getString(R.string.no_data));
         }
     }
 
     private void showNotification(final String message) {
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(NewRequestIntentService.this, message, Toast.LENGTH_LONG).show();
-            }
-        });
+        mHandler.post(() -> Toast.makeText(NewRequestIntentService.this, message, Toast.LENGTH_LONG).show());
+    }
+
+    private String getWatermarkDescription(String lat, String lng) {
+        StringBuilder sb = new StringBuilder(data.getString(EXTRA_DESCRIPTION));
+        sb.append("\nGoogle Map : ").append(String.format(GOOGLE_MAP_LINK, lat, lng));
+        sb.append("\nsent from ").append(getString(R.string.app_name));
+        LogUtils.d(TAG, "description :: ", sb.toString());
+        return sb.toString();
     }
 }
