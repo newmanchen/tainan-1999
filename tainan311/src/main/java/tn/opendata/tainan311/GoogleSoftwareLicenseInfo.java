@@ -10,6 +10,8 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
+ * Google Legal Notice if using the Goolgle Play Service
+ *
  * Created by newman on 5/8/15.
  */
 public class GoogleSoftwareLicenseInfo extends Activity {

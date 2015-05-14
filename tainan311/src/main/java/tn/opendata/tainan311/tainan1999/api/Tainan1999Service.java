@@ -8,5 +8,11 @@ import rx.Observable;
 public interface Tainan1999Service {
     @POST("/ServiceRequestsQuery.aspx")
     Observable<QueryResponse> queryReports(@Body QueryRequest request);
+
+    @POST("/ServiceRequestAdd.aspx")
+    Observable<AddResponse> addReports(@Body AddRequest request);
+
+    @POST("/post.php?dir=newman")
+    Observable<AddResponse> addReportsTest(@Body AddRequest request);
 }
 

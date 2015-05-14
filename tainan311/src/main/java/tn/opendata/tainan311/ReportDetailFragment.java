@@ -39,7 +39,7 @@ public class ReportDetailFragment extends WizardFragment {
     @InjectView(R.id.phone) TextView textview_phone;
     @InjectView(R.id.email) TextView textview_email;
     @InjectView(R.id.photo) ImageView imageview_photo;
-    @InjectView(R.id.map_snapshot) ImageView imageview_mapview;
+//    @InjectView(R.id.map_snapshot) ImageView imageview_mapview;
 
     private Handler mNonUiHandler;
     private static final String TAG = ReportDetailFragment.class.getSimpleName();
@@ -52,11 +52,7 @@ public class ReportDetailFragment extends WizardFragment {
     * number.
     */
     public static ReportDetailFragment newInstance() {
-        ReportDetailFragment fragment = new ReportDetailFragment();
-//        Bundle args = new Bundle();
-//        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-//        fragment.setArguments(args);
-        return fragment;
+        return new ReportDetailFragment();
     }
 
     @Override
@@ -86,23 +82,18 @@ public class ReportDetailFragment extends WizardFragment {
 
         //TODO: should query from Server (service_code)
         String[] serviceNameArray = getResources().getStringArray(R.array.service_name);
-        ArrayAdapter<String> serviceNameAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, serviceNameArray);
+        ArrayAdapter<String> serviceNameAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, serviceNameArray);
         spinner_serviceName.setAdapter(serviceNameAdapter);
         spinner_serviceName.setOnItemSelectedListener(mOnItemSelectListener);
         String[] subProjectArray = getResources().getStringArray(R.array.subproject_pv);
-        ArrayAdapter<String> subprojectAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, subProjectArray);
+        ArrayAdapter<String> subprojectAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, subProjectArray);
         spinner_subProject.setAdapter(subprojectAdapter);
 
         String[] areaArray = getResources().getStringArray(R.array.area);
-        ArrayAdapter<String> areaAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, areaArray);
+        ArrayAdapter<String> areaAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, areaArray);
         spinner_area.setAdapter(areaAdapter);
 
-        mNonUiHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                loadPreSetupFields();
-            }
-        });
+        mNonUiHandler.post(() -> loadPreSetupFields());
         return rootView;
     }
 
@@ -144,7 +135,7 @@ public class ReportDetailFragment extends WizardFragment {
                     break;
             }
             String[] subProjectArray = getResources().getStringArray(arrayResId);
-            ArrayAdapter<String> subprojectAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, subProjectArray);
+            ArrayAdapter<String> subprojectAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, subProjectArray);
             spinner_subProject.setAdapter(subprojectAdapter);
         }
 
@@ -175,29 +166,21 @@ public class ReportDetailFragment extends WizardFragment {
             LogUtils.d(TAG, "tempPhone, ", tempPhone);
             final String mail = account;
             final String phone = tempPhone;
-            context.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    textview_email.setText(mail);
-                    String nameValue = name;
-                    if (TextUtils.isEmpty(name)) {
-                        nameValue = ProfileUtil.getUserName(getActivity());
-                    }
-                    textview_name.setText(nameValue);
-                    textview_phone.setText(phone);
+            context.runOnUiThread(() -> {
+                textview_email.setText(mail);
+                String nameValue = name;
+                if (TextUtils.isEmpty(name)) {
+                    nameValue = ProfileUtil.getUserName(getActivity());
                 }
+                textview_name.setText(nameValue);
+                textview_phone.setText(phone);
             });
 
             Bundle b = getData();
-            LatLng location = (LatLng) b.getParcelable(NewRequestIntentService.EXTRA_LOCATION);
+            LatLng location = b.getParcelable(NewRequestIntentService.EXTRA_LOCATION);
             final Address address = LocationUtils.getFromLocationName(context, location, null);
             LogUtils.d(TAG, "address is ", address.getAddressLine(0));
-            context.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    textview_address.setText(address.getAddressLine(0));
-                }
-            });
+            context.runOnUiThread(() -> textview_address.setText(address.getAddressLine(0)));
         }
     }
 
@@ -239,7 +222,7 @@ public class ReportDetailFragment extends WizardFragment {
         final String description = this.textview_description.getText().toString();
         if (TextUtils.isEmpty(description)) {
             this.textview_description.setError(string_must_have);
-            throwsException |= true;
+            throwsException = true;
         } else {
             acc.putString(NewRequestIntentService.EXTRA_DESCRIPTION, description);
         }
@@ -247,7 +230,7 @@ public class ReportDetailFragment extends WizardFragment {
         final String address = this.textview_address.getText().toString();
         if (TextUtils.isEmpty(address)) {
             this.textview_address.setError(string_must_have);
-            throwsException |= true;
+            throwsException = true;
         } else {
             acc.putString(NewRequestIntentService.EXTRA_ADDRESS, address);
         }
@@ -255,7 +238,7 @@ public class ReportDetailFragment extends WizardFragment {
         final String name = this.textview_name.getText().toString();
         if (TextUtils.isEmpty(name)) {
             this.textview_name.setError(string_must_have);
-            throwsException |= true;
+            throwsException = true;
         } else {
             acc.putString(NewRequestIntentService.EXTRA_NAME, name);
         }
@@ -263,14 +246,14 @@ public class ReportDetailFragment extends WizardFragment {
         final String phone = this.textview_phone.getText().toString();
         if (TextUtils.isEmpty(phone)) {
             this.textview_phone.setError(string_must_have);
-            throwsException |= true;
+            throwsException = true;
         } else {
             acc.putString(NewRequestIntentService.EXTRA_PHONE, phone);
         }
 
         // check here to make sure that all the mush have fields are ready
         if (throwsException) {
-            throw new IllegalStateException(new String("Some fields are empty"));
+            throw new IllegalStateException("Some fields are empty");
         }
 
         // email is optional field

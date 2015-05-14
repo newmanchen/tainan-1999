@@ -4,12 +4,13 @@ import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
+
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
-import tn.opendata.tainan311.utils.Base64Utils;
-import tn.opendata.tainan311.utils.LogUtils;
 
 import java.io.File;
+
+import tn.opendata.tainan311.utils.Base64Utils;
 
 @Root(name="Picture")
 public class Picture implements Parcelable{
@@ -79,5 +80,4 @@ public class Picture implements Parcelable{
         parcel.writeString(fileName);
         parcel.writeString(filePath);
     }
-
 }

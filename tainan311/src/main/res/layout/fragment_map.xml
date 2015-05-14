@@ -1,9 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="8dp"
-    tools:context="tn.opendata.tainan311.ReportActivity$PlaceholderFragment">
+    android:padding="8dp">
 
     <TextView android:id="@+id/msg"
         style="@style/WizardTitle"

@@ -7,7 +7,6 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
@@ -36,7 +35,7 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
     @InjectView(R.id.pager) ViewPager mViewPager;
 
     private static final String TAG = ReportActivity.class.getSimpleName();
-    private SectionsPagerAdapter mSectionsPagerAdapter;
+    SectionsPagerAdapter mSectionsPagerAdapter;
     private final Bundle data = new Bundle(); //TODO: handle config change
 
     @Override
@@ -91,8 +90,6 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
             try {
                 data.putAll(f.onNextClick((Bundle) data.clone()));
                 showConfirmDialog();
-//                createNewRequest();
-//                finish();
             } catch(IllegalStateException e) {
                LogUtils.w(TAG, e.getMessage(), e);
             }
@@ -103,7 +100,7 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
     @Override
     public void onBackPressed() {
         boolean first = mViewPager.getCurrentItem() == 0;
-        boolean ifIgnoreTips = (PreferenceUtils.getIgnorePref(this) == true && mViewPager.getCurrentItem() == 1);
+        boolean ifIgnoreTips = (PreferenceUtils.getIgnorePref(this) && mViewPager.getCurrentItem() == 1);
 
         if(first || ifIgnoreTips){
           super.onBackPressed();
@@ -120,6 +117,7 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
         cd.show(getFragmentManager(), TAG_DIALOG_CONFIRM);
     }
 
+    @SuppressWarnings("unused")
     private void createNewRequest() {
         Intent intent = new Intent(ReportActivity.this, NewRequestIntentService.class);
         intent.putExtra(NewRequestIntentService.EXTRA_DATA, data);
@@ -232,7 +230,6 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
     private static final String TAG_DIALOG_CONFIRM = "TAG_DIALOG_CONFIRM";
     private static final String EXTRA_BUNDLE = "extra_bundle";
     public static class ConfirmDialog extends DialogFragment {
-        Context context;
         Bundle sentData;
 
         public ConfirmDialog() {
@@ -246,21 +243,16 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle(R.string.text_confirm)
             .setMessage(R.string.text_confirm_message)
-            .setPositiveButton(R.string.text_button_confirm, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    Activity act = getActivity();
-                    if (act != null) {
-                        Intent intent = new Intent(context, NewRequestIntentService.class);
-                        intent.putExtra(NewRequestIntentService.EXTRA_DATA, sentData);
-                        act.startService(intent);
-                    }
+            .setPositiveButton(R.string.text_button_confirm, (dialogInterface, i) -> {
+                Activity act = getActivity();
+                if (act != null) {
+                    Intent intent = new Intent(context, NewRequestIntentService.class);
+                    intent.putExtra(NewRequestIntentService.EXTRA_DATA, sentData);
+                    act.startService(intent);
+                    act.finish();
                 }
             })
-            .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                }
+            .setNegativeButton(android.R.string.cancel, (dialogInterface, i) -> {
             });
             return builder.create();
         }

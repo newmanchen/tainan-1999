@@ -51,8 +51,6 @@ dependencies {
     compile 'com.android.support:support-v13:22.0.0'
     compile 'com.google.guava:guava:18.0'
     compile 'com.google.code.gson:gson:2.3'
-    compile 'org.apache.httpcomponents:httpcore:4.3.2'
-    compile 'org.apache.httpcomponents:httpmime:4.3.4'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile ('com.squareup.retrofit:converter-simplexml:1.9.0') {
         exclude group: 'stax', module: 'stax-api'

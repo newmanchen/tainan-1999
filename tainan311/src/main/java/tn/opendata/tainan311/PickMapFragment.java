@@ -1,8 +1,7 @@
 package tn.opendata.tainan311;
 
-import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -16,11 +15,15 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 
+import tn.opendata.tainan311.utils.LogUtils;
+
 /**
+ * To pick a location on map to retrieve the lat/long to server
+ *
  * Created by sam on 2014/6/11.
  */
 public class PickMapFragment extends WizardFragment implements View.OnClickListener{
-    private static final String ARG_SECTION_NUMBER = "section_number";
+    private static final String TAG = PickMapFragment.class.getSimpleName();
     private GoogleMap map;
     private Handler handler = new Handler();
 
@@ -29,11 +32,7 @@ public class PickMapFragment extends WizardFragment implements View.OnClickListe
      * number.
      */
     public static PickMapFragment newInstance() {
-        PickMapFragment fragment = new PickMapFragment();
-//        Bundle args = new Bundle();
-//        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-//        fragment.setArguments(args);
-        return fragment;
+        return new PickMapFragment();
     }
 
     public PickMapFragment() {
@@ -43,59 +42,25 @@ public class PickMapFragment extends WizardFragment implements View.OnClickListe
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+        map = getMapFragment().getMap();
         map.getUiSettings().setCompassEnabled(true);
         map.getUiSettings().setMyLocationButtonEnabled(true);
         map.setBuildingsEnabled(true);
         map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
-        CameraUpdate center = CameraUpdateFactory.newLatLngZoom(new LatLng(22.997144,120.212966),13); //台南火車站
+        CameraUpdate center = CameraUpdateFactory.newLatLngZoom(new LatLng(22.997144, 120.212966), 13); //台南火車站
 
         map.moveCamera(center);
-        map.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
-            @Override
-            public void onMyLocationChange(Location location) {
-                LatLng myLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-                CameraPosition cameraPosition = new CameraPosition.Builder()
-                        .target(myLatLng)
-                        .zoom(map.getMaxZoomLevel() - 3)
+        map.setOnMyLocationChangeListener(location -> {
+            LatLng myLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(myLatLng)
+                    .zoom(map.getMaxZoomLevel() - 3)
 //                        .tilt(30)
-                        .build();
-                map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 1000, null);
-                map.setOnMyLocationChangeListener(null);
-            }
+                    .build();
+            map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 1000, null);
+            map.setOnMyLocationChangeListener(null);
         });
-
-        // remove query from fixmystreet.com
-//        Calendar cal = Calendar.getInstance();
-//        cal.add(Calendar.DAY_OF_YEAR, -5);
-//        GeoReportV2.QueryRequestBuilder builder = GeoReportV2.QueryRequestBuilder.create().open().build();
-//        final ListenableFuture<List<Request>> future = builder.execute();
-//
-//        future.addListener(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    for(Request r: future.get()){
-//
-//                        //only display point with Location...
-//                        if(!TextUtils.isEmpty(r.getLat()) && !TextUtils.isEmpty(r.getLon())){
-//                            MarkerOptions markerOpt = new MarkerOptions();
-//                            markerOpt.position(new LatLng(Double.parseDouble(r.getLat()),Double.parseDouble(r.getLon())));
-//                            markerOpt.title(r.getService_code());
-//                            markerOpt.snippet(r.getDescription());
-//                            markerOpt.draggable(false);
-//                            map.addMarker(markerOpt);
-//                        }
-//                    }
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                } catch (ExecutionException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }, MainThreadExecutor.build());
-
         map.setMyLocationEnabled(true);
         setReady(true);
     }
@@ -113,15 +78,11 @@ public class PickMapFragment extends WizardFragment implements View.OnClickListe
         super.onDestroyView();
 
         //workaround for nested MapFragment
-        handler.postAtTime(new Runnable(){
-            @Override
-            public void run() {
-                Fragment fragment = (getFragmentManager().findFragmentById(R.id.map));
-                FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
-                ft.remove(fragment);
-                ft.commit();
-            }
-        }, "removemap",300) ;
+        handler.postAtTime(() -> {
+            FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
+            ft.remove(getMapFragment());
+            ft.commit();
+        }, "removemap", 300) ;
     }
 
     @Override
@@ -129,6 +90,16 @@ public class PickMapFragment extends WizardFragment implements View.OnClickListe
         super.onDestroy();
         //workaround for nested MapFragment
         handler.removeCallbacksAndMessages("removemap");
+    }
+
+    private MapFragment getMapFragment() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            LogUtils.d(TAG, "using getFragmentManager");
+            return (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+        } else {
+            LogUtils.d(TAG, "using getChildFragmentManager");
+            return (MapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        }
     }
 
     @Override

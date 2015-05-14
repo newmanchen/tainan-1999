@@ -1,9 +1,11 @@
 package tn.opendata.tainan311.tainan1999.api;
 
-import android.os.Build;
-
 import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementArray;
+import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
+
+import java.util.List;
 
 /**
  * Created by newman on 5/12/15.
@@ -22,42 +24,34 @@ import org.simpleframework.xml.Root;
  */
 @Root(name="root")
 public class AddRequest {
-    @Element
+    @Element(data=true)
     private String city_id; // 城市識別碼
-    @Element
+    @Element(data=true)
     private String area; // 行政區
-    @Element
+    @Element(data=true)
     private String address_string; // 地點
-    @Element(required=false)
+    @Element(required=false, data=true)
     private String lat; // 緯度(WGS84)
-    @Element(required=false,name="long")
+    @Element(required=false, name="long", data=true)
     private String lng; // 經度(WGS84)
-    @Element(required=false)
+    @Element(required=false, data=true)
     private String email; // E-MAIL
-    @Element(required=false)
+    @Element(required=false, data=true)
     private String device_id; // 僅用於行動裝置
-    @Element
+    @Element(data=true)
     private String name; // 姓名
-    @Element
+    @Element(data=true)
     private String phone; // 電話
-    @Element
+    @Element(data=true)
     private String service_name;  // 案件類型
-    @Element
+    @Element(data=true)
     private String subproject; // 案件事項
-    @Element
+    @Element(data=true)
     private String description; // 案件內容
-    @Element(required=false)
-    private String pictures; // 上傳照片
-    @Element(required=false)
-    private String picture; // 照片
-    @Element(required=false,name="description")
-    private String description_pic; // 照片描述
-    @Element(required=false)
-    private String fileName; // 檔案名稱, 需含副檔名且檔案類型限制JPG
-    @Element(required=false)
-    private String file; // 檔案資料
+    @ElementList(required=false)
+    private List<AddPicture> pictures; // 上傳照片
 
-    public AddRequest(String city_id, String area, String address_string, String lat, String lng, String email, String device_id, String name, String phone, String service_name, String subproject, String description, String pictures, String picture, String description_pic, String fileName, String file) {
+    public AddRequest(String city_id, String area, String address_string, String lat, String lng, String email, String device_id, String name, String phone, String service_name, String subproject, String description, List<AddPicture> pictures) {
         this.city_id = city_id;
         this.area = area;
         this.address_string = address_string;
@@ -71,10 +65,6 @@ public class AddRequest {
         this.subproject = subproject;
         this.description = description;
         this.pictures = pictures;
-        this.picture = picture;
-        this.description_pic = description_pic;
-        this.fileName = fileName;
-        this.file = file;
     }
 
     public String getCity_id() {
@@ -173,44 +163,12 @@ public class AddRequest {
         this.description = description;
     }
 
-    public String getPictures() {
+    public List<AddPicture> getPictures() {
         return pictures;
     }
 
-    public void setPictures(String pictures) {
+    public void setPictures(List<AddPicture> pictures) {
         this.pictures = pictures;
-    }
-
-    public String getPicture() {
-        return picture;
-    }
-
-    public void setPicture(String picture) {
-        this.picture = picture;
-    }
-
-    public String getDescription_pic() {
-        return description_pic;
-    }
-
-    public void setDescription_pic(String description_pic) {
-        this.description_pic = description_pic;
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
-    public String getFile() {
-        return file;
-    }
-
-    public void setFile(String file) {
-        this.file = file;
     }
 
     public static class Builder {
@@ -226,13 +184,9 @@ public class AddRequest {
         private String service_name = null;
         private String subproject = null;
         private String description = null;
-        private String pictures = null;
-        private String picture = null;
-        private String description_pic = null;
-        private String fileName = null;
-        private String file = null;
+        private List<AddPicture> pictures = null;
 
-        public Builder create() { new Builder(); }
+        public static Builder create() { return new Builder(); }
 
         public Builder setCity_id(String city_id) {
             this.city_id = city_id;
@@ -294,33 +248,13 @@ public class AddRequest {
             return this;
         }
 
-        public Builder setPictures(String pictures) {
+        public Builder setPictures(List<AddPicture> pictures) {
             this.pictures = pictures;
             return this;
         }
 
-        public Builder setPicture(String picture) {
-            this.picture = picture;
-            return this;
-        }
-
-        public Builder setDescription_pic(String description_pic) {
-            this.description_pic = description_pic;
-            return this;
-        }
-
-        public Builder setFileName(String fileName) {
-            this.fileName = fileName;
-            return this;
-        }
-
-        public Builder setFile(String file) {
-            this.file = file;
-            return this;
-        }
-
         public AddRequest build() {
-            return new AddRequest()
+            return new AddRequest(city_id, area, address_string, lat, lng, email, device_id, name, phone, service_name, subproject, description, pictures);
         }
     }
 }

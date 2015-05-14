@@ -3,15 +3,13 @@ package tn.opendata.tainan311;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import butterknife.ButterKnife;
-import butterknife.InjectView;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -19,17 +17,17 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import tn.opendata.tainan311.tainan1999.api.Picture;
 import tn.opendata.tainan311.tainan1999.api.Record;
 import tn.opendata.tainan311.tainan1999.util.TainanConstant;
 import tn.opendata.tainan311.utils.LocationUtils;
 import tn.opendata.tainan311.utils.LogUtils;
 
-import java.io.File;
-
 import static tn.opendata.tainan311.utils.EasyUtil.isNotEmpty;
-
-
 
 public class DetailActivity extends Activity {
     public static final String EXTRA_KEY_REQUEST = "extra_key_request";
@@ -83,8 +81,10 @@ public class DetailActivity extends Activity {
 
     private void updateActionBar() {
         ActionBar ab = getActionBar();
-        ab.setTitle(mRequest.getService_name());
-        ab.setDisplayHomeAsUpEnabled(true);
+        if (ab != null) {
+            ab.setTitle(mRequest.getService_name());
+            ab.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     private void initViews() {
@@ -122,6 +122,7 @@ public class DetailActivity extends Activity {
         }
         agency.setText(TainanConstant.AGENCY[Integer.valueOf(mRequest.getAgency())]);
         GoogleMap map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+        map.getUiSettings().setZoomControlsEnabled(true);
         final LatLng issueLocation;
         if (mRequest.getLat() == 0 || mRequest.getLng() == 0) {
             issueLocation = LocationUtils.getLocationFromAddress(this, mRequest.getAddress_string());

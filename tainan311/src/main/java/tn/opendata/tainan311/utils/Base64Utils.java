@@ -1,18 +1,18 @@
 package tn.opendata.tainan311.utils;
 
 import android.util.Base64;
-import android.util.Log;
 
 import org.apache.http.util.ByteArrayBuffer;
 
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
+ * For encode from string and decode to string within base64
+ *
  * Created by newman on 5/7/15.
  */
 public class Base64Utils {
@@ -32,7 +32,7 @@ public class Base64Utils {
             }
             // need import org.apache.commons.codec.binary.Base64
             // dataBase64 = new String(Base64.encodeBase64(byteArrayBuffer.toByteArray()));
-            dataBase64 = new String(Base64.encodeToString(byteArrayBuffer.toByteArray(), Base64.DEFAULT));
+            dataBase64 = Base64.encodeToString(byteArrayBuffer.toByteArray(), Base64.DEFAULT);
         } finally {
             EasyUtil.close(fileInput);
         }
@@ -47,8 +47,6 @@ public class Base64Utils {
         try {
             fos = new FileOutputStream(path);
             fos.write(Base64.decode(base64string, Base64.DEFAULT));
-        } catch (FileNotFoundException e) {
-            LogUtils.w(TAG, e.getMessage(), e);
         } catch (IOException e) {
             LogUtils.w(TAG, e.getMessage(), e);
         } finally  {

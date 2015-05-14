@@ -20,7 +20,6 @@ public abstract class WizardFragment extends Fragment{
         controller.setNextEnabled(true);
     }
 
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);

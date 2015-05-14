@@ -1,11 +1,9 @@
 package tn.opendata.tainan311;
 
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,24 +16,16 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.common.collect.Maps;
-import com.google.common.util.concurrent.ListenableFuture;
 
-import java.util.List;
 import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import tn.opendata.tainan311.georeportv2.GeoReportV2;
-import tn.opendata.tainan311.georeportv2.vo.Request;
-import tn.opendata.tainan311.utils.MainThreadExecutor;
-
-import static tn.opendata.tainan311.utils.EasyUtil.findView;
+import tn.opendata.tainan311.tainan1999.api.Record;
 
 
 public class MainMapActivity extends FragmentActivity implements ListView.OnItemClickListener, DrawerLayout.DrawerListener, GoogleMap.OnInfoWindowClickListener {
@@ -45,7 +35,7 @@ public class MainMapActivity extends FragmentActivity implements ListView.OnItem
     @InjectView(R.id.navigation_drawer) View drawerView;
     @InjectView(R.id.navigation_list) ListView mDrawerList;
     private GoogleMap map;
-    private Map<Marker, Request> requestMap = Maps.newConcurrentMap();
+    private Map<Marker, Record> requestMap = Maps.newConcurrentMap();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +44,7 @@ public class MainMapActivity extends FragmentActivity implements ListView.OnItem
         ButterKnife.inject(this);
 
         String[] drawer_text = getResources().getStringArray(R.array.drawer_text);
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_item, drawer_text));
+        mDrawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_item, drawer_text));
         mDrawerList.setOnItemClickListener(this);
         drawerLayout.setDrawerListener(this);
 
@@ -71,7 +61,6 @@ public class MainMapActivity extends FragmentActivity implements ListView.OnItem
         map.moveCamera(center);
 
         animateToMyLocation();
-        // showProblems(); // do not call this now due to issues are not on fixmystreet
     }
 
     //from xml
@@ -100,55 +89,51 @@ public class MainMapActivity extends FragmentActivity implements ListView.OnItem
         progress.setVisibility(View.VISIBLE);
         //TODO: limit to 90 days
         //TODO use tainan199 request instead the GeoReportV2
-        GeoReportV2.QueryRequestBuilder builder = GeoReportV2.QueryRequestBuilder.create().build();
-        final ListenableFuture<List<Request>> future = builder.execute();
-        future.addListener(new Runnable() {
-            @Override
-            public void run() {
-                Map<Marker, Request> localMap = Maps.newConcurrentMap();
-                try {
-                    for (Request r : future.get()) {
-                        //only display point with Location...
-                        if (!TextUtils.isEmpty(r.getLat()) && !TextUtils.isEmpty(r.getLon())) {
-                            MarkerOptions markerOpt = new MarkerOptions();
-                            markerOpt.position(new LatLng(Double.parseDouble(r.getLat()), Double
-                                    .parseDouble(r.getLon())));
-                            markerOpt.title(r.getService_code());
-                            markerOpt.snippet(r.getDescription());
-                            markerOpt.draggable(false);
-
-                            float color = "closed".equals(r
-                                    .getStatus()) ? BitmapDescriptorFactory.HUE_GREEN : BitmapDescriptorFactory.HUE_RED;
-
-                            markerOpt.icon(BitmapDescriptorFactory.defaultMarker(color));
-                            Marker m = map.addMarker(markerOpt);
-                            localMap.put(m, r);
-                        }
-                        requestMap = localMap;
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    progress.setVisibility(View.GONE);
-                }
-            }
-        }, MainThreadExecutor.build());
+//        GeoReportV2.QueryRequestBuilder builder = GeoReportV2.QueryRequestBuilder.create().build();
+//        final ListenableFuture<List<Request>> future = builder.execute();
+//        future.addListener(new Runnable() {
+//            @Override
+//            public void run() {
+//                Map<Marker, Request> localMap = Maps.newConcurrentMap();
+//                try {
+//                    for (Request r : future.get()) {
+//                        //only display point with Location...
+//                        if (!TextUtils.isEmpty(r.getLat()) && !TextUtils.isEmpty(r.getLon())) {
+//                            MarkerOptions markerOpt = new MarkerOptions();
+//                            markerOpt.position(new LatLng(Double.parseDouble(r.getLat()), Double
+//                                    .parseDouble(r.getLon())));
+//                            markerOpt.title(r.getService_code());
+//                            markerOpt.snippet(r.getDescription());
+//                            markerOpt.draggable(false);
+//
+//                            float color = "closed".equals(r
+//                                    .getStatus()) ? BitmapDescriptorFactory.HUE_GREEN : BitmapDescriptorFactory.HUE_RED;
+//
+//                            markerOpt.icon(BitmapDescriptorFactory.defaultMarker(color));
+//                            Marker m = map.addMarker(markerOpt);
+//                            localMap.put(m, r);
+//                        }
+//                        requestMap = localMap;
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                } finally {
+//                    progress.setVisibility(View.GONE);
+//                }
+//            }
+//        }, MainThreadExecutor.build());
     }
 
     private void animateToMyLocation() {
-        map.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
-            @Override
-            public void onMyLocationChange(Location location) {
-                LatLng myLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-                CameraPosition cameraPosition = new CameraPosition.Builder()
-                        .target(myLatLng)
-                        .zoom(map.getCameraPosition().zoom)
-                        .build();
+        map.setOnMyLocationChangeListener(location -> {
+            LatLng myLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(myLatLng)
+                    .zoom(map.getCameraPosition().zoom)
+                    .build();
 
-                map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 2000, null);
-
-                map.setOnMyLocationChangeListener(null);  //once...
-            }
+            map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 2000, null);
+            map.setOnMyLocationChangeListener(null);
         });
         map.setMyLocationEnabled(true);
     }

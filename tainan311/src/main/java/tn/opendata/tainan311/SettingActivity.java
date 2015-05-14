@@ -1,5 +1,6 @@
 package tn.opendata.tainan311;
 
+import android.app.ActionBar;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
@@ -19,7 +20,10 @@ public class SettingActivity extends PreferenceActivity {
 
         getFragmentManager().beginTransaction().replace(android.R.id.content,
                 new SettingFragment()).commit();
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar ab = getActionBar();
+        if (ab != null) {
+            ab.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     public static final String PREFS_KEY_DEFAULT_NAME = "reporter_name_preference";

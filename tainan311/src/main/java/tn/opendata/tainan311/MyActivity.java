@@ -5,8 +5,6 @@ import android.app.ListActivity;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -20,7 +18,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.common.collect.Lists;
-
+import com.google.common.collect.Sets;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.HashSet;
@@ -29,33 +29,29 @@ import java.util.Set;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
 import retrofit.RestAdapter;
 import retrofit.converter.SimpleXMLConverter;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import tn.opendata.tainan311.tainan1999.TainanReport1999;
 import tn.opendata.tainan311.tainan1999.api.QueryRequest;
 import tn.opendata.tainan311.tainan1999.api.Record;
 import tn.opendata.tainan311.tainan1999.api.Tainan1999Service;
-
 import tn.opendata.tainan311.tainan1999.util.TainanConstant;
-
 import tn.opendata.tainan311.utils.LogUtils;
 import tn.opendata.tainan311.utils.PreferenceUtils;
 
 import static tn.opendata.tainan311.utils.EasyUtil.isNotEmpty;
 
 /**
+ * This is an activity for reports added by user own
+ *
  * Created by newman on 5/8/15.
  */
 public class MyActivity extends ListActivity {
     private static final String TAG = MyActivity.class.getSimpleName();
     // Object
     private QueryRequestArrayAdapter mQueryRequestArrayAdapter;
-    // Value
     private RestAdapter restAdapter;
 
     @Override
@@ -83,7 +79,9 @@ public class MyActivity extends ListActivity {
 
     private void initActionBar() {
         ActionBar ab = getActionBar();
-        ab.setDisplayHomeAsUpEnabled(true);
+        if (ab != null) {
+            ab.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     private void initEmptyView() {
@@ -137,6 +135,7 @@ public class MyActivity extends ListActivity {
                        LogUtils.e(TAG, err.getMessage());
                    });
         } else {
+            showProgressOnActionBar(false);
             LogUtils.d(TAG, "requestIds is null or empty");
         }
     }
@@ -169,23 +168,21 @@ public class MyActivity extends ListActivity {
                       .doOnNext(pic -> pic.doPrepareImage(getContext()))
                     .first() //We only need 1 pic
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(pic -> {
-                                Picasso.with(getContext())
-                                       .load(new File(pic.getFilePath()))
-                                       .fit()
-                                       .centerCrop()
-                                       .into(holder.cover, new Callback() {
-                                           @Override
-                                           public void onSuccess() {
-                                               holder.cover.setVisibility(View.VISIBLE);
-                                           }
+                    .subscribe(pic -> Picasso.with(getContext())
+                           .load(new File(pic.getFilePath()))
+                           .fit()
+                           .centerCrop()
+                           .into(holder.cover, new Callback() {
+                               @Override
+                               public void onSuccess() {
+                                   holder.cover.setVisibility(View.VISIBLE);
+                               }
 
-                                           @Override
-                                           public void onError() {
-                                               LogUtils.w(TAG, "onError");
-                                           }
-                                       });
-                            }, err -> LogUtils.e(TAG, err.getMessage())
+                               @Override
+                               public void onError() {
+                                   LogUtils.w(TAG, "onError");
+                               }
+                           }), err -> LogUtils.e(TAG, err.getMessage())
 
                     );
             // service name
@@ -257,8 +254,9 @@ public class MyActivity extends ListActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @SuppressWarnings("unused")
     private void setRawRequestIdsForTest() {
-        HashSet<String> t = new HashSet<String>();
+        HashSet<String> t = Sets.newHashSet();
         t.add("UN201505110183");
         t.add("UN201505110247");
         PreferenceUtils.setMyRequestIds(this, t);

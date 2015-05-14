@@ -68,8 +68,4 @@ public class QueryResponse {
     public String getStacktrace() {
         return stacktrace;
     }
-
-
 }
-
-

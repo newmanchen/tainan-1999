@@ -22,7 +22,7 @@ public class PreferenceUtils {
     public static void setMyRequestIds(Context context, HashSet<String> requestIds){
         SharedPreferences.Editor prefs = context.getSharedPreferences(Constant.PREF_NAME, 0).edit();
         prefs.putStringSet(Constant.KEY_MY_REQUEST_ID, requestIds);
-        prefs.commit();
+        prefs.apply();
     }
 
     public static boolean getIgnorePref(Context context){
@@ -33,6 +33,6 @@ public class PreferenceUtils {
     public static void setIgnoreTipPref(Context context, boolean ignore){
         SharedPreferences.Editor prefs = context.getSharedPreferences(Constant.PREF_NAME, 0).edit();
         prefs.putBoolean(Constant.KEY_SHOW_TIPS, !ignore);
-        prefs.commit();
+        prefs.apply();
     }
 }

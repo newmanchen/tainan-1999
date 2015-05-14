@@ -50,6 +50,8 @@ import static tn.opendata.tainan311.tainan1999.api.QueryRequest.Builder;
 import static tn.opendata.tainan311.utils.EasyUtil.isNotEmpty;
 
 /**
+ * The landing page
+ *
  * Created by newman on 5/5/15.
  */
 public class TainanRequestListActivity extends ListActivity {
@@ -74,16 +76,20 @@ public class TainanRequestListActivity extends ListActivity {
         @Override
         public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
             int lastInScreen = firstVisibleItem + visibleItemCount;
-            //is the bottom item visible & not loading more already ? Load more !
             if((lastInScreen == totalItemCount) && !(mLoadingMore)){
-                Record r = mQueryRequestArrayAdapter.getItem(mQueryRequestArrayAdapter.getCount()-1);
-                String time = r.getRequested_datetime();
-                try {
-                    Date d = mSimpleDateFormat.parse(time);
-                    cal.setTimeInMillis(d.getTime());
-                    loadQueryRequest(false);
-                } catch (ParseException e) {
-                    LogUtils.w(TAG, e.getMessage(), e);
+                int count = mQueryRequestArrayAdapter.getCount();
+                if (count > 0) {
+                    Record r = mQueryRequestArrayAdapter.getItem(mQueryRequestArrayAdapter.getCount() - 1);
+                    String time = r.getRequested_datetime();
+                    try {
+                        Date d = mSimpleDateFormat.parse(time);
+                        cal.setTimeInMillis(d.getTime());
+                        loadQueryRequest(false);
+                    } catch (ParseException e) {
+                        LogUtils.w(TAG, e.getMessage(), e);
+                    }
+                } else {
+                    LogUtils.d(TAG, "onScroll():: no data in this adapter");
                 }
             }
         }
@@ -109,8 +115,10 @@ public class TainanRequestListActivity extends ListActivity {
 
     private void initActionBar() {
         ActionBar ab = getActionBar();
-        ab.setTitle(R.string.request_list_title);
-//        ab.setDisplayHomeAsUpEnabled(true);
+        if (ab != null) {
+            ab.setTitle(R.string.request_list_title);
+//            ab.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     private void initViews() {
@@ -119,7 +127,7 @@ public class TainanRequestListActivity extends ListActivity {
                 .inflate(R.layout.list_item_loading_more, null);
         getListView().addFooterView(mLoadingMoreItem);
 
-        mQueryRequestArrayAdapter = new QueryRequestArrayAdapter(TainanRequestListActivity.this, new ArrayList<Record>());
+        mQueryRequestArrayAdapter = new QueryRequestArrayAdapter(TainanRequestListActivity.this, new ArrayList<>());
         setListAdapter(mQueryRequestArrayAdapter);
         getListView().setOnItemClickListener(mQueryRequestArrayAdapter);
         getListView().setOnScrollListener(mOnScrollListener);
@@ -168,7 +176,7 @@ public class TainanRequestListActivity extends ListActivity {
                    }
 
                }, err -> {
-                   LogUtils.e(TAG, err.getMessage());
+                   LogUtils.w(TAG, err.getMessage(), err);
                    removeLoadingMoreListItem();
                });
     }

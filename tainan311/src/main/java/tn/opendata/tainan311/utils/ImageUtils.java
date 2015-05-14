@@ -12,23 +12,19 @@ import android.provider.MediaStore;
 import com.google.common.base.Optional;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * Created by vincent on 2014/6/10.
- */
 public final class ImageUtils {
     private static final String TAG = ImageUtils.class.getSimpleName();
+
     public static Optional<String> saveBitmap(Bitmap bitmap) {
         Optional<File> file = createImageFile();
-        if ( file.isPresent() ) {
+        if (file.isPresent()) {
             FileOutputStream fout = null;
             try {
                 File f = file.get();
@@ -51,22 +47,22 @@ public final class ImageUtils {
     }
 
     private static final String CONTENT_URI_GOOGLE_ALBUM = "content://com.google.android.apps.photos.content/0/";
+
     public static Optional<Bitmap> getBitmapFromIntentData(Context context, Intent data) {
         Uri selectedImageUri = data.getData();
-        if ( selectedImageUri == null || context == null ) {
+        if (selectedImageUri == null || context == null) {
             return Optional.absent();
         }
-        final String[] column = {MediaStore.Images.Media.DATA , MediaStore.Images.Media.DISPLAY_NAME};
+        final String[] column = { MediaStore.Images.Media.DATA, MediaStore.Images.Media.DISPLAY_NAME };
         Cursor cursor = null;
         try {
             cursor = context.getContentResolver().query(selectedImageUri, column, null, null, null);
-            if ( cursor != null && cursor.moveToNext() ) {
+            if (cursor != null && cursor.moveToNext()) {
                 BitmapFactory.Options opt = new BitmapFactory.Options();
                 opt.inSampleSize = 2;
                 opt.inPreferredConfig = Bitmap.Config.RGB_565;
 
                 if (selectedImageUri.toString().startsWith(CONTENT_URI_GOOGLE_ALBUM)) {
-                    final int columnIndex = cursor.getColumnIndex(column[1]);
                     InputStream is;
                     if (selectedImageUri.toString().startsWith(CONTENT_URI_GOOGLE_ALBUM)) {
                         is = context.getContentResolver().openInputStream(selectedImageUri);
@@ -80,10 +76,6 @@ public final class ImageUtils {
                     return Optional.of(BitmapFactory.decodeFile(path, opt));
                 }
             }
-        } catch (FileNotFoundException e) {
-            LogUtils.w(TAG, e.getMessage(), e);
-        } catch (MalformedURLException e) {
-            LogUtils.w(TAG, e.getMessage(), e);
         } catch (IOException e) {
             LogUtils.w(TAG, e.getMessage(), e);
         } finally {
@@ -94,43 +86,40 @@ public final class ImageUtils {
 
     public static Optional<File> createImageFile() {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String path = timeStamp;
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         if (!storageDir.exists()) {
             storageDir.mkdirs();
         }
 
-        File image = null;
         try {
-            return Optional.of(File.createTempFile(path, ".jpg", storageDir));
+            return Optional.of(File.createTempFile(timeStamp, ".jpg", storageDir));
         } catch (IOException e) {
             e.printStackTrace();
         }
         return Optional.absent();
     }
 
+    @SuppressWarnings("unused")
     public static Bitmap cropCenterBitmap(Bitmap srcBmp) {
         Bitmap dstBmp;
-        if (srcBmp.getWidth() >= srcBmp.getHeight()){
+        if (srcBmp.getWidth() >= srcBmp.getHeight()) {
 
             dstBmp = Bitmap.createBitmap(
                     srcBmp,
-                    srcBmp.getWidth()/2 - srcBmp.getHeight()/2,
+                    srcBmp.getWidth() / 2 - srcBmp.getHeight() / 2,
                     0,
                     srcBmp.getHeight(),
                     srcBmp.getHeight()
             );
-        }else{
-
+        } else {
             dstBmp = Bitmap.createBitmap(
                     srcBmp,
                     0,
-                    srcBmp.getHeight()/2 - srcBmp.getWidth()/2,
+                    srcBmp.getHeight() / 2 - srcBmp.getWidth() / 2,
                     srcBmp.getWidth(),
                     srcBmp.getWidth()
             );
         }
         return dstBmp;
     }
-
 }
