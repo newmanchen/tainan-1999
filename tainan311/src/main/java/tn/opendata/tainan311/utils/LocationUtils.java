@@ -5,6 +5,7 @@ import android.location.Address;
 import android.location.Geocoder;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.common.collect.Lists;
 
 import java.io.IOException;
 import java.util.List;
@@ -46,7 +47,7 @@ public class LocationUtils {
      * @return the best address of the LatLng
      */
     public static Address getFromLocationName(Context context, LatLng location, String address) {
-        List<Address> resultAddress = null;
+        List<Address> resultAddress = Lists.newArrayList();
         double precesion = 0.05;
 
         if (Geocoder.isPresent()) {
