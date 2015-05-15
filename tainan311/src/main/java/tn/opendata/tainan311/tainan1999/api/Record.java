@@ -12,9 +12,10 @@ import java.util.List;
 
 @Root
 public class Record implements Parcelable{
-    @Element private String service_request_id; //案件編號
-    @Element private String requested_datetime; //反映日期
-
+    @Element(required=false)
+    private String service_request_id; //案件編號
+    @Element(required=false)
+    private String requested_datetime; //反映日期
     @Element(required=false)
     private String status; //案件狀態
     @Element private String keyword; //案件描述
@@ -22,7 +23,8 @@ public class Record implements Parcelable{
     private String area; //行政區
     @Element(required=false)
     private String service_name; //案件類型
-    @Element private String agency; //業管單位
+    @Element(required=false)
+    private String agency; //業管單位
     @Element(required=false)
     private String subproject; //案件事項
     @Element private String description; //案件內容

@@ -8,7 +8,7 @@ import org.simpleframework.xml.Root;
  */
 @Root(name="root")
 public class AddResponse {
-    @Element
+    @Element(required=false)
     private int returncode; // 0表示成功，其它表示不成功
     @Element(required=false)
     private String description; // 錯誤說明【操作失敗才會顯示】
@@ -20,7 +20,7 @@ public class AddResponse {
     private String service_request_id; // 案件編號
     @Element(required=false)
     private String service_notice; // 服務案件說明
-    @Element
+    @Element(required=false)
     private String count; // 結果筆數
 
     public String getToken() {
