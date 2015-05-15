@@ -120,7 +120,11 @@ public class DetailActivity extends Activity {
             ll_expected.setVisibility(View.VISIBLE);
             expectedData.setText(mRequest.getExpected_datetime());
         }
-        agency.setText(TainanConstant.AGENCY[Integer.valueOf(mRequest.getAgency())]);
+        if (mRequest.getAgency() != null && mRequest.getAgency().equals("0")) {
+            agency.setText(TainanConstant.AGENCY[Integer.valueOf(mRequest.getAgency())]);
+        } else {
+            agency.setText(mRequest.getAgency());
+        }
         GoogleMap map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
         map.getUiSettings().setZoomControlsEnabled(true);
         final LatLng issueLocation;

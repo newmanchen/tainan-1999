@@ -27,7 +27,8 @@ public class Record implements Parcelable{
     private String agency; //業管單位
     @Element(required=false)
     private String subproject; //案件事項
-    @Element private String description; //案件內容
+    @Element(required=false)
+    private String description; //案件內容
     @Element(required=false)
     private String address_string; //地點
     @Element(required=false)
