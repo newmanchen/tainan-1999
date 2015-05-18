@@ -108,7 +108,7 @@ public class TainanRequestListActivity extends ListActivity {
         restAdapter = new RestAdapter.Builder()
                 .setEndpoint(TainanConstant.TAINAN1999_URL)
                 .setConverter(new SimpleXMLConverter())
-                .setLogLevel(RestAdapter.LogLevel.FULL)
+//                .setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
 
         mLoadingMore = false;
