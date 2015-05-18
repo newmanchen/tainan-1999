@@ -18,7 +18,8 @@ public class Record implements Parcelable{
     private String requested_datetime; //反映日期
     @Element(required=false)
     private String status; //案件狀態
-    @Element private String keyword; //案件描述
+    @Element(required=false)
+    private String keyword; //案件描述
     @Element(required=false)
     private String area; //行政區
     @Element(required=false)
