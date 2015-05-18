@@ -34,6 +34,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import me.drakeet.materialdialog.MaterialDialog;
 import retrofit.RestAdapter;
 import retrofit.converter.SimpleXMLConverter;
 import rx.Observable;
@@ -60,6 +61,7 @@ public class TainanRequestListActivity extends ListActivity {
     AddFloatingActionButton addRequestButton;
     // View
     private LinearLayout mLoadingMoreItem;
+    private MaterialDialog mMaterialDialog;
     // Object
     private QueryRequestArrayAdapter mQueryRequestArrayAdapter;
     private SimpleDateFormat mSimpleDateFormat;
@@ -104,11 +106,12 @@ public class TainanRequestListActivity extends ListActivity {
         restAdapter = new RestAdapter.Builder()
                 .setEndpoint(TainanConstant.TAINAN1999_URL)
                 .setConverter(new SimpleXMLConverter())
-                        //.setLogLevel(RestAdapter.LogLevel.FULL)
+//                .setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
 
         mLoadingMore = false;
         initActionBar();
+        initEmptyView();
         initViews();
         loadQueryRequest(true);
     }
@@ -119,6 +122,14 @@ public class TainanRequestListActivity extends ListActivity {
             ab.setTitle(R.string.request_list_title);
 //            ab.setDisplayHomeAsUpEnabled(true);
         }
+    }
+
+    private void initEmptyView() {
+        View view = getLayoutInflater().inflate(R.layout.empty_view, null);
+        TextView tv = (TextView) view.findViewById(R.id.empty_string);
+        tv.setText(R.string.text_no_my_activity);
+        ((ViewGroup) getListView().getParent()).addView(view, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        getListView().setEmptyView(view);
     }
 
     private void initViews() {
@@ -168,15 +179,17 @@ public class TainanRequestListActivity extends ListActivity {
                    mLoadingMore = false;
                    removeLoadingMoreListItem();
                    if (queryResponse.getReturncode() == 0) { //success
+                       LogUtils.w(TAG, "returned count = ", queryResponse.getCount());
                        List<Record> records = queryResponse.getRecords();
                        mQueryRequestArrayAdapter.addAll(records);
                    } else {
-                       LogUtils.e(TAG, "error");
-                       //TODO: error handle??
+                       LogUtils.w(TAG, "error, description:",  queryResponse.getDescription(), "  stacktrace:",queryResponse.getStacktrace());
+                       showErrorDialog(queryResponse.getDescription());
                    }
                }, err -> {
                    LogUtils.w(TAG, err.getMessage(), err);
                    removeLoadingMoreListItem();
+                   showErrorDialog(null);
                });
     }
 
@@ -186,6 +199,18 @@ public class TainanRequestListActivity extends ListActivity {
 
     private void removeLoadingMoreListItem() {
         mLoadingMoreItem.setVisibility(View.GONE);
+    }
+
+    private void showErrorDialog(final String errorString) {
+        if (mMaterialDialog == null) {
+            mMaterialDialog = new MaterialDialog(this);
+        }
+        mMaterialDialog.setTitle(R.string.text_error)
+                .setMessage(isNotEmpty(errorString) ? errorString : getString(R.string.text_default_error))
+                .setPositiveButton(android.R.string.ok, v -> {
+                    mMaterialDialog.dismiss();
+                })
+                .show();
     }
 
     @Override

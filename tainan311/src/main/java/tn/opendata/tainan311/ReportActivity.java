@@ -148,8 +148,8 @@ public class ReportActivity extends Activity implements WizardFragment.FlowContr
 
     @Override
     public void setNextEnabled(boolean enabled) {
-        doneButton.setEnabled(true);
-        nextButton.setEnabled(true);
+        doneButton.setEnabled(enabled);
+        nextButton.setEnabled(enabled);
     }
 
     @Override

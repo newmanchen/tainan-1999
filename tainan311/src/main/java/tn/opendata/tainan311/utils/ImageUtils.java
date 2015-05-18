@@ -22,7 +22,7 @@ import java.util.Date;
 public final class ImageUtils {
     private static final String TAG = ImageUtils.class.getSimpleName();
 
-    public static Optional<String> saveBitmap(Bitmap bitmap) {
+    public static Optional<File> saveBitmap(Bitmap bitmap) {
         Optional<File> file = createImageFile();
         if (file.isPresent()) {
             FileOutputStream fout = null;
@@ -36,7 +36,7 @@ public final class ImageUtils {
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 85, fout);
                 fout.flush();
 
-                return Optional.of(f.getAbsolutePath());
+                return Optional.of(f);
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {

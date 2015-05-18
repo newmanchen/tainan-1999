@@ -88,4 +88,8 @@
     <string name="text_button_confirm">確認</string>
     <string name="text_confirm_message">點下確認按鈕會馬上送出您所填的資料到台南市民熱線網頁，包含您的姓名、電話、現在所在位置和E-mail</string>
     <string name="text_no_my_activity">沒有任何回報案件</string>
+    <string name="text_error">錯誤發生</string>
+    <string name="text_default_error">網站發生不預期的狀況，請稍候再試。離開此程式後再進入，謝謝。</string>
+    <string name="text_add_fail">新增失敗</string>
+    <string name="less_than_one_mb">照片大小限制小於 1 MB, 請重新選擇</string>
 </resources>

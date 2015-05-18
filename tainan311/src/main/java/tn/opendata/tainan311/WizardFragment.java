@@ -17,7 +17,7 @@ public abstract class WizardFragment extends Fragment{
 
     public void setReady(boolean mReady) {
         this.mReady = mReady;
-        controller.setNextEnabled(true);
+        controller.setNextEnabled(mReady);
     }
 
     @Override

@@ -14,10 +14,13 @@ import android.widget.Toast;
 
 import com.google.common.base.Optional;
 
+import java.io.File;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import tn.opendata.tainan311.utils.ImageUtils;
+import tn.opendata.tainan311.utils.LogUtils;
 
 /**
  * To pick a photo or take a picture for adding to report
@@ -25,10 +28,10 @@ import tn.opendata.tainan311.utils.ImageUtils;
  * Created by sam on 2014/6/11.
  */
 public class PickPhotoFragment extends WizardFragment {
+    private static final String TAG = PickPhotoFragment.class.getSimpleName();
     @InjectView(R.id.photo) ImageView mPhotoView;
 //    @InjectView(R.id.album) ImageButton mPickPhoto;
 //    @InjectView(R.id.camera) ImageButton mTakePhoto;
-
 
     private static final int REQUEST_CODE_IMAGE_PICKER = 0x1;
     private static final int REQUEST_CODE_IMAGE_CAPTURE = 0x2;
@@ -66,13 +69,15 @@ public class PickPhotoFragment extends WizardFragment {
                 if (bitmap.isPresent()) {
                     Bitmap bmp = bitmap.get();
                     mPhotoView.setImageBitmap(bmp); // scaled
+                    bmp = Bitmap.createScaledBitmap(bmp, 1280, 960, false);
                     mPhoto = getImagePath(bmp);
                 }
             } else if ( requestCode == REQUEST_CODE_IMAGE_CAPTURE ) {
                 Bundle bundle = data.getExtras();
                 Bitmap imageBitmap;
                 if ( bundle != null && (imageBitmap = (Bitmap)bundle.get("data")) != null ) {
-                    mPhotoView.setImageBitmap(Bitmap.createScaledBitmap(imageBitmap, 1280, 960, false));
+                    imageBitmap = Bitmap.createScaledBitmap(imageBitmap, 1280, 960, false);
+                    mPhotoView.setImageBitmap(imageBitmap);
                     mPhoto = getImagePath(imageBitmap);
                 }
             }
@@ -80,11 +85,28 @@ public class PickPhotoFragment extends WizardFragment {
     }
 
     private String getImagePath(Bitmap bmp) {
-        Optional<String> path = ImageUtils.saveBitmap(bmp);
-        if ( path.isPresent() ) {
-            return path.get();
+        Optional<File> file = ImageUtils.saveBitmap(bmp);
+        if (file.isPresent()) {
+            checkBitmapSize(file.get());
+            return file.get().getAbsolutePath();
+        } else {
+            LogUtils.d(TAG, "no image file");
+            return null;
         }
-        return null;
+    }
+
+    private void checkBitmapSize(File bmp) {
+        long bmpSize = bmp.length();
+        LogUtils.d(TAG, "bmpSize@", bmp.getAbsoluteFile(), " is ", bmpSize);
+        if (bmpSize > 10000000) {
+            setReady(false);
+            Activity act = getActivity();
+            if (act != null) {
+                Toast.makeText(act, R.string.less_than_one_mb, Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            setReady(true);
+        }
     }
 
     @OnClick(R.id.album)

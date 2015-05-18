@@ -29,6 +29,7 @@ import java.util.Set;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import me.drakeet.materialdialog.MaterialDialog;
 import retrofit.RestAdapter;
 import retrofit.converter.SimpleXMLConverter;
 import rx.Observable;
@@ -53,6 +54,8 @@ public class MyActivity extends ListActivity {
     // Object
     private QueryRequestArrayAdapter mQueryRequestArrayAdapter;
     private RestAdapter restAdapter;
+    // View
+    private MaterialDialog mMaterialDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +68,6 @@ public class MyActivity extends ListActivity {
                 .setConverter(new SimpleXMLConverter())
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
-
 
         initActionBar();
         initEmptyView();
@@ -126,18 +128,31 @@ public class MyActivity extends ListActivity {
                                }
                            }
                        } else {
-                           LogUtils.e(TAG, "error");
-                           //TODO: error handle??
+                           LogUtils.w(TAG, "error, description:",  queryResponse.getDescription(), "  stacktrace:",queryResponse.getStacktrace());
+                           showErrorDialog(queryResponse.getDescription());
                        }
                        showProgressOnActionBar(false);
                    }, err -> {
                        showProgressOnActionBar(false);
                        LogUtils.e(TAG, err.getMessage());
+                       showErrorDialog(null);
                    });
         } else {
             showProgressOnActionBar(false);
             LogUtils.d(TAG, "requestIds is null or empty");
         }
+    }
+
+    private void showErrorDialog(final String errorString) {
+        if (mMaterialDialog == null) {
+            mMaterialDialog = new MaterialDialog(this);
+        }
+        mMaterialDialog.setTitle(R.string.text_error)
+                       .setMessage(isNotEmpty(errorString) ? errorString : getString(R.string.text_default_error))
+                       .setPositiveButton(android.R.string.ok, v -> {
+                           mMaterialDialog.dismiss();
+                       })
+                       .show();
     }
 
     public class QueryRequestArrayAdapter extends ArrayAdapter<Record> implements AdapterView.OnItemClickListener {

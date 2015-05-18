@@ -90,7 +90,6 @@ public class NewRequestIntentService extends IntentService {
             builder.setPhone(data.getString(EXTRA_PHONE));
             builder.setEmail(data.getString(EXTRA_EMAIL));
             if (data.containsKey(NewRequestIntentService.EXTRA_PHOTO)) {
-                // put this to non ui thread
                 String path = data.getString(NewRequestIntentService.EXTRA_PHOTO);
                 if (!TextUtils.isEmpty(path)) {
                     try {
@@ -125,6 +124,7 @@ public class NewRequestIntentService extends IntentService {
                     .subscribe(addResponse -> {
                         LogUtils.d(TAG, "onSuccess");
                         if (addResponse != null) {
+                            LogUtils.w(TAG, "add response :: returncode = ", addResponse.getReturncode());
                             if (addResponse.getReturncode() == 0) {
                                 LogUtils.d(TAG, "add response :: token = ", addResponse.getToken());
                                 LogUtils.d(TAG, "add response :: service_notice = ", addResponse.getService_notice());
@@ -138,10 +138,9 @@ public class NewRequestIntentService extends IntentService {
                                 requestIds.add(addResponse.getService_request_id());
                                 PreferenceUtils.setMyRequestIds(NewRequestIntentService.this, requestIds);
                             } else {
-                                // TODO error handling
-                                LogUtils.d(TAG, "add response :: returncode = ", addResponse.getReturncode());
-                                LogUtils.d(TAG, "add response :: description = ", addResponse.getDescription());
-                                LogUtils.d(TAG, "add response :: stacktrace = ", addResponse.getStacktrace());
+                                LogUtils.w(TAG, "add response :: description = ", addResponse.getDescription());
+                                LogUtils.w(TAG, "add response :: stacktrace = ", addResponse.getStacktrace());
+                                showNotification(getString(R.string.text_add_fail)+":"+addResponse.getDescription());
                             }
                         }
                     }, err -> LogUtils.w(TAG, err.getMessage(), err));
