@@ -46,6 +46,7 @@ import tn.opendata.tainan311.tainan1999.api.Record;
 import tn.opendata.tainan311.tainan1999.api.Tainan1999Service;
 import tn.opendata.tainan311.tainan1999.util.TainanConstant;
 import tn.opendata.tainan311.utils.LogUtils;
+import tn.opendata.tainan311.utils.NewsBoard;
 
 import static tn.opendata.tainan311.tainan1999.api.QueryRequest.Builder;
 import static tn.opendata.tainan311.utils.EasyUtil.isNotEmpty;
@@ -62,6 +63,7 @@ public class TainanRequestListActivity extends ListActivity {
     // View
     private LinearLayout mLoadingMoreItem;
     private MaterialDialog mMaterialDialog;
+    private MaterialDialog mNewsMaterialDialog;
     // Object
     private QueryRequestArrayAdapter mQueryRequestArrayAdapter;
     private SimpleDateFormat mSimpleDateFormat;
@@ -114,6 +116,22 @@ public class TainanRequestListActivity extends ListActivity {
         initEmptyView();
         initViews();
         loadQueryRequest(true);
+        loadNewsBoard();
+    }
+
+    private void loadNewsBoard() {
+        new Thread(() -> {
+            try {
+                mNewsMaterialDialog = NewsBoard.create(TainanRequestListActivity.this)
+                        .withUrl(TainanConstant.NEWS_URL)
+                        .addPositiveButton(android.R.string.ok, v -> { if (mNewsMaterialDialog != null ) {mNewsMaterialDialog.dismiss(); }})
+                        .titleId(android.R.string.dialog_alert_title)
+                        .checkMethod(NewsBoard.CheckMethod.GITHUB_ETAG)
+                        .run();
+            } catch(Exception e) {
+                LogUtils.e(TAG, e.toString(), e);
+            }
+        }).start();
     }
 
     private void initActionBar() {

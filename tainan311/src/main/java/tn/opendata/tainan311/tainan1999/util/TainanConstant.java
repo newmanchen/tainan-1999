@@ -6,6 +6,7 @@ package tn.opendata.tainan311.tainan1999.util;
 public class TainanConstant {
     public static final String TAINAN1999_URL = "http://open1999.tainan.gov.tw:82";
     public static final String POST_TEST_SERVER_URL = "http://posttestserver.com";
+    public static final String NEWS_URL = "https://raw.githubusercontent.com/newmanchen/tainan-1999/master/News.md";
     // city-id on tainan1999
     public static final String CITY_ID = "tainan.gov.tw";
     // service_name on tainan1999
