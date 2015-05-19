@@ -38,6 +38,8 @@ public class NewsBoard {
 
     private View.OnClickListener negativeClickListener = null;
     private View.OnClickListener positiveClickListener = null;
+    private boolean negativeDefaultAction = false;
+    private boolean positiveDefaultAction = false;
 
     private CheckMethod method = CheckMethod.LAST_MODIFIED;
 
@@ -80,9 +82,21 @@ public class NewsBoard {
         return this;
     }
 
+    public NewsBoard addPositiveButton(int id) {
+        positiveId = id;
+        positiveDefaultAction = true;
+        return this;
+    }
+
     public NewsBoard addNegativeButton(int id, View.OnClickListener listener) {
         negativeId = id;
         negativeClickListener = listener;
+        return this;
+    }
+
+    public NewsBoard addNegativeButton(int id) {
+        negativeId = id;
+        negativeDefaultAction = true;
         return this;
     }
 
@@ -114,10 +128,22 @@ public class NewsBoard {
                     mMaterialDialog.setTitle(titleId);
                 }
                 if ( negativeId != -1 ) {
-                    mMaterialDialog.setNegativeButton(negativeId, negativeClickListener);
+                    if (negativeDefaultAction) {
+                        mMaterialDialog.setNegativeButton(negativeId, v -> {
+                            mMaterialDialog.dismiss();
+                        });
+                    } else {
+                        mMaterialDialog.setNegativeButton(negativeId, negativeClickListener);
+                    }
                 }
                 if ( positiveId != -1 ) {
-                    mMaterialDialog.setPositiveButton(positiveId, positiveClickListener);
+                    if (positiveDefaultAction) {
+                        mMaterialDialog.setPositiveButton(positiveId, v -> {
+                            mMaterialDialog.dismiss();
+                        });
+                    } else {
+                        mMaterialDialog.setPositiveButton(positiveId, positiveClickListener);
+                    }
                 }
                 mMaterialDialog.show();
             });

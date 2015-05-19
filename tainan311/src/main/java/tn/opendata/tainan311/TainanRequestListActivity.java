@@ -63,7 +63,6 @@ public class TainanRequestListActivity extends ListActivity {
     // View
     private LinearLayout mLoadingMoreItem;
     private MaterialDialog mMaterialDialog;
-    private MaterialDialog mNewsMaterialDialog;
     // Object
     private QueryRequestArrayAdapter mQueryRequestArrayAdapter;
     private SimpleDateFormat mSimpleDateFormat;
@@ -122,9 +121,9 @@ public class TainanRequestListActivity extends ListActivity {
     private void loadNewsBoard() {
         new Thread(() -> {
             try {
-                mNewsMaterialDialog = NewsBoard.create(TainanRequestListActivity.this)
+                NewsBoard.create(TainanRequestListActivity.this)
                         .withUrl(TainanConstant.NEWS_URL)
-                        .addPositiveButton(android.R.string.ok, v -> { if (mNewsMaterialDialog != null ) {mNewsMaterialDialog.dismiss(); }})
+                        .addPositiveButton(android.R.string.ok)
                         .titleId(android.R.string.dialog_alert_title)
                         .checkMethod(NewsBoard.CheckMethod.GITHUB_ETAG)
                         .run();
