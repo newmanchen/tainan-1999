@@ -121,35 +121,39 @@ public class NewsBoard {
             SharedPreferences pref = activity.get().getSharedPreferences(SHARD_PREF, Context.MODE_PRIVATE);
             pref.edit().putString("lastModified", msg.data).apply();
 
-            activity.get().runOnUiThread(() -> {
-                mMaterialDialog = new MaterialDialog(activity.get());
-                mMaterialDialog.setMessage(msg.message);
-                if ( titleId != -1 ) {
-                    mMaterialDialog.setTitle(titleId);
-                }
-                if ( negativeId != -1 ) {
-                    if (negativeDefaultAction) {
-                        mMaterialDialog.setNegativeButton(negativeId, v -> {
-                            mMaterialDialog.dismiss();
-                        });
-                    } else {
-                        mMaterialDialog.setNegativeButton(negativeId, negativeClickListener);
+            if (!isEmpty(msg.message)) {
+                activity.get().runOnUiThread(() -> {
+                    mMaterialDialog = new MaterialDialog(activity.get());
+                    mMaterialDialog.setMessage(msg.message);
+                    if (titleId != -1) {
+                        mMaterialDialog.setTitle(titleId);
                     }
-                }
-                if ( positiveId != -1 ) {
-                    if (positiveDefaultAction) {
-                        mMaterialDialog.setPositiveButton(positiveId, v -> {
-                            mMaterialDialog.dismiss();
-                        });
-                    } else {
-                        mMaterialDialog.setPositiveButton(positiveId, positiveClickListener);
+                    if (negativeId != -1) {
+                        if (negativeDefaultAction) {
+                            mMaterialDialog.setNegativeButton(negativeId, v -> {
+                                mMaterialDialog.dismiss();
+                            });
+                        } else {
+                            mMaterialDialog.setNegativeButton(negativeId, negativeClickListener);
+                        }
                     }
-                }
-                mMaterialDialog.show();
-            });
+                    if (positiveId != -1) {
+                        if (positiveDefaultAction) {
+                            mMaterialDialog.setPositiveButton(positiveId, v -> {
+                                mMaterialDialog.dismiss();
+                            });
+                        } else {
+                            mMaterialDialog.setPositiveButton(positiveId, positiveClickListener);
+                        }
+                    }
+                    mMaterialDialog.show();
+                });
+            } else {
+                LogUtils.d(TAG, "no news - empty news");
+            }
             return mMaterialDialog;
         } else {
-            LogUtils.d(TAG, "no news");
+            LogUtils.d(TAG, "no news - the same key");
             return mMaterialDialog;
         }
     }
@@ -198,5 +202,10 @@ public class NewsBoard {
 
     public static NewsBoard create(Activity activity) {
         return new NewsBoard(activity);
+    }
+
+    private boolean isEmpty(String message) {
+        message = message.replace("\n", "");
+        return TextUtils.isEmpty(message);
     }
 }
