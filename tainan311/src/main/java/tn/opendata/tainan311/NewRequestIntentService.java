@@ -98,6 +98,7 @@ public class NewRequestIntentService extends IntentService {
                         LogUtils.d(TAG, "pic file size is ", picFile.length());
                         pic.setFileName(picFile.getName());
                         pic.setFile(Base64Utils.getBase64FileContent(picFile));
+                        pic.setDescription("before.1");
 
                         //TODO 3 pictures
                         List<AddPicture> pics = Lists.newArrayList();
@@ -113,13 +114,14 @@ public class NewRequestIntentService extends IntentService {
             }
 
             RestAdapter rest = new RestAdapter.Builder()
-//                    .setEndpoint(TainanConstant.POST_TEST_SERVER_URL)
                     .setEndpoint(TainanConstant.TAINAN1999_URL)
+//                    .setEndpoint(TainanConstant.POST_TEST_SERVER_URL)
                     .setConverter(new SimpleXMLConverter())
                     .build();
 
             Tainan1999Service service = rest.create(Tainan1999Service.class);
             service.addReports(builder.build())
+//            service.addReportsTest(builder.build())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(addResponse -> {
                         LogUtils.d(TAG, "onSuccess");

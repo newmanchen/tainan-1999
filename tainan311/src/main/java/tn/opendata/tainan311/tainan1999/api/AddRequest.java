@@ -1,7 +1,6 @@
 package tn.opendata.tainan311.tainan1999.api;
 
 import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementArray;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
