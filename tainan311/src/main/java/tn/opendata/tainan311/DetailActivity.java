@@ -62,7 +62,6 @@ public class DetailActivity extends Activity {
     TextView agency;
     private Record mRequest;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,7 +77,6 @@ public class DetailActivity extends Activity {
         }
     }
 
-
     private void updateActionBar() {
         ActionBar ab = getActionBar();
         if (ab != null) {
@@ -91,7 +89,6 @@ public class DetailActivity extends Activity {
         ImageView[] images = new ImageView[]{imageView1,imageView2,imageView3};
         int upbound = Math.min(mRequest.getPictures().size(),images.length);
         for(int i=0;i< upbound;i++){
-
             Picture pic = mRequest.getPictures().get(i);
 
             if(isNotEmpty(pic.getFilePath())){
@@ -102,7 +99,6 @@ public class DetailActivity extends Activity {
                        .into(images[i]);
                 images[i].setVisibility(View.VISIBLE);
             }
-
         }
 
         area.setText(mRequest.getArea());

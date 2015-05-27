@@ -179,8 +179,10 @@ public class ReportDetailFragment extends WizardFragment {
             Bundle b = getData();
             LatLng location = b.getParcelable(NewRequestIntentService.EXTRA_LOCATION);
             final Address address = LocationUtils.getFromLocationName(context, location, null);
-            LogUtils.d(TAG, "address is ", address.getAddressLine(0));
-            context.runOnUiThread(() -> textview_address.setText(address.getAddressLine(0)));
+            if (address != null) {
+                LogUtils.d(TAG, "address is ", address.getAddressLine(0));
+                context.runOnUiThread(() -> textview_address.setText(address.getAddressLine(0)));
+            }
         }
     }
 
