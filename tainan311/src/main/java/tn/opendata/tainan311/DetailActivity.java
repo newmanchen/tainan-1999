@@ -9,23 +9,24 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Picasso;
-
-import java.io.File;
-
-import butterknife.ButterKnife;
-import butterknife.InjectView;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
 import tn.opendata.tainan311.tainan1999.api.Picture;
 import tn.opendata.tainan311.tainan1999.api.Record;
 import tn.opendata.tainan311.tainan1999.util.TainanConstant;
 import tn.opendata.tainan311.utils.LocationUtils;
 import tn.opendata.tainan311.utils.LogUtils;
+
+import java.io.File;
 
 import static tn.opendata.tainan311.utils.EasyUtil.isNotEmpty;
 
@@ -123,14 +124,27 @@ public class DetailActivity extends Activity {
         }
         GoogleMap map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
         map.getUiSettings().setZoomControlsEnabled(true);
-        final LatLng issueLocation;
+
+        Observable<LatLng> obLatLng;
+        float markerColor;
         if (mRequest.getLat() == 0 || mRequest.getLng() == 0) {
-            issueLocation = LocationUtils.getLocationFromAddress(this, mRequest.getAddress_string());
+            obLatLng = LocationUtils.getLocationFromAddressAsync(this, mRequest.getAddress_string());
+            markerColor = BitmapDescriptorFactory.HUE_ROSE;
         } else {
-            issueLocation = new LatLng(mRequest.getLat(), mRequest.getLng());
+            obLatLng = Observable.just(new LatLng(mRequest.getLat(), mRequest.getLng()));
+            markerColor = BitmapDescriptorFactory.HUE_RED;
         }
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(issueLocation, 17));
-        map.addMarker(new MarkerOptions().title(mRequest.getSubproject()).position(issueLocation));
+
+        obLatLng.observeOn(AndroidSchedulers.mainThread())
+                .subscribe(latLng -> {
+                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
+                    map.addMarker(new MarkerOptions().title(mRequest.getSubproject())
+                                                     .icon(BitmapDescriptorFactory.defaultMarker(markerColor))
+                                                     .position(latLng)
+
+                    );
+                });
+
     }
 
     @Override

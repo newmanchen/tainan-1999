@@ -6,6 +6,8 @@ import android.location.Geocoder;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.common.collect.Lists;
+import rx.Observable;
+import rx.Subscriber;
 
 import java.io.IOException;
 import java.util.List;
@@ -38,6 +40,14 @@ public class LocationUtils {
         LogUtils.d(TAG, "result latlng = ", lat);
         return lat;
     }
+
+    public static Observable<LatLng> getLocationFromAddressAsync(Context context, String strAddress){
+       return Observable.create(subscriber -> {
+           subscriber.onNext(getLocationFromAddress(context, strAddress));
+           subscriber.onCompleted();
+        });
+    }
+
 
     /**
      * should be called by background thread
