@@ -81,8 +81,8 @@ public class MainMapActivity extends FragmentActivity implements ListView.OnItem
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         requestMap.clear();
+        super.onDestroy();
     }
 
     private void showProblems() {

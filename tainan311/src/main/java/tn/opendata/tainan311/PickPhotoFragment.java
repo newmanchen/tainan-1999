@@ -69,14 +69,18 @@ public class PickPhotoFragment extends WizardFragment {
                 if (bitmap.isPresent()) {
                     Bitmap bmp = bitmap.get();
                     mPhotoView.setImageBitmap(bmp); // scaled
-                    bmp = Bitmap.createScaledBitmap(bmp, 1280, 960, false);
+                    int width = bmp.getWidth();
+                    int height = (int) ((1280f/(float)width)*bmp.getHeight());
+                    bmp = Bitmap.createScaledBitmap(bmp, 1280, height, false);
                     mPhoto = getImagePath(bmp);
                 }
             } else if ( requestCode == REQUEST_CODE_IMAGE_CAPTURE ) {
                 Bundle bundle = data.getExtras();
                 Bitmap imageBitmap;
                 if ( bundle != null && (imageBitmap = (Bitmap)bundle.get("data")) != null ) {
-                    imageBitmap = Bitmap.createScaledBitmap(imageBitmap, 1280, 960, false);
+                    int width = imageBitmap.getWidth();
+                    int height = (int) ((1280f/(float)width)*imageBitmap.getHeight());
+                    imageBitmap = Bitmap.createScaledBitmap(imageBitmap, 1280, height, false);
                     mPhotoView.setImageBitmap(imageBitmap);
                     mPhoto = getImagePath(imageBitmap);
                 }
